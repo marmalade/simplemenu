@@ -1,0 +1,27 @@
+includepaths
+{
+	"./include"
+}
+
+packages
+{
+#	dpi
+	freetype
+}
+
+files
+{
+	["src"]
+	src/simplemenu.cpp
+
+	["include"]
+	include/simplemenu.h
+}
+
+subprojects
+{
+	#dpi
+	../dpi/dpi.mkf
+	freetype
+	freetypehelper
+}
