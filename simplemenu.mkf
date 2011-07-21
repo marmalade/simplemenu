@@ -12,10 +12,31 @@ packages
 files
 {
 	["src"]
-	src/simplemenu.cpp
+	(src)
+	simplemenu.cpp
+	smBackground.cpp
+	smItem.cpp
+	smMenu.cpp
+	smTerminalItem.cpp
+	smScriptProvider.cpp
+	smStyle.cpp
+	smStyleSheet.cpp
+	smTextBlock.cpp
 
 	["include"]
-	include/simplemenu.h
+	(include)
+	simplemenu.h
+	smBackground.h 
+	smInput.h
+	smTerminalItem.h
+	smItem.h 
+	smMenu.h 
+	smScriptProvider.h 
+	smStyle.h 
+	smStyleSheet.h 
+	smTextBlock.h 
+	smIntrusiveList.h
+	smScriptingBinds.h 
 }
 
 subprojects
