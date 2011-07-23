@@ -3,6 +3,7 @@
 #include <IwGx.h>
 #include "smMenu.h"
 #include "smItem.h"
+#include "smImage.h"
 #include "smTextBlock.h"
 #include "fthFont.h"
 
@@ -418,8 +419,8 @@ bool	CsmItem::ParseAttribute(CIwTextParserITX* pParser, const char* pAttrName)
 	{
 		uint32 t;
 		pParser->ReadStringHash(&t);
-		//CsmImage* ti = new CsmImage(t);
-		//childItems.Add(ti);
+		CsmImage* ti = new CsmImage(t);
+		childItems.Add(ti);
 		return true;
 	}
 	return CIwManaged::ParseAttribute(pParser, pAttrName);

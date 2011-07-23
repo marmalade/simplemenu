@@ -3,10 +3,18 @@
 #include <dpiInfo.h>
 #include <freetypehelper.h>
 #include "smMenu.h"
+#include "smButton.h"
+#include "smImage.h"
+#include "smInput.h"
+#include "smScriptProvider.h"
 
 namespace SimpleMenu
 {
 	int initCounter = 0;
+	CsmInputFilter* g_inputFilter = 0;
+	CIwArray<CsmScriptableClassDeclaration*>* toe_scriptClassDeclarations=0;
+
+	CsmInputFilter* smGetInputFilter() {return g_inputFilter;}
 }
 
 using namespace SimpleMenu;
@@ -17,6 +25,9 @@ void SimpleMenu::smInit()
 	if (initCounter != 1)
 		return;
 
+	DPI::dpiInit();
+	FreeTypeHelper::fthInit();
+
 	#ifdef IW_BUILD_RESOURCES
 	IwGetResManager()->AddHandler(new CsmMenuResHandler);
 	IwGetResManager()->AddHandler(new CsmStyleSheetResHandler);
@@ -24,38 +35,68 @@ void SimpleMenu::smInit()
 
 	IW_CLASS_REGISTER(CsmMenu);
 	IW_CLASS_REGISTER(CsmBackground);
-	//IW_CLASS_REGISTER(CsmClickable);
+	IW_CLASS_REGISTER(CsmButton);
+	IW_CLASS_REGISTER(CsmClickable);
+	IW_CLASS_REGISTER(CsmImage);
 	//IW_CLASS_REGISTER(CsmCanvas);
 	//IW_CLASS_REGISTER(CsmMenu);
-	//IW_CLASS_REGISTER(CsmImage);
 	//IW_CLASS_REGISTER(CsmImageCarousel);
 	//IW_CLASS_REGISTER(CsmInputComponent);
 	IW_CLASS_REGISTER(CsmItem);
 	IW_CLASS_REGISTER(CsmTextBlock);
 	IW_CLASS_REGISTER(CsmStyleSheet);
 	//IW_CLASS_REGISTER(CsmSlider);
-	//IW_CLASS_REGISTER(CsmButton);
 	//IW_CLASS_REGISTER(CsmRow);
 	//IW_CLASS_REGISTER(CsmCompass);
 	//IW_CLASS_REGISTER(CsmGrid);
 
-	DPI::dpiInit();
-	FreeTypeHelper::fthInit();
 
-	//IW_CLASS_REGISTER(CfthFont);
+	toe_scriptClassDeclarations = new CIwArray<CsmScriptableClassDeclaration*>;
+
+	g_inputFilter = new CsmInputFilter();
 }
 
 void SimpleMenu::smTerminate()
 {
 	--initCounter;
 	if (initCounter < 0)
-		IwAssertMsg(FREETYPE,false,("smTerminate doesn't match smInit"));
+		IwAssertMsg(SIMPLEMENU,false,("smTerminate doesn't match smInit"));
 	if (initCounter != 0)
 		return;
 
 	FreeTypeHelper::fthTerminate();
 	DPI::dpiTerminate();
+
+	delete g_inputFilter;
+	g_inputFilter = 0;
+
+	if (toe_scriptClassDeclarations)
+	{
+		for (CIwArray<CsmScriptableClassDeclaration*>::iterator i = toe_scriptClassDeclarations->begin(); i!=toe_scriptClassDeclarations->end(); ++i)
+		{
+			(*i)->Close();
+			//delete(*i);
+		}
+		delete toe_scriptClassDeclarations;
+		toe_scriptClassDeclarations = 0;
+	}
 }
+
+void SimpleMenu::smRegisterClass(CsmScriptableClassDeclaration* c)
+{
+	toe_scriptClassDeclarations->push_back(c);
+}
+
+void SimpleMenu::smRegisterScriptableClasses(IsmScriptProvider* system)
+{
+	if (!toe_scriptClassDeclarations)
+		return;
+	for (CIwArray<CsmScriptableClassDeclaration*>::iterator i = toe_scriptClassDeclarations->begin(); i!=toe_scriptClassDeclarations->end(); ++i)
+	{
+		system->RegisterClass(*i);
+	}
+}
+
 void	SimpleMenu::smReadString(CIwTextParserITX* pParser, std::string* s)
 {
 		char* c = pParser->ReadString();

@@ -15,6 +15,9 @@ files
 	(src)
 	simplemenu.cpp
 	smBackground.cpp
+	smButton.cpp
+	smClickable.cpp
+	smImage.cpp
 	smItem.cpp
 	smMenu.cpp
 	smTerminalItem.cpp
@@ -22,11 +25,17 @@ files
 	smStyle.cpp
 	smStyleSheet.cpp
 	smTextBlock.cpp
+	smTextBox.cpp
+	smInput.cpp
+
 
 	["include"]
 	(include)
 	simplemenu.h
 	smBackground.h 
+	smButton.h 
+	smClickable.h 
+	smImage.h 
 	smInput.h
 	smTerminalItem.h
 	smItem.h 
@@ -37,6 +46,7 @@ files
 	smTextBlock.h 
 	smIntrusiveList.h
 	smScriptingBinds.h 
+	smTextBox.h
 }
 
 subprojects

@@ -30,8 +30,10 @@ void CsmStyleSettings::Serialise ()
 	Border.Serialise();
 	BorderColor.Serialise();
 	ShadowColor.Serialise();
+	TextShadowColor.Serialise();
 	ShadowSize.Serialise();
 	ShadowOffset.Serialise();
+	TextShadowOffset.Serialise();
 	IwSerialiseBool(DropShadow);
 	IwSerialiseInt32(HorizontalAlignment);
 	IwSerialiseInt32(VerticalAlignment);
@@ -50,7 +52,9 @@ void CsmStyle::Serialise ()
 	IwSerialiseBool(isBorder);
 	IwSerialiseBool(isBorderColor);
 	IwSerialiseBool(isShadowColor);
+	IwSerialiseBool(isTextShadowColor);
 	IwSerialiseBool(isShadowOffset);
+	IwSerialiseBool(isTextShadowOffset);
 	IwSerialiseBool(isShadowSize);
 	IwSerialiseBool(isDropShadow);
 	IwSerialiseBool(isHorizontalAlignment);
@@ -95,12 +99,20 @@ bool	CsmStyle::ParseAttribute(CIwTextParserITX* pParser, const char* pAttrName)
 		isBorderColor = true;
 		return true;
 	}
-	if (!stricmp("shadowColour",pAttrName) || !stricmp("shadowColor",pAttrName))
+	if (!stricmp("shadowColour",pAttrName) || !stricmp("shadowColor",pAttrName)|| !stricmp("shadow-Colour",pAttrName) || !stricmp("shadow-Color",pAttrName))
 	{
 		uint8 c[4];
 		pParser->ReadUInt8Array(c,4);
 		settings.ShadowColor.Set(c[0],c[1],c[2],c[3]);
 		isShadowColor = true;
+		return true;
+	}
+	if (!stricmp("textShadowColour",pAttrName) || !stricmp("textShadowColor",pAttrName) || !stricmp("text-Shadow-Colour",pAttrName) || !stricmp("text-Shadow-Color",pAttrName))
+	{
+		uint8 c[4];
+		pParser->ReadUInt8Array(c,4);
+		settings.TextShadowColor.Set(c[0],c[1],c[2],c[3]);
+		isTextShadowColor = true;
 		return true;
 	}
 	if (!stricmp("HorizontalAlignment", pAttrName))
@@ -119,6 +131,12 @@ bool	CsmStyle::ParseAttribute(CIwTextParserITX* pParser, const char* pAttrName)
 	{
 		settings.ShadowOffset.ParseAttribute(pParser);
 		isShadowOffset = true;
+		return true;
+	}
+	if (!stricmp("text-shadow-offset", pAttrName))
+	{
+		settings.TextShadowOffset.ParseAttribute(pParser);
+		isTextShadowOffset = true;
 		return true;
 	}
 	if (!stricmp("shadow-size", pAttrName))

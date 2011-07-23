@@ -7,10 +7,11 @@
 #include "smStyleSheet.h"
 #include "smScriptProvider.h"
 #include "smItem.h"
+#include "smInput.h"
 
 namespace SimpleMenu
 {
-	class CsmMenu : public CIwResource
+	class CsmMenu : public CIwResource, public IsmInputReciever
 	{
 		friend class CsmItem;
 

@@ -109,6 +109,8 @@ void CsmTextBlock::Prepare(smItemContext* renderContext,int16 width)
 	int16 contentWidth = width - GetMarginLeft() - GetMarginRight() - GetPaddingLeft() - GetPaddingRight();
 	CIwArray<FreeTypeHelper::CfthGlyphLayout> layout;
 	layoutData.origin = CIwSVec2::g_Zero;
+	layoutData.shadowOffset = CIwSVec2(combinedStyle.TextShadowOffset.x.GetPx(1),combinedStyle.TextShadowOffset.y.GetPx(1));
+	layoutData.shadowColour = combinedStyle.TextShadowColor;
 	layoutData.size.x = contentWidth;
 	layoutData.size.y = combinedStyle.FontSize.GetPx(width);
 	layoutData.textAlignment = combinedStyle.HorizontalAlignment;//IW_GEOM_ONE/3;

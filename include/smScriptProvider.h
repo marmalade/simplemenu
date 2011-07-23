@@ -56,5 +56,8 @@ namespace SimpleMenu
 		virtual bool PopArgBool()=0;
 		virtual void* PopArgClass(CsmScriptableClassDeclaration*)=0;
 	};
+
+	void smRegisterScriptableClasses(IsmScriptProvider* system);
+	void smRegisterClass(CsmScriptableClassDeclaration* c);
 }
 #include "smScriptingBinds.h"

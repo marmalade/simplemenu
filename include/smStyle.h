@@ -19,8 +19,10 @@ namespace SimpleMenu
 		DPI::CdpiLength4 Border;
 		CIwColour BorderColor;
 		CIwColour ShadowColor;
+		CIwColour TextShadowColor;
 		DPI::CdpiLength ShadowSize;
 		DPI::CdpiLength2 ShadowOffset;
+		DPI::CdpiLength2 TextShadowOffset;
 		bool DropShadow;
 		iwfixed HorizontalAlignment;
 		iwfixed VerticalAlignment;
@@ -30,7 +32,7 @@ namespace SimpleMenu
 			HorizontalAlignment(0),VerticalAlignment(IW_GEOM_ONE/2),
 			ShadowSize(3, DPI::CdpiLength::PT),
 			DropShadow(false)
-			{ FontColor.Set(0xFF000000); BorderColor.Set(0xFF000000); ShadowColor.Set(0x40000000);}
+			{ FontColor.Set(0xFF000000); BorderColor.Set(0xFF000000); ShadowColor.Set(0x40000000); TextShadowColor.Set(0x40000000);}
 		void Serialise();
 		void Inherit(CsmStyleSettings* other)
 		{
@@ -43,6 +45,8 @@ namespace SimpleMenu
 			BorderColor = other->BorderColor;
 			ShadowSize = other->ShadowSize;
 			ShadowOffset = other->ShadowOffset;
+			TextShadowOffset = other->TextShadowOffset;
+			TextShadowColor = other->TextShadowColor;
 			HorizontalAlignment = other->HorizontalAlignment;
 			VerticalAlignment = other->VerticalAlignment;
 		}
@@ -71,7 +75,9 @@ namespace SimpleMenu
 				&& (Padding == other.Padding)
 				&& (Border == other.Border)
 				&& (ShadowColor == other.ShadowColor)
+				&& (TextShadowColor == other.TextShadowColor)
 				&& (ShadowOffset == other.ShadowOffset)
+				&& (TextShadowOffset == other.TextShadowOffset)
 				&& (ShadowColor == other.ShadowColor)
 				&& (DropShadow == other.DropShadow)
 				&& (BorderColor == other.BorderColor)
@@ -94,14 +100,16 @@ namespace SimpleMenu
 		bool isBorder;
 		bool isShadowSize;
 		bool isShadowOffset;
+		bool isTextShadowOffset;
 		bool isShadowColor;
+		bool isTextShadowColor;
 		bool isDropShadow;
 		bool isBorderColor;
 		bool isHorizontalAlignment;
 		bool isVerticalAlignment;
 	public:
 		CsmStyle():isFont(false),isFontSize(false),isFontColor(false),isBackground(false),isMargin(false),isPadding(false),
-			isShadowSize(false),isShadowOffset(false),isShadowColor(false),isDropShadow(false),
+			isShadowSize(false),isShadowOffset(false),isTextShadowOffset(false),isShadowColor(false),isTextShadowColor(false),isDropShadow(false),
 			isBorder(false),isBorderColor(false),isHorizontalAlignment(false),isVerticalAlignment(false){}
 		virtual void Serialise();
 		void Apply(CsmStyleSettings* other)
@@ -127,8 +135,12 @@ namespace SimpleMenu
 				other->DropShadow = settings.DropShadow;
 			if (isShadowColor)
 				other->ShadowColor = settings.ShadowColor;
+			if (isTextShadowColor)
+				other->TextShadowColor = settings.TextShadowColor;
 			if (isShadowOffset)
 				other->ShadowOffset = settings.ShadowOffset;
+			if (isTextShadowOffset)
+				other->TextShadowOffset = settings.TextShadowOffset;
 			if (isShadowSize)
 				other->ShadowSize = settings.ShadowSize;
 			if (isPadding)

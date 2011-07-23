@@ -1,0 +1,26 @@
+includepaths
+{
+	"./include"
+}
+
+files
+{
+	["src"]
+	(src)
+	smLua.cpp
+	smLuaState.cpp
+	smLuaScript.cpp
+
+	["include"]
+	(include)
+	smLua.h
+	smLuaState.h
+	smLuaScript.h
+}
+
+subprojects
+{
+	#dpi
+	./simplemenu.mkf
+	lua
+}
