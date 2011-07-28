@@ -1,0 +1,36 @@
+#!/usr/bin/env i3d_make_build.py
+
+option 
+{
+	strict
+	s3e-data-dir="./data" 
+}
+assets
+{
+	(./data)
+}
+
+files
+{
+	[Source]
+	(./src)
+	testmenu.cpp
+
+}
+deployments
+{
+}
+packages
+{
+	#simplemenu
+	pugixml
+	freetype
+}
+subprojects
+{
+	#simplemenu
+	../simplemenu.mkf
+	../simplemenu.lua.mkf
+	freetype
+	freetypehelper
+}

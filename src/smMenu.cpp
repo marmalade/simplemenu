@@ -131,8 +131,9 @@ void CsmMenu::Render()
 		item->Render(&renderContext);
 	}
 
+	//render scroll
 	CsmItem* content=GetContent();
-	if (activeTouch && content)
+	if ((activeTouch || scrollAnimation) && content)
 	{
 		int16 contentHeight = content->GetSize().y;
 		if (contentHeight)
