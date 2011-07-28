@@ -6,6 +6,8 @@
 #include "smButton.h"
 #include "smImage.h"
 #include "smInput.h"
+#include "smTextBlock.h"
+#include "smTextBox.h"
 #include "smScriptProvider.h"
 
 namespace SimpleMenu
@@ -52,6 +54,12 @@ void SimpleMenu::smInit()
 
 
 	toe_scriptClassDeclarations = new CIwArray<CsmScriptableClassDeclaration*>;
+	smRegisterClass(CsmMenu::GetClassDescription());
+	smRegisterClass(CsmButton::GetClassDescription());
+	smRegisterClass(CsmClickable::GetClassDescription());
+	smRegisterClass(CsmImage::GetClassDescription());
+	smRegisterClass(CsmItem::GetClassDescription());
+	smRegisterClass(CsmTextBlock::GetClassDescription());
 
 	g_inputFilter = new CsmInputFilter();
 }

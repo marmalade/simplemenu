@@ -7,24 +7,14 @@ files
 {
 	["src"]
 	(src)
-	smLua.cpp
-	smLuaState.cpp
-	smLuaScript.cpp
+	smFeatures.cpp
 
 	["include"]
 	(include)
-	smLua.h
-	smLuaState.h
-	smLuaScript.h
-}
-
-packages
-{
-	lua
+	smFeatures.h
 }
 
 subprojects
 {
 	./simplemenu.mkf
-	lua
 }

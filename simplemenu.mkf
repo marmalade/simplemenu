@@ -49,10 +49,14 @@ files
 	smTextBox.h
 }
 
+packages
+{
+	dpi
+}
+
 subprojects
 {
-	#dpi
-	../dpi/dpi.mkf
+	dpi
 	freetype
 	freetypehelper
 }

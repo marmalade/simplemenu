@@ -1,1 +1,7 @@
 https://github.com/marmalade/
+
+do not forget to add these repositories to your sources.list:
+
+https://github.com/marmalade/pugixml/raw/master
+https://github.com/marmalade/Freetype/raw/master
+https://github.com/marmalade/dpi/raw/master
