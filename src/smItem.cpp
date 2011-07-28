@@ -1,6 +1,7 @@
 #include <IwTextParserITX.h>
 #include <IwResManager.h>
 #include <IwGx.h>
+#include "simplemenu.h"
 #include "smMenu.h"
 #include "smItem.h"
 #include "smImage.h"
@@ -59,11 +60,18 @@ void CsmItem::Serialise ()
 	IwSerialiseUInt32(styleClass);
 	IwSerialiseUInt32(state);
 	IwSerialiseUInt32(idHash);
+	smSerialiseString(onUpdate);
 }
 
-
+void CsmItem::EvalUpdate()
+{
+	if (onUpdate.size() > 0)
+		GetRoot()->Eval(this, onUpdate.c_str());
+}
 void CsmItem::Prepare(smItemContext* renderContext,int16 width)
 {
+	EvalUpdate();
+
 	CombineStyle(renderContext);
 	smItemContext context = *renderContext;
 	context.parentStyle = &combinedStyle;
@@ -421,6 +429,11 @@ bool	CsmItem::ParseAttribute(CIwTextParserITX* pParser, const char* pAttrName)
 		pParser->ReadStringHash(&t);
 		CsmImage* ti = new CsmImage(t);
 		childItems.Add(ti);
+		return true;
+	}
+	if (!stricmp(pAttrName, "onupdate"))
+	{
+		smReadString(pParser, &onUpdate);
 		return true;
 	}
 	return CIwManaged::ParseAttribute(pParser, pAttrName);

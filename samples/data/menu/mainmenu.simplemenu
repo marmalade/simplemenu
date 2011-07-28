@@ -6,7 +6,15 @@ CsmMenu
 
 	CsmTextBlock
 	{
-		text "This is content."
+		text "Searching for GPS"
+
+		onupdate "
+			if CsmLocation.IsAvailable() then
+				self:SetText( 'GPS is available!' .. CsmLocation.GetLongitude() .. 'x' .. CsmLocation.GetLatitude() .. ' received at ' .. CsmLocation.GetDataTimestamp() )
+			else
+				self:SetText( 'GPS is not available!')
+			end
+		"
 	}
 	CsmTextBlock
 	{

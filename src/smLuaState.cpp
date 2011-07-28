@@ -154,6 +154,11 @@ void CsmLuaState::Return(int i)
 	++numRes;
 	lua_pushinteger(L,i);
 }
+void CsmLuaState::Return(long i)
+{
+	++numRes;
+	lua_pushinteger(L,i);
+}
 void CsmLuaState::Return(bool i)
 {
 	++numRes;

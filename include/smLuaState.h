@@ -37,6 +37,7 @@ namespace SimpleMenu
 		virtual void ReturnNil();
 		virtual void Return();
 		virtual void Return(int i);
+		virtual void Return(long i);
 		virtual void Return(bool i);
 		virtual void Return(float i);
 		virtual void Return(const char*);

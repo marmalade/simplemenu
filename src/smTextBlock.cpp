@@ -98,6 +98,7 @@ void CsmTextBlock::SetText(const char* t)
 
 void CsmTextBlock::Prepare(smItemContext* renderContext,int16 width)
 {
+	EvalUpdate();
 	CombineStyle(renderContext);
 	if (cachedWithWidth == width && combinedStyle == cachedWithCombinedStyle)
 		return;

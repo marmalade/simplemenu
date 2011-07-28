@@ -60,7 +60,7 @@ namespace SimpleMenu
 	};
 
 
-	template<class T,typename TAG> inline void TsmIntrusiveListItem<T,TAG>::AttachHead(TsmIntrusiveList<T,typename TAG>* list)
+	template<class T,typename TAG> inline void TsmIntrusiveListItem<T,TAG>::AttachHead(TsmIntrusiveList<T,TAG>* list)
 	{
 		Detach();
 		listContainer = list;

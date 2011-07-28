@@ -20,6 +20,11 @@ namespace SimpleMenu
 		static bool IsAvailable();
 		static float GetLatitude();
 		static float GetLongitude();
+		static float GetAltitude();
+		static float GetHorizontalAccuracy();
+		static float GetTimeStampUTC();
+		static float GetVerticalAccuracy();
+		static long GetDataTimestamp();
 	protected:
 		static CsmLocation* RequestFeature();
 		static int32 Callback (void* systemData, void* userData);

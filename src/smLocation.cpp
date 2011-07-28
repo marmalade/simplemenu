@@ -15,6 +15,11 @@ CsmScriptableClassDeclaration* CsmLocation::GetClassDescription()
 		ScriptTraits::Method("IsAvailable", &CsmLocation::IsAvailable),
 		ScriptTraits::Method("GetLatitude", &CsmLocation::GetLatitude),
 		ScriptTraits::Method("GetLongitude", &CsmLocation::GetLongitude),
+		ScriptTraits::Method("GetAltitude", &CsmLocation::GetAltitude),
+		ScriptTraits::Method("GetHorizontalAccuracy", &CsmLocation::GetHorizontalAccuracy),
+		ScriptTraits::Method("GetTimeStampUTC", &CsmLocation::GetTimeStampUTC),
+		ScriptTraits::Method("GetVerticalAccuracy", &CsmLocation::GetVerticalAccuracy),
+		ScriptTraits::Method("GetDataTimestamp", &CsmLocation::GetDataTimestamp),
 			0);
 	return &d;
 }
@@ -81,5 +86,25 @@ float CsmLocation::GetLatitude()
 }
 float CsmLocation::GetLongitude()
 {
-	return (float)RequestFeature()->l.m_Latitude;
+	return (float)RequestFeature()->l.m_Longitude;
+}
+float CsmLocation::GetAltitude()
+{
+	return (float)RequestFeature()->l.m_Altitude;
+}
+float CsmLocation::GetHorizontalAccuracy()
+{
+	return (float)RequestFeature()->l.m_HorizontalAccuracy;
+}
+float CsmLocation::GetTimeStampUTC()
+{
+	return (float)RequestFeature()->l.m_TimeStampUTC;
+}
+float CsmLocation::GetVerticalAccuracy()
+{
+	return (float)RequestFeature()->l.m_VerticalAccuracy;
+}
+long CsmLocation::GetDataTimestamp()
+{
+	return (float)RequestFeature()->m_recievedAt;
 }

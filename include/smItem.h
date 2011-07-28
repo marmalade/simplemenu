@@ -55,6 +55,7 @@ namespace SimpleMenu
 		CsmStyle style;
 		CsmStyleSettings combinedStyle;
 		TsmIntrusiveList<CsmLazyEvent,CsmItem> lazyEvents;
+		std::string onUpdate;
 	public:
 		//Declare managed class
 		IW_MANAGED_DECLARE(CsmItem);
@@ -134,7 +135,7 @@ namespace SimpleMenu
 		virtual bool VisitBackward(IsmVisitor* visitor);
 
 		void InitTree(CsmMenu*,CsmItem*);
-
+		void EvalUpdate();
 	protected:
 		void RenderBackgroud(smItemContext* renderContext);
 		void RenderShadow(smItemContext* renderContext);
