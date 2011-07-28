@@ -1,0 +1,28 @@
+CsmMenu
+{
+	name "mainmenu"
+
+	styleSheet "menu"
+
+	CsmItem
+	{
+		CsmButton
+		{
+			text "a"
+		}
+	}
+	CsmItem
+	{
+		CsmButton
+		{
+			text "b"
+		}
+	}
+	CsmItem
+	{
+		CsmButton
+		{
+			text "c"
+		}
+	}
+}
