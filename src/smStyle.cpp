@@ -34,6 +34,10 @@ void CsmStyleSettings::Serialise ()
 	ShadowSize.Serialise();
 	ShadowOffset.Serialise();
 	TextShadowOffset.Serialise();
+	MinWidth.Serialise();
+	MinHeight.Serialise();
+	MaxWidth.Serialise();
+	MaxHeight.Serialise();
 	IwSerialiseBool(DropShadow);
 	IwSerialiseInt32(HorizontalAlignment);
 	IwSerialiseInt32(VerticalAlignment);
@@ -59,6 +63,10 @@ void CsmStyle::Serialise ()
 	IwSerialiseBool(isDropShadow);
 	IwSerialiseBool(isHorizontalAlignment);
 	IwSerialiseBool(isVerticalAlignment);
+	IwSerialiseBool(isMinWidth);
+	IwSerialiseBool(isMinHeight);
+	IwSerialiseBool(isMaxWidth);
+	IwSerialiseBool(isMaxHeight);
 }
 
 #ifdef IW_BUILD_RESOURCES
@@ -77,13 +85,13 @@ bool	CsmStyle::ParseAttribute(CIwTextParserITX* pParser, const char* pAttrName)
 		isFont = true;
 		return true;
 	}
-	if (!stricmp("fontSize",pAttrName))
+	if (!stricmp("fontSize",pAttrName) || !stricmp("font-size",pAttrName))
 	{
 		settings.FontSize.ParseAttribute(pParser);
 		isFontSize = true;
 		return true;
 	}
-	if (!stricmp("fontColour",pAttrName) || !stricmp("fontColor",pAttrName))
+	if (!stricmp("fontColour",pAttrName) || !stricmp("fontColor",pAttrName) || !stricmp("font-colour",pAttrName) || !stricmp("font-color",pAttrName))
 	{
 		uint8 c[4];
 		pParser->ReadUInt8Array(c,4);
@@ -91,7 +99,7 @@ bool	CsmStyle::ParseAttribute(CIwTextParserITX* pParser, const char* pAttrName)
 		isFontColor = true;
 		return true;
 	}
-	if (!stricmp("borderColour",pAttrName) || !stricmp("borderColor",pAttrName))
+	if (!stricmp("borderColour",pAttrName) || !stricmp("borderColor",pAttrName) || !stricmp("border-Colour",pAttrName) || !stricmp("border-Color",pAttrName))
 	{
 		uint8 c[4];
 		pParser->ReadUInt8Array(c,4);
@@ -115,13 +123,13 @@ bool	CsmStyle::ParseAttribute(CIwTextParserITX* pParser, const char* pAttrName)
 		isTextShadowColor = true;
 		return true;
 	}
-	if (!stricmp("HorizontalAlignment", pAttrName))
+	if (!stricmp("HorizontalAlignment", pAttrName) || !stricmp("horizontal-alignment", pAttrName))
 	{
 		pParser->ReadFixed(&settings.HorizontalAlignment);
 		isHorizontalAlignment = true;
 		return true;
 	}
-	if (!stricmp("VerticalAlignment", pAttrName))
+	if (!stricmp("VerticalAlignment", pAttrName) || !stricmp("vertical-alignment", pAttrName))
 	{
 		pParser->ReadFixed(&settings.VerticalAlignment);
 		isVerticalAlignment = true;
@@ -244,6 +252,30 @@ bool	CsmStyle::ParseAttribute(CIwTextParserITX* pParser, const char* pAttrName)
 	{
 		settings.Border.bottom.ParseAttribute(pParser);
 		isBorder = true;
+		return true;
+	}
+	if (!stricmp("min-width", pAttrName))
+	{
+		settings.MinWidth.ParseAttribute(pParser);
+		isMinWidth = true;
+		return true;
+	}
+	if (!stricmp("min-height", pAttrName))
+	{
+		settings.MinHeight.ParseAttribute(pParser);
+		isMinHeight = true;
+		return true;
+	}
+	if (!stricmp("max-width", pAttrName))
+	{
+		settings.MaxWidth.ParseAttribute(pParser);
+		isMaxWidth = true;
+		return true;
+	}
+	if (!stricmp("max-height", pAttrName))
+	{
+		settings.MaxHeight.ParseAttribute(pParser);
+		isMaxHeight = true;
 		return true;
 	}
 

@@ -8,10 +8,22 @@ files
 	["src"]
 	(src)
 	smFeatures.cpp
+	smAllFeatures.cpp
+	smLocation.cpp
+	smAudio.cpp
+	smVideo.cpp
+	smAccelerometer.cpp
+	smCompass.cpp
 
 	["include"]
 	(include)
 	smFeatures.h
+	smAllFeatures.h
+	smLocation.h
+	smAudio.h
+	smVideo.h
+	smAccelerometer.h
+	smCompass.h 
 }
 
 subprojects

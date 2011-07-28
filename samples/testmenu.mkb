@@ -16,6 +16,12 @@ files
 	(./src)
 	testmenu.cpp
 
+	[Data]
+	(./data)
+
+	[Data/Menu]
+	(./data/menu)
+	mainmenu.simplemenu
 }
 deployments
 {

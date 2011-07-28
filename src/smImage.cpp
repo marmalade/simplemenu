@@ -2,6 +2,7 @@
 #include <IwResManager.h>
 #include <IwGx.h>
 #include "smImage.h"
+#include "smMenu.h"
 #include "fthFont.h"
 
 using namespace SimpleMenu;
@@ -15,6 +16,17 @@ namespace SimpleMenu
 IW_CLASS_FACTORY(CsmImage);
 //This macro is required within some source file for every class derived from CIwManaged. It implements essential functionality
 IW_MANAGED_IMPLEMENT(CsmImage);
+
+//Get scriptable class declaration
+CsmScriptableClassDeclaration* CsmImage::GetClassDescription()
+{
+	static  TsmScriptableClassDeclaration<CsmImage> d ("CsmImage",
+			ScriptTraits::Method("GetRoot", &CsmImage::GetRoot),
+			ScriptTraits::Method("GetChildAt", &CsmImage::GetChildAt),
+			ScriptTraits::Method("GetChildItemsCount", &CsmImage::GetChildItemsCount),
+			0);
+	return &d;
+}
 
 //Constructor
 CsmImage::CsmImage()

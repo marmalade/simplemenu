@@ -17,6 +17,10 @@ namespace SimpleMenu
 		DPI::CdpiLength4 Margin;
 		DPI::CdpiLength4 Padding;
 		DPI::CdpiLength4 Border;
+		DPI::CdpiLength MinWidth;
+		DPI::CdpiLength MinHeight;
+		DPI::CdpiLength MaxWidth;
+		DPI::CdpiLength MaxHeight;
 		CIwColour BorderColor;
 		CIwColour ShadowColor;
 		CIwColour TextShadowColor;
@@ -31,7 +35,11 @@ namespace SimpleMenu
 			FontSize(8,DPI::CdpiLength::PT),
 			HorizontalAlignment(0),VerticalAlignment(IW_GEOM_ONE/2),
 			ShadowSize(3, DPI::CdpiLength::PT),
-			DropShadow(false)
+			DropShadow(false),
+			MinWidth(0, DPI::CdpiLength::PX),
+			MaxWidth(2147483647, DPI::CdpiLength::PX),
+			MinHeight(0, DPI::CdpiLength::PX),
+			MaxHeight(2147483647, DPI::CdpiLength::PX)
 			{ FontColor.Set(0xFF000000); BorderColor.Set(0xFF000000); ShadowColor.Set(0x40000000); TextShadowColor.Set(0x40000000);}
 		void Serialise();
 		void Inherit(CsmStyleSettings* other)
@@ -107,10 +115,18 @@ namespace SimpleMenu
 		bool isBorderColor;
 		bool isHorizontalAlignment;
 		bool isVerticalAlignment;
+		bool isMinWidth;
+		bool isMinHeight;
+		bool isMaxWidth;
+		bool isMaxHeight;
 	public:
 		CsmStyle():isFont(false),isFontSize(false),isFontColor(false),isBackground(false),isMargin(false),isPadding(false),
 			isShadowSize(false),isShadowOffset(false),isTextShadowOffset(false),isShadowColor(false),isTextShadowColor(false),isDropShadow(false),
-			isBorder(false),isBorderColor(false),isHorizontalAlignment(false),isVerticalAlignment(false){}
+			isBorder(false),isBorderColor(false),isHorizontalAlignment(false),isVerticalAlignment(false),
+			isMinWidth(false),
+			isMinHeight(false),
+			isMaxWidth(false),
+			isMaxHeight(false){}
 		virtual void Serialise();
 		void Apply(CsmStyleSettings* other)
 		{
@@ -149,6 +165,14 @@ namespace SimpleMenu
 				other->HorizontalAlignment = settings.HorizontalAlignment;
 			if (isVerticalAlignment)
 				other->VerticalAlignment = settings.VerticalAlignment;
+			if (isMinWidth)
+				other->MinWidth = settings.MinWidth;
+			if (isMinHeight)
+				other->MinHeight = settings.MinHeight;
+			if (isMaxWidth)
+				other->MaxWidth = settings.MaxWidth;
+			if (isMaxHeight)
+				other->MaxHeight = settings.MaxHeight;
 		}
 
 #ifdef IW_BUILD_RESOURCES

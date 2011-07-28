@@ -17,6 +17,27 @@ namespace SimpleMenu
 	CIwArray<CsmScriptableClassDeclaration*>* toe_scriptClassDeclarations=0;
 
 	CsmInputFilter* smGetInputFilter() {return g_inputFilter;}
+
+	smCloseState sm_menuCloseState = SM_KEEP_OPEN;
+	smCloseState smGetCloseState() { return sm_menuCloseState; }
+
+	class CsmUtils
+	{
+	public:
+		static void CloseAllMenus() {sm_menuCloseState= SM_CLOSE_ALL;}
+		static void CloseMenu() {sm_menuCloseState= SM_CLOSE_CURRENT;}
+	};
+
+	CsmScriptableClassDeclaration* smGetClassDescription()
+	{
+		static  TsmScriptableClassDeclaration<CsmUtils> d ("CsmUtils",
+			ScriptTraits::Method("CloseMenu", &CsmUtils::CloseMenu),
+			ScriptTraits::Method("CloseAllMenus", &CsmUtils::CloseAllMenus),
+				0);
+		return &d;
+	}
+
+
 }
 
 using namespace SimpleMenu;
@@ -60,6 +81,7 @@ void SimpleMenu::smInit()
 	smRegisterClass(CsmImage::GetClassDescription());
 	smRegisterClass(CsmItem::GetClassDescription());
 	smRegisterClass(CsmTextBlock::GetClassDescription());
+	smRegisterClass(smGetClassDescription());
 
 	g_inputFilter = new CsmInputFilter();
 }

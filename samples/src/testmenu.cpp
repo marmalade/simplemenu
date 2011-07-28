@@ -7,6 +7,7 @@
 #include <smMenu.h>
 #include <smInput.h>
 #include <smLuaState.h>
+#include <smAllFeatures.h>
 
 using namespace FreeTypeHelper;
 
@@ -20,12 +21,15 @@ int main(int argc, char* argv[])
 	IwGraphicsInit();
 	fthInit();
 	SimpleMenu::smInit();
+	SimpleMenu::smLuaInit();
+	SimpleMenu::smFeaturesInit();
 
 	IwGxSetColClear(0x1f, 0x1f, 0xc0, 0x7f);
 
 	SimpleMenu::CsmInputFilter* input = SimpleMenu::smGetInputFilter();
 	input->Register();
 	SimpleMenu::CsmLuaState* lua = new SimpleMenu::CsmLuaState();
+	lua->Initialize();
 	CIwResGroup* sampleGroup =  IwGetResManager()->LoadGroup("menu/mainmenu.group");
 	SimpleMenu::CsmMenu* m = (SimpleMenu::CsmMenu*)sampleGroup->GetResNamed("mainmenu", "CsmMenu");
 	m->Initialize(lua);
@@ -43,7 +47,8 @@ int main(int argc, char* argv[])
 				(result == false) ||
 				(s3eKeyboardGetState(s3eKeyEsc) & S3E_KEY_STATE_DOWN) ||
 				(s3eKeyboardGetState(s3eKeyAbsBSK) & S3E_KEY_STATE_DOWN) ||
-				(s3eDeviceCheckQuitRequest())
+				(s3eDeviceCheckQuitRequest()) ||
+				(SimpleMenu::smGetCloseState() != SimpleMenu::SM_KEEP_OPEN)
 				)
 				break;
 
@@ -62,6 +67,8 @@ int main(int argc, char* argv[])
 	delete lua;
 	input->UnRegister();
 
+	SimpleMenu::smFeaturesTerminate();
+	SimpleMenu::smLuaTerminate();
 	SimpleMenu::smTerminate();
 	fthTerminate();
 	IwGraphicsTerminate();

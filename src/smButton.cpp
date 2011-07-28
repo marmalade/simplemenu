@@ -33,7 +33,7 @@ uint32 CsmButton::GetElementNameHash()
 //Get scriptable class declaration
 CsmScriptableClassDeclaration* CsmButton::GetClassDescription()
 {
-	static  TsmScriptableClassDeclaration<CsmButton> d ("CsmItem",
+	static  TsmScriptableClassDeclaration<CsmButton> d ("CsmButton",
 			ScriptTraits::Method("GetRoot", &CsmButton::GetRoot),
 			ScriptTraits::Method("GetChildAt", &CsmButton::GetChildAt),
 			ScriptTraits::Method("GetChildItemsCount", &CsmButton::GetChildItemsCount),

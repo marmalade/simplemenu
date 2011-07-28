@@ -15,5 +15,6 @@ CsmMenu
 	CsmButton
 	{
 		text "Close"
+		onclick "CsmUtils.CloseAllMenus()"
 	}
 }

@@ -27,6 +27,17 @@ CsmClickable::~CsmClickable()
 {
 }
 
+//Get scriptable class declaration
+CsmScriptableClassDeclaration* CsmClickable::GetClassDescription()
+{
+	static  TsmScriptableClassDeclaration<CsmClickable> d ("CsmClickable",
+			ScriptTraits::Method("GetRoot", &CsmClickable::GetRoot),
+			ScriptTraits::Method("GetChildAt", &CsmClickable::GetChildAt),
+			ScriptTraits::Method("GetChildItemsCount", &CsmClickable::GetChildItemsCount),
+			0);
+	return &d;
+}
+
 //Reads/writes a binary file using @a IwSerialise interface.
 void CsmClickable::Serialise ()
 {

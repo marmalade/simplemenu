@@ -27,6 +27,9 @@ files
 	smTextBlock.cpp
 	smTextBox.cpp
 	smInput.cpp
+	smImageSource.cpp
+	smGradientBackground.cpp
+	smSolidColorBackground.cpp
 
 
 	["include"]
@@ -47,6 +50,10 @@ files
 	smIntrusiveList.h
 	smScriptingBinds.h 
 	smTextBox.h
+	smImageSource.h
+	smGradientBackground.h
+	smSolidColorBackground.h
+	smUtils.h
 }
 
 packages
