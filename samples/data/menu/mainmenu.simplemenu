@@ -4,25 +4,16 @@ CsmMenu
 
 	styleSheet "menu"
 
-	CsmItem
+	CsmTextBlock
 	{
-		CsmButton
-		{
-			text "a"
-		}
+		text "This is content."
 	}
-	CsmItem
+	CsmTextBlock
 	{
-		CsmButton
-		{
-			text "b"
-		}
+		text "HEADER"
 	}
-	CsmItem
+	CsmButton
 	{
-		CsmButton
-		{
-			text "c"
-		}
+		text "Close"
 	}
 }

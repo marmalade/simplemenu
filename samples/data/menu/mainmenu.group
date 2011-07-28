@@ -1,10 +1,15 @@
 CIwResGroup
 {
+	#Name of resource group
 	name "mainmenu"
 
+	#Font files
 	./font.ttf
 	./fontbold.ttf
 
+	#Menu css-like style file
 	./menu.simplemenustyle
+
+	#Menu file
 	./mainmenu.simplemenu
 }
