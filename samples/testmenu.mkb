@@ -8,6 +8,10 @@ option
 assets
 {
 	(./data)
+	./menu/font.ttf
+	./menu/fontbold.ttf
+	(../data-ram/data-gles1)
+	./menu/mainmenu.group.bin
 }
 
 files
@@ -38,6 +42,22 @@ subprojects
 	../simplemenu.mkf
 	../simplemenu.lua.mkf
 	../simplemenu.features.mkf
+	../simplemenu.svg.mkf
+	../simplemenu.curl.mkf
 	freetype
 	freetypehelper
+}
+deployments
+{
+	caption="Simple Menu Demo"
+	long-caption="Simple Menu Demo"
+	win32-pref-windowtitle="Simple Menu Demo"
+	assets=Default
+	provider="www_101gr_com"
+	manufacturer="101gr.com"
+	copyright="101gr.com (c) 2011"
+	version="0.0.1"
+	networking=1
+
+	iphone-appid=com.101gr.SimpleMenuDemo
 }

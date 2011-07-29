@@ -1,0 +1,26 @@
+includepaths
+{
+	"./include"
+}
+
+files
+{
+	["src"]
+	(src)
+	smSvg.cpp
+
+	["include"]
+	(include)
+	smSvg.h
+}
+
+packages
+{
+#	libsvg
+}
+
+subprojects
+{
+	./simplemenu.mkf
+#	libsvg
+}

@@ -1,0 +1,26 @@
+includepaths
+{
+	"./include"
+}
+
+files
+{
+	["src"]
+	(src)
+	smCurl.cpp
+
+	["include"]
+	(include)
+	smCurl.h
+}
+
+packages
+{
+	libcurl
+}
+
+subprojects
+{
+	./simplemenu.mkf
+	libcurl
+}
