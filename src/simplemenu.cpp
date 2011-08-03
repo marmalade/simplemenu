@@ -12,6 +12,8 @@
 #include "smCanvas.h"
 #include "smSlider.h"
 #include "smGallery.h"
+#include "smSelect.h"
+#include "smSwitch.h"
 
 namespace SimpleMenu
 {
@@ -74,7 +76,8 @@ void SimpleMenu::smInit()
 	IW_CLASS_REGISTER(CsmItem);
 	IW_CLASS_REGISTER(CsmTextBlock);
 	IW_CLASS_REGISTER(CsmStyleSheet);
-	//IW_CLASS_REGISTER(CsmSlider);
+	IW_CLASS_REGISTER(CsmSelect);
+	IW_CLASS_REGISTER(CsmSwitch);
 	//IW_CLASS_REGISTER(CsmRow);
 	//IW_CLASS_REGISTER(CsmCompass);
 	//IW_CLASS_REGISTER(CsmGrid);

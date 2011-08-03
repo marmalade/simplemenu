@@ -6,7 +6,7 @@ CsmStyleSheet
 	style
 	{
 		font "font"
-		fontSize 6 pt
+		fontSize 8 pt
 		fontColor {0,0,0,255}
 		shadowColor {0,0,0,64}
 		shadow-size 3 pt
@@ -17,10 +17,12 @@ CsmStyleSheet
 		}
 	}
 	bindto "SLIDER" "*" "*"
+	bindto "SWITCH" "*" "*"
 	style
 	{
 		padding 1 pt
 		border 1 px
+		font-colour {255,255,255,255}
 		borderColor {50,70,150,255}
 		horizontal-alignment 0.5
 		background

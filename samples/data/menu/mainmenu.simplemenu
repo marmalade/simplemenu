@@ -19,8 +19,23 @@ CsmMenu
 		CsmTextBlock
 		{
 		styleClass "SLIDERKNOB"
-		text "[]"
+		text "Slider"
 		}
+	}
+	CsmSwitch
+	{
+		CsmTextBlock
+		{
+		styleClass "SLIDERKNOB"
+		text "Switch"
+		}
+	}
+	CsmSelect
+	{
+		text "OPTION 0"
+		text "OPTION 1"
+		text "OPTION 2"
+		text "OPTION 3"
 	}
 	CsmGallery
 	{
