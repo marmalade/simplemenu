@@ -50,7 +50,19 @@ void CsmGallery::PrepareChildItems(smItemContext* context,int16 width)
 	int16 contentWidth = width - GetContentOffsetLeft()-GetContentOffsetRight();
 	size.x = width;
 	size.y = 0;
+
+	if (!touched)
+	{
+		iwfixed desiredPosition = carouselPosition & ~(IW_GEOM_ONE-1);
+		if ((carouselPosition & (IW_GEOM_ONE-1)) > IW_GEOM_ONE/2)
+			desiredPosition += IW_GEOM_ONE;
+		if (desiredPosition > (GetChildItemsCount()-1)*IW_GEOM_ONE )
+			desiredPosition = (GetChildItemsCount()-1)*IW_GEOM_ONE;
+		if (desiredPosition < 0 )
+			desiredPosition = 0;
 	
+		carouselPosition = carouselPosition+(desiredPosition-carouselPosition)/2;
+	}
 	for (CIwManaged** i = childItems.GetBegin(); i!=childItems.GetEnd(); ++i)
 	{
 		CsmItem* item = static_cast<CsmItem*>(*i);
@@ -81,10 +93,6 @@ void CsmGallery::TouchMotion(smTouchContext* smTouchContext)
 	int16 contentWidth = size.x - GetContentOffsetLeft()-GetContentOffsetRight();
 	iwfixed v = shift*IW_GEOM_ONE/(size.x);
 	carouselPosition -= v;
-	if (carouselPosition > (GetChildItemsCount()-1)*IW_GEOM_ONE )
-		carouselPosition = (GetChildItemsCount()-1)*IW_GEOM_ONE;
-	if (carouselPosition < 0 )
-		carouselPosition = 0;
 }
 void CsmGallery::Touch(smTouchContext* smTouchContext)
 {
@@ -93,8 +101,13 @@ void CsmGallery::Touch(smTouchContext* smTouchContext)
 void CsmGallery::TouchReleased(smTouchContext* smTouchContext)
 {
 	touched = false;
+	
 }
-
+void CsmGallery::TouchCanceled(smTouchContext* smTouchContext)
+{
+	touched = false;
+	
+}
 //Render image on the screen surface
 void CsmGallery::Render(smItemContext* renderContext)
 {

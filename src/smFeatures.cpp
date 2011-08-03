@@ -1,6 +1,7 @@
 #include <IwDebug.h>
 #include <smFeatures.h>
 #include <smAllFeatures.h>
+#include <smConfig.h>
 
 namespace SimpleMenu
 {
@@ -26,7 +27,7 @@ void SimpleMenu::smFeaturesInit()
 		return;
 
 	smInit();
-
+	smConfigInit();
 	smRegisterClass(CsmLocation::GetClassDescription());
 }
 
@@ -45,7 +46,7 @@ void SimpleMenu::smFeaturesTerminate()
 		delete sm_featuresList;
 		sm_featuresList = 0;
 	}
-
+	smConfigTerminate();
 	smTerminate();
 }
 

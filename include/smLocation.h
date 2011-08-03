@@ -10,7 +10,7 @@ namespace SimpleMenu
 	public: 
 		private:
 		s3eLocation l;
-		time_t m_recievedAt;
+		time_t m_receivedAt;
 
 	public: 
 		virtual ~CsmLocation();

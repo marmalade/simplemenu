@@ -22,12 +22,18 @@ CsmStyleSheet
 		padding 1 pt
 		border 1 px
 		borderColor {50,70,150,255}
+		horizontal-alignment 0.5
 		background
 		{
 			point {25,35,75,255} 0 %
 			point {25,35,75,255} 70 %
 			point {90,110,170,255} 100 %
 		}
+	}
+	bindto "GALLERY" "*" "*"
+	style
+	{
+		horizontal-alignment 0.5
 	}
 	bindto "BUTTON" "*" "*"
 	bindto "*" "SLIDERKNOB" "*"

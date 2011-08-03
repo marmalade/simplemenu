@@ -40,6 +40,7 @@ namespace SimpleMenu
 		virtual bool IsActive() const {return true;}
 		virtual void Touch(smTouchContext* smTouchContext);
 		virtual void TouchReleased(smTouchContext* smTouchContext);
+		virtual void TouchCanceled(smTouchContext* smTouchContext);
 
 		virtual void TouchMotion(smTouchContext* smTouchContext);
 #ifdef IW_BUILD_RESOURCES

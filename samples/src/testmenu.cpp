@@ -8,6 +8,7 @@
 #include <smInput.h>
 #include <smLuaState.h>
 #include <smAllFeatures.h>
+#include <smConfig.h>
 
 using namespace FreeTypeHelper;
 

@@ -68,6 +68,16 @@ void CsmItem::EvalUpdate()
 	if (onUpdate.size() > 0)
 		GetRoot()->Eval(this, onUpdate.c_str());
 }
+//Animate item
+void CsmItem::Animate(iwfixed timespan)
+{
+	for (CIwManaged** i = childItems.GetBegin(); i!=childItems.GetEnd(); ++i)
+	{
+		CsmItem* item = static_cast<CsmItem*>(*i);
+		item->Animate(timespan);
+	}
+}
+
 void CsmItem::Prepare(smItemContext* renderContext,int16 width)
 {
 	EvalUpdate();

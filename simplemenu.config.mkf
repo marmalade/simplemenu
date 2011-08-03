@@ -14,7 +14,13 @@ files
 	smConfig.h
 }
 
+packages
+{
+	pugixml
+}
+
 subprojects
 {
 	./simplemenu.mkf
+	pugixml
 }

@@ -72,6 +72,8 @@ namespace SimpleMenu
 		//Reads/writes a binary file using @a IwSerialise interface.
 		virtual void Serialise ();
 
+		//Animate item and all child items
+		virtual void Animate(iwfixed timespan);
 		//Evaluates size of item and prepares all nessesary things to render it
 		virtual void Prepare(smItemContext* renderContext,int16 width);
 		//Render image on the screen surface

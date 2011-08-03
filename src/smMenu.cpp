@@ -212,6 +212,11 @@ void CsmMenu::Update(iwfixed dt)
 		delete e;
 	}
 
+	for (CIwManaged** i = childItems.GetBegin(); i!=childItems.GetEnd(); ++i)
+	{
+		CsmItem* item = static_cast<CsmItem*>(*i);
+		item->Animate(dt);
+	}
 
 	if (onUpdate.size() > 0)
 		if (scriptProvider)

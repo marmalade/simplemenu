@@ -1,5 +1,5 @@
 #include "smLocation.h"
-//#include "smConfig.h"
+#include "smConfig.h"
 
 using namespace SimpleMenu;
 
@@ -42,23 +42,25 @@ CsmLocation* CsmLocation::RequestFeature()
 }
 void CsmLocation::SaveToConfig()
 {
-		//CsmConfig::SetFloat("sm-location-latitude", (float)l.m_Latitude);
-		//CsmConfig::SetFloat("sm-location-longitude", (float)l.m_Longitude);
+	CsmConfig::SetFloat("sm-location-latitude", (float)l.m_Latitude);
+	CsmConfig::SetFloat("sm-location-longitude", (float)l.m_Longitude);
+	CsmConfig::SetLong("sm-location-m_received-at", (long)m_receivedAt);
 }
 void CsmLocation::LoadFromConfig()
 {
-		//l.m_Latitude = CsmConfig::GetFloat("sm-location-latitude");
-		//l.m_Longitude = CsmConfig::GetFloat("sm-location-longitude");
+	l.m_Latitude = CsmConfig::GetFloat("sm-location-latitude");
+	l.m_Longitude = CsmConfig::GetFloat("sm-location-longitude");
+	m_receivedAt = CsmConfig::GetLong("sm-location-m_received-at");
 }
 void CsmLocation::StartFeature()
 {
-	m_recievedAt = 0;
+	m_receivedAt = 0;
 	s3eLocationStart();
-	//if (CsmConfig::IsExist("sm-location-latitude"))
-	//{
-	//	g_smLocation->LoadFromConfig();
-	//}
-	//else
+	if (CsmConfig::IsExist("sm-location-latitude"))
+	{
+		g_smLocation->LoadFromConfig();
+	}
+	else
 	{
 		s3eLocationGet(&l);
 		SaveToConfig();
@@ -70,7 +72,7 @@ int32 CsmLocation::Callback (void* systemData, void* userData)
 	if (g_smLocation)
 	{
 		g_smLocation->l = *((s3eLocation*)systemData);
-		g_smLocation->m_recievedAt = time(0);
+		g_smLocation->m_receivedAt = time(0);
 		g_smLocation->SaveToConfig();
 	}
 	return 0;
@@ -106,5 +108,5 @@ float CsmLocation::GetVerticalAccuracy()
 }
 long CsmLocation::GetDataTimestamp()
 {
-	return (long)RequestFeature()->m_recievedAt;
+	return (long)RequestFeature()->m_receivedAt;
 }

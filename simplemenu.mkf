@@ -33,6 +33,9 @@ files
 	smImageSource.cpp
 	smGradientBackground.cpp
 	smSolidColorBackground.cpp
+	smSwitch.cpp
+	smSelect.cpp
+	smCheckbox.cpp
 
 
 	["include"]
@@ -60,6 +63,9 @@ files
 	smGradientBackground.h
 	smSolidColorBackground.h
 	smUtils.h
+	smSwitch.h
+	smSelect.h
+	smCheckbox.h
 }
 
 packages

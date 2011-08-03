@@ -14,6 +14,7 @@ files
 	smVideo.cpp
 	smAccelerometer.cpp
 	smCompass.cpp
+	smVolumeSlider.cpp
 
 	["include"]
 	(include)
@@ -24,6 +25,7 @@ files
 	smVideo.h
 	smAccelerometer.h
 	smCompass.h 
+	smVolumeSlider.h
 }
 
 subprojects
