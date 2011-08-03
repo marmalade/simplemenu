@@ -425,7 +425,8 @@ bool CsmMenu::TouchMotionEvent(smTouchContext* touchContext)
 	if (activeTouch != touchContext)
 		return false;
 	CIwVec2 shift = touchContext->currentPoistion-touchContext->lastKnownPoistion;
-	if (isVerticalScrolled || abs(touchContext->firstKnownPoistion.y - touchContext->currentPoistion.y) > 10)
+	DPI::CdpiLength threshold(10*IW_GEOM_ONE, DPI::CdpiLength::PT);
+	if (isVerticalScrolled || abs(touchContext->firstKnownPoistion.y - touchContext->currentPoistion.y) > threshold.GetPx(1))
 	{
 		isVerticalScrolled = true;
 		if (activeItem)

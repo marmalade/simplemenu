@@ -98,6 +98,7 @@ namespace SimpleMenu
 
 		virtual void RearrangeChildItems();
 		virtual void PrepareChildItems(smItemContext* renderContext,int16 width);
+		virtual void RenderChildren(smItemContext* renderContext);
 
 		inline int16 GetMarginLeft()const {return combinedStyle.GetMarginLeft(1);}
 		inline int16 GetMarginTop()const {return combinedStyle.GetMarginTop(1);}

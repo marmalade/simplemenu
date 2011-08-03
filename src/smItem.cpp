@@ -304,11 +304,15 @@ void CsmItem::Render(smItemContext* renderContext)
 	RenderShadow(renderContext);
 	RenderBackgroud(renderContext);
 	RenderBorder(renderContext);
-
+	RenderChildren(renderContext);
+	
+}
+void CsmItem::RenderChildren(smItemContext* renderContext)
+{
 	for (CIwManaged** i = childItems.GetBegin(); i!=childItems.GetEnd(); ++i)
 	{
 		CsmItem* item = static_cast<CsmItem*>(*i);
-		item->Render(&context);
+		item->Render(renderContext);
 	}
 }
 void CsmItem::CombineStyle(smItemContext* renderContext)

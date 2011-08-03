@@ -57,6 +57,7 @@ CsmStyleSheet
 		}
 	}
 	bindto "BUTTON" "*" "FOCUS"
+	bindto "*" "SLIDERKNOB" "FOCUS"
 	style
 	{
 		padding 4 pt
