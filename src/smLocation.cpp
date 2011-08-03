@@ -106,5 +106,5 @@ float CsmLocation::GetVerticalAccuracy()
 }
 long CsmLocation::GetDataTimestamp()
 {
-	return (float)RequestFeature()->m_recievedAt;
+	return (long)RequestFeature()->m_recievedAt;
 }

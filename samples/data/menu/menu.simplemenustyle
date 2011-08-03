@@ -16,7 +16,21 @@ CsmStyleSheet
 			color {255,255,255,255}
 		}
 	}
+	bindto "SLIDER" "*" "*"
+	style
+	{
+		padding 1 pt
+		border 1 px
+		borderColor {50,70,150,255}
+		background
+		{
+			point {25,35,75,255} 0 %
+			point {25,35,75,255} 70 %
+			point {90,110,170,255} 100 %
+		}
+	}
 	bindto "BUTTON" "*" "*"
+	bindto "*" "SLIDERKNOB" "*"
 	style
 	{
 		padding 4 pt

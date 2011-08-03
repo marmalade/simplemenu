@@ -29,4 +29,5 @@ files
 subprojects
 {
 	./simplemenu.mkf
+	./simplemenu.config.mkf
 }

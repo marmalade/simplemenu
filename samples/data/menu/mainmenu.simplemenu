@@ -3,7 +3,35 @@ CsmMenu
 	name "mainmenu"
 
 	styleSheet "menu"
+	CsmItem
+	{
+	style { padding 10 px }
+	CsmTextBlock
+	{
+		text ""
 
+		onupdate "
+			self:SetText( 'DPI = ' .. CsmUtils.GetDPI() )
+		"
+	}
+	CsmSlider
+	{
+		CsmTextBlock
+		{
+		styleClass "SLIDERKNOB"
+		text "[]"
+		}
+	}
+	CsmGallery
+	{
+		text "--------------"
+		text "ABABA"
+		CsmItem
+		{
+		text "Line 1"
+		text "Line 2!"
+		}
+	}
 	CsmTextBlock
 	{
 		text "Searching for GPS"
@@ -15,6 +43,7 @@ CsmMenu
 				self:SetText( 'GPS is not available!')
 			end
 		"
+	}
 	}
 	CsmTextBlock
 	{

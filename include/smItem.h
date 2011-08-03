@@ -79,16 +79,23 @@ namespace SimpleMenu
 
 		bool IsVisible(smItemContext* renderContext);
 
+		//Gets position of the item
 		const CIwSVec2& GetOrigin() const {return origin;}
 		//Gets size of the item. It's only valid after Prepare method been executed
 		const CIwSVec2& GetSize() const {return size;}
-
+		//Sets position of the item. This method should be called during parent RearrangeChildItems method
 		virtual void SetOrigin(const CIwSVec2& v) { if (origin!=v) { origin=v;RearrangeChildItems(); }}
-
-		//Method walks through child items and collect active ones into plain list
-		//virtual void CollectActiveItems(CIwArray<CsmItem*>& collection);
+		//Gets the element name hash to select an apropriate style
+		virtual uint32 GetElementNameHash();
+		//Gets the element name class to select an apropriate style
+		virtual uint32 GetElementClassHash();
+		//Gets the element name state to select an apropriate style
+		virtual uint32 GetElementStateHash();
+		//Gets the element name ID hash
+		uint32 GetElementIdHash() { return idHash; }
 
 		virtual void RearrangeChildItems();
+		virtual void PrepareChildItems(smItemContext* renderContext,int16 width);
 
 		inline int16 GetMarginLeft()const {return combinedStyle.GetMarginLeft(1);}
 		inline int16 GetMarginTop()const {return combinedStyle.GetMarginTop(1);}
@@ -119,16 +126,14 @@ namespace SimpleMenu
 		virtual void InheritStyle(CsmStyleSettings* parentSettings);
 		virtual void ApplyStyleSheet(CsmStyleSheet* styleSheet);
 		virtual void ApplyStyle(CsmStyle* style);
-		virtual uint32 GetElementNameHash();
-		virtual uint32 GetElementClassHash();
-		virtual uint32 GetElementStateHash();
-		uint32 GetElementIdHash() { return idHash; }
 		//Finds an active item in children
 		virtual CsmItem* FindActiveItemAt(const CIwVec2 & item);
 		virtual void SetFocus(bool f);
 		virtual void Touch(smTouchContext* smTouchContext);
 		virtual void TouchReleased(smTouchContext* smTouchContext);
+		virtual void TouchCanceled(smTouchContext* smTouchContext);
 		virtual void TouchMotion(smTouchContext* smTouchContext);
+		//Check if element can interact with user
 		virtual bool IsActive() const {return false;}
 
 		virtual bool VisitForward(IsmVisitor* visitor);

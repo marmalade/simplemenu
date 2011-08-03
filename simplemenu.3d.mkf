@@ -1,0 +1,20 @@
+includepaths
+{
+	"./include"
+}
+
+files
+{
+	["src"]
+	(src)
+	sm3DModel.cpp
+
+	["include"]
+	(include)
+	sm3DModel.h
+}
+
+subprojects
+{
+	./simplemenu.mkf
+}

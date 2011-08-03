@@ -16,7 +16,9 @@ files
 	simplemenu.cpp
 	smBackground.cpp
 	smButton.cpp
+	smCanvas.cpp
 	smClickable.cpp
+	smGallery.cpp
 	smImage.cpp
 	smItem.cpp
 	smMenu.cpp
@@ -24,6 +26,7 @@ files
 	smScriptProvider.cpp
 	smStyle.cpp
 	smStyleSheet.cpp
+	smSlider.cpp
 	smTextBlock.cpp
 	smTextBox.cpp
 	smInput.cpp
@@ -37,7 +40,9 @@ files
 	simplemenu.h
 	smBackground.h 
 	smButton.h 
+	smCanvas.h
 	smClickable.h 
+	smGallery.h
 	smImage.h 
 	smInput.h
 	smTerminalItem.h
@@ -46,6 +51,7 @@ files
 	smScriptProvider.h 
 	smStyle.h 
 	smStyleSheet.h 
+	smSlider.h
 	smTextBlock.h 
 	smIntrusiveList.h
 	smScriptingBinds.h 

@@ -75,18 +75,21 @@ void CsmItem::Prepare(smItemContext* renderContext,int16 width)
 	CombineStyle(renderContext);
 	smItemContext context = *renderContext;
 	context.parentStyle = &combinedStyle;
-
+	PrepareChildItems(&context, width);
+	RearrangeChildItems();
+}
+void CsmItem::PrepareChildItems(smItemContext* context,int16 width)
+{
 	int16 contentWidth = width - GetContentOffsetLeft()-GetContentOffsetRight();
 	size.x = width;
 	size.y = 0;
 	for (CIwManaged** i = childItems.GetBegin(); i!=childItems.GetEnd(); ++i)
 	{
 		CsmItem* item = static_cast<CsmItem*>(*i);
-		item->Prepare(&context,contentWidth);
+		item->Prepare(context,contentWidth);
 		size.y += item->GetSize().y;
 	}
 	size.y += GetContentOffsetTop()+GetContentOffsetBottom();
-	RearrangeChildItems();
 }
 void CsmItem::RearrangeChildItems()
 {
@@ -136,8 +139,8 @@ void CsmItem::RenderShadow(smItemContext* renderContext)
 		return;
 	if (combinedStyle.ShadowColor.a == 0)
 		return;
-	if (combinedStyle.ShadowSize.IsZero() && combinedStyle.ShadowOffset.IsZero())
-		return;
+	//if (combinedStyle.ShadowSize.IsZero() && combinedStyle.ShadowOffset.IsZero())
+	//	return;
 
 	uint32 vertices = 16;
 	uint32 numIndices = 18*3;
@@ -375,6 +378,9 @@ void CsmItem::TouchReleased(smTouchContext* touchContext)
 {
 }
 void CsmItem::TouchMotion(smTouchContext* touchContext)
+{
+}
+void CsmItem::TouchCanceled(smTouchContext* smTouchContext)
 {
 }
 uint32 CsmItem::GetElementNameHash() { return SM_ANYSTYLE; }

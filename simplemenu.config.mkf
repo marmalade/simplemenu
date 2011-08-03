@@ -1,0 +1,20 @@
+includepaths
+{
+	"./include"
+}
+
+files
+{
+	["src"]
+	(src)
+	smConfig.cpp
+
+	["include"]
+	(include)
+	smConfig.h
+}
+
+subprojects
+{
+	./simplemenu.mkf
+}

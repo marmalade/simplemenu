@@ -10,7 +10,7 @@ assets
 	(./data)
 	./menu/font.ttf
 	./menu/fontbold.ttf
-	(../data-ram/data-gles1)
+	(./data-ram/data-gles1)
 	./menu/mainmenu.group.bin
 }
 
@@ -26,16 +26,21 @@ files
 	[Data/Menu]
 	(./data/menu)
 	mainmenu.simplemenu
+	menu.simplemenustyle
+	mainmenu.group
 }
+
 deployments
 {
 }
+
 packages
 {
 	#simplemenu
 	pugixml
 	freetype
 }
+
 subprojects
 {
 	#simplemenu
@@ -43,7 +48,7 @@ subprojects
 	../simplemenu.lua.mkf
 	../simplemenu.features.mkf
 	../simplemenu.svg.mkf
-	../simplemenu.curl.mkf
+	#../simplemenu.curl.mkf
 	freetype
 	freetypehelper
 }

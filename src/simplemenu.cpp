@@ -9,6 +9,9 @@
 #include "smTextBlock.h"
 #include "smTextBox.h"
 #include "smScriptProvider.h"
+#include "smCanvas.h"
+#include "smSlider.h"
+#include "smGallery.h"
 
 namespace SimpleMenu
 {
@@ -26,6 +29,9 @@ namespace SimpleMenu
 	public:
 		static void CloseAllMenus() {sm_menuCloseState= SM_CLOSE_ALL;}
 		static void CloseMenu() {sm_menuCloseState= SM_CLOSE_CURRENT;}
+		static int GetDPI() {
+			return DPI::dpiGetScreenDPI();
+		}
 	};
 
 	CsmScriptableClassDeclaration* smGetClassDescription()
@@ -33,6 +39,7 @@ namespace SimpleMenu
 		static  TsmScriptableClassDeclaration<CsmUtils> d ("CsmUtils",
 			ScriptTraits::Method("CloseMenu", &CsmUtils::CloseMenu),
 			ScriptTraits::Method("CloseAllMenus", &CsmUtils::CloseAllMenus),
+			ScriptTraits::Method("GetDPI", &CsmUtils::GetDPI),
 				0);
 		return &d;
 	}
@@ -61,10 +68,9 @@ void SimpleMenu::smInit()
 	IW_CLASS_REGISTER(CsmButton);
 	IW_CLASS_REGISTER(CsmClickable);
 	IW_CLASS_REGISTER(CsmImage);
-	//IW_CLASS_REGISTER(CsmCanvas);
-	//IW_CLASS_REGISTER(CsmMenu);
-	//IW_CLASS_REGISTER(CsmImageCarousel);
-	//IW_CLASS_REGISTER(CsmInputComponent);
+	IW_CLASS_REGISTER(CsmSlider);
+	IW_CLASS_REGISTER(CsmCanvas);
+	IW_CLASS_REGISTER(CsmGallery);
 	IW_CLASS_REGISTER(CsmItem);
 	IW_CLASS_REGISTER(CsmTextBlock);
 	IW_CLASS_REGISTER(CsmStyleSheet);

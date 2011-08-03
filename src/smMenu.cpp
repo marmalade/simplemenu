@@ -425,6 +425,7 @@ bool CsmMenu::TouchMotionEvent(smTouchContext* touchContext)
 		isVerticalScrolled = true;
 		if (activeItem)
 		{
+			activeItem->TouchCanceled(touchContext);
 			SetFocusTo(0);
 			activeItem = 0;
 		}
