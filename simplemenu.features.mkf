@@ -13,6 +13,7 @@ files
 	smAudio.cpp
 	smVideo.cpp
 	smAccelerometer.cpp
+	smCamera.cpp
 	smCompass.cpp
 	smVolumeSlider.cpp
 
@@ -24,6 +25,7 @@ files
 	smAudio.h
 	smVideo.h
 	smAccelerometer.h
+	smCamera.h
 	smCompass.h 
 	smVolumeSlider.h
 }

@@ -93,7 +93,7 @@ bool	CsmStyle::ParseAttribute(CIwTextParserITX* pParser, const char* pAttrName)
 	}
 	if (!stricmp("fontColour",pAttrName) || !stricmp("fontColor",pAttrName) || !stricmp("font-colour",pAttrName) || !stricmp("font-color",pAttrName))
 	{
-		uint8 c[4];
+		uint8 c[4] = {255,255,255,255};
 		pParser->ReadUInt8Array(c,4);
 		settings.FontColor.Set(c[0],c[1],c[2],c[3]);
 		isFontColor = true;
@@ -101,7 +101,7 @@ bool	CsmStyle::ParseAttribute(CIwTextParserITX* pParser, const char* pAttrName)
 	}
 	if (!stricmp("borderColour",pAttrName) || !stricmp("borderColor",pAttrName) || !stricmp("border-Colour",pAttrName) || !stricmp("border-Color",pAttrName))
 	{
-		uint8 c[4];
+		uint8 c[4] = {255,255,255,255};
 		pParser->ReadUInt8Array(c,4);
 		settings.BorderColor.Set(c[0],c[1],c[2],c[3]);
 		isBorderColor = true;
@@ -109,7 +109,7 @@ bool	CsmStyle::ParseAttribute(CIwTextParserITX* pParser, const char* pAttrName)
 	}
 	if (!stricmp("shadowColour",pAttrName) || !stricmp("shadowColor",pAttrName)|| !stricmp("shadow-Colour",pAttrName) || !stricmp("shadow-Color",pAttrName))
 	{
-		uint8 c[4];
+		uint8 c[4] = {255,255,255,255};
 		pParser->ReadUInt8Array(c,4);
 		settings.ShadowColor.Set(c[0],c[1],c[2],c[3]);
 		isShadowColor = true;
@@ -117,7 +117,7 @@ bool	CsmStyle::ParseAttribute(CIwTextParserITX* pParser, const char* pAttrName)
 	}
 	if (!stricmp("textShadowColour",pAttrName) || !stricmp("textShadowColor",pAttrName) || !stricmp("text-Shadow-Colour",pAttrName) || !stricmp("text-Shadow-Color",pAttrName))
 	{
-		uint8 c[4];
+		uint8 c[4] = {255,255,255,255};
 		pParser->ReadUInt8Array(c,4);
 		settings.TextShadowColor.Set(c[0],c[1],c[2],c[3]);
 		isTextShadowColor = true;
