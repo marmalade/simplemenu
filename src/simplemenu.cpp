@@ -14,6 +14,8 @@
 #include "smGallery.h"
 #include "smSelect.h"
 #include "smSwitch.h"
+#include "smRow.h"
+#include "smGrid.h"
 
 namespace SimpleMenu
 {
@@ -78,9 +80,8 @@ void SimpleMenu::smInit()
 	IW_CLASS_REGISTER(CsmStyleSheet);
 	IW_CLASS_REGISTER(CsmSelect);
 	IW_CLASS_REGISTER(CsmSwitch);
-	//IW_CLASS_REGISTER(CsmRow);
-	//IW_CLASS_REGISTER(CsmCompass);
-	//IW_CLASS_REGISTER(CsmGrid);
+	IW_CLASS_REGISTER(CsmRow);
+	IW_CLASS_REGISTER(CsmGrid);
 
 
 	toe_scriptClassDeclarations = new CIwArray<CsmScriptableClassDeclaration*>;
@@ -172,6 +173,8 @@ void SimpleMenu::smDrawSimpleMenuScrollbar(const CIwSVec2 & pos,const CIwSVec2 &
 
 void SimpleMenu::smRenderLoading()
 {
+	IwGxClear(IW_GX_DEPTH_BUFFER_F);
+
 	iwangle step = IW_GEOM_ONE/32;
 	g_toeLoadingAngle = (g_toeLoadingAngle+step) %IW_GEOM_ONE;
 	int32 h = (int32)IwGxGetScreenHeight();
@@ -224,6 +227,7 @@ void SimpleMenu::smRenderLoading()
 	IwGxDrawPrims(IW_GX_QUAD_LIST, 0, index);
 	IwGxFlush();
 	IwGxSwapBuffers();
+	IwGxClear(IW_GX_DEPTH_BUFFER_F);
 }
 
 //Reads/writes a binary file using @a IwSerialise interface.

@@ -85,8 +85,11 @@ void CsmItem::Prepare(smItemContext* renderContext,int16 width)
 	CombineStyle(renderContext);
 	smItemContext context = *renderContext;
 	context.parentStyle = &combinedStyle;
-	PrepareChildItems(&context, width);
-	RearrangeChildItems();
+	if (childItems.GetSize() > 0)
+	{
+		PrepareChildItems(&context, width);
+		RearrangeChildItems();
+	}
 }
 void CsmItem::PrepareChildItems(smItemContext* context,int16 width)
 {

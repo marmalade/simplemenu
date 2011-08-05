@@ -2,96 +2,105 @@ CsmMenu
 {
 	name "mainmenu"
 
-	onload "
-		CsmLocation.WaitForGPS()
-	"
-
 	styleSheet "menu"
+
 	CsmItem
 	{
-	style { padding 10 px }
-
-		CsmItem
-		{
-			style { padding 10 px }
+		style { padding 10 px }
 
 			CsmItem
 			{
-				style 
-				{
-					drop-shadow true
-					shadow-size -2 pt
-					shadow-offset 1 pt 1 pt
-					padding 20 pt
-					border 1 px
-					#border-colour { 255, 255, 0 }
-				}
+				style { padding 10 px }
 
-				text "Sample"
+				CsmItem
+				{
+					style 
+					{
+						drop-shadow true
+						shadow-size -2 pt
+						shadow-offset 1 pt 1 pt
+						padding 20 pt
+						border 1 px
+						#border-colour { 255, 255, 0 }
+					}
+
+					text "Sample"
+				}
+			}
+
+		CsmTextBlock
+		{
+			text ""
+
+			onupdate "
+				self:SetText( 'DPI = ' .. CsmUtils.GetDPI() )
+			"
+		}
+		CsmSlider
+		{
+			CsmTextBlock
+			{
+			styleClass "SLIDERKNOB"
+			text "Slider"
 			}
 		}
-
-	CsmTextBlock
-	{
-		text ""
-
-		onupdate "
-			self:SetText( 'DPI = ' .. CsmUtils.GetDPI() )
-		"
-	}
-	CsmSlider
-	{
+		CsmSwitch
+		{
+			CsmTextBlock
+			{
+			styleClass "SLIDERKNOB"
+			text "Switch"
+			}
+		}
+		CsmSelect
+		{
+			text "OPTION 0"
+			text "OPTION 1"
+			text "OPTION 2"
+			text "OPTION 3"
+		}
+		CsmGallery
+		{
+			text "--------------"
+			text "ABABA"
+			CsmItem
+			{
+			text "Line 1"
+			text "Line 2!"
+			}
+		}
 		CsmTextBlock
 		{
-		styleClass "SLIDERKNOB"
-		text "Slider"
-		}
-	}
-	CsmSwitch
-	{
-		CsmTextBlock
-		{
-		styleClass "SLIDERKNOB"
-		text "Switch"
-		}
-	}
-	CsmSelect
-	{
-		text "OPTION 0"
-		text "OPTION 1"
-		text "OPTION 2"
-		text "OPTION 3"
-	}
-	CsmGallery
-	{
-		text "--------------"
-		text "ABABA"
-		CsmItem
-		{
-		text "Line 1"
-		text "Line 2!"
-		}
-	}
-	CsmTextBlock
-	{
-		text "Searching for GPS"
+			text "Searching for GPS"
 
-		onupdate "
-			if CsmLocation.IsAvailable() then
-				self:SetText( 'GPS is available!' .. CsmLocation.GetLongitude() .. 'x' .. CsmLocation.GetLatitude() .. ' received at ' .. CsmLocation.GetDataTimestamp() )
-			else
-				self:SetText( 'GPS is not available!')
-			end
-		"
-	}
+			onupdate "
+				if CsmLocation.IsAvailable() then
+					self:SetText( 'GPS is available!' .. CsmLocation.GetLongitude() .. 'x' .. CsmLocation.GetLatitude() .. ' received at ' .. CsmLocation.GetDataTimestamp() )
+				else
+					self:SetText( 'GPS is not available!')
+				end
+			"
+		}
+		CsmButton
+		{
+			text "Wait for GPS signal"
+			onclick "CsmLocation.WaitForGPS()"
+		}
 	}
 	CsmTextBlock
 	{
 		text "HEADER"
 	}
-	CsmButton
+	CsmRow
 	{
-		text "Close"
-		onclick "CsmUtils.CloseAllMenus()"
+		CsmButton
+		{
+			text "About"
+		}
+		CsmButton
+		{
+			text "Close"
+			onclick "CsmUtils.CloseAllMenus()"
+		}
 	}
 }

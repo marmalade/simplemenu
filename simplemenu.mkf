@@ -36,7 +36,8 @@ files
 	smSwitch.cpp
 	smSelect.cpp
 	smCheckbox.cpp
-
+	smGrid.cpp
+	smRow.cpp
 
 	["include"]
 	(include)
@@ -66,6 +67,8 @@ files
 	smSwitch.h
 	smSelect.h
 	smCheckbox.h
+	smGrid.h
+	smRow.h
 }
 
 packages
