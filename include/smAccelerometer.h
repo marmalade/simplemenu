@@ -1,3 +1,9 @@
+#pragma once
+#include <s3eLocation.h>
+#include "smFeatures.h"
+
+namespace SimpleMenu
+{
 	class CsmAccelerometer: public CsmFeature
 	{
 	public: 
@@ -14,3 +20,4 @@
 		virtual void StartFeature();
 		virtual void StopFeature();
 	};
+}

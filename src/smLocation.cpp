@@ -1,3 +1,4 @@
+#include <s3eKeyboard.h>
 #include "smLocation.h"
 #include "smConfig.h"
 
@@ -20,6 +21,7 @@ CsmScriptableClassDeclaration* CsmLocation::GetClassDescription()
 		ScriptTraits::Method("GetTimeStampUTC", &CsmLocation::GetTimeStampUTC),
 		ScriptTraits::Method("GetVerticalAccuracy", &CsmLocation::GetVerticalAccuracy),
 		ScriptTraits::Method("GetDataTimestamp", &CsmLocation::GetDataTimestamp),
+		ScriptTraits::Method("WaitForGPS", &CsmLocation::WaitForGPS),
 			0);
 	return &d;
 }
@@ -81,6 +83,38 @@ void CsmLocation::StopFeature()
 {
 	s3eLocationStop();
 	s3eLocationUnRegister(S3E_LOCATION_CALLBACK_LOCATION_UPDATED, Callback);
+}
+bool CsmLocation::WaitForGPS()
+{
+	CsmLocation* feature = RequestFeature();
+	if (!feature)
+		return false;
+
+	time_t r = feature->m_receivedAt;
+	time_t rr = r;
+	while (rr == r)
+	{
+		s3eDeviceYield(30);
+		s3eKeyboardUpdate();
+
+		bool result = true;
+		if	(
+			(result == false) ||
+			(s3eKeyboardGetState(s3eKeyEsc) & S3E_KEY_STATE_DOWN) ||
+			(s3eKeyboardGetState(s3eKeyAbsBSK) & S3E_KEY_STATE_DOWN) ||
+			(s3eDeviceCheckQuitRequest()) ||
+			(SimpleMenu::smGetCloseState() != SimpleMenu::SM_KEEP_OPEN)
+			)
+			break;
+
+		smRenderLoading();
+		rr = feature->m_receivedAt;
+	}
+	while ((s3eKeyboardGetState(s3eKeyEsc) & S3E_KEY_STATE_DOWN))
+	{
+		s3eDeviceYield(30);
+		s3eKeyboardUpdate();
+	}
 }
 float CsmLocation::GetLatitude()
 {

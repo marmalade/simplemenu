@@ -29,6 +29,11 @@ void SimpleMenu::smFeaturesInit()
 	smInit();
 	smConfigInit();
 	smRegisterClass(CsmLocation::GetClassDescription());
+	smRegisterClass(CsmCamera::GetClassDescription());
+	smRegisterClass(CsmCompass::GetClassDescription());
+	smRegisterClass(CsmAccelerometer::GetClassDescription());
+	smRegisterClass(CsmAudio::GetClassDescription());
+	smRegisterClass(CsmVideo::GetClassDescription());
 }
 
 void SimpleMenu::smFeaturesTerminate()

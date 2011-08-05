@@ -22,6 +22,8 @@ files
 
 	[Data]
 	(./data)
+	app.icf
+	app.config.txt
 
 	[Data/Menu]
 	(./data/menu)

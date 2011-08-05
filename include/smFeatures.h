@@ -25,13 +25,4 @@ namespace SimpleMenu
 		virtual void StartFeature() {};
 		virtual void StopFeature() {};
 	};
-
-
-
-
-
-
-
-
-
 }

@@ -143,6 +143,76 @@ void CsmItem::RenderBackgroud(smItemContext* renderContext)
 		renderContext->viewportSize,
 		renderContext->transformation);
 }
+void CsmItem::RenderInternalShadow(smItemContext* renderContext)
+{
+	if (!combinedStyle.DropShadow)
+		return;
+	if (combinedStyle.ShadowColor.a == 0)
+		return;
+
+	uint32 vertices = 8;
+	uint32 numIndices = 8*3;
+	CIwSVec2* v = IW_GX_ALLOC(CIwSVec2,vertices);
+	CIwColour* col =IW_GX_ALLOC(CIwColour,vertices);
+	uint16* indices = IW_GX_ALLOC(uint16,numIndices);
+	CIwMaterial* m = IW_GX_ALLOC_MATERIAL();
+	m->SetColAmbient(255,255,255,255);
+	//m->SetCullMode(CIwMaterial::CULL_NONE);
+	CIwSVec2 leftTop = GetOrigin()+ CIwSVec2(GetMarginLeft(), GetMarginTop())+CIwSVec2(GetBorderLeft(),GetBorderTop());
+	CIwSVec2 rightBottom = leftTop + GetSize()- CIwSVec2(GetMarginLeft()+GetMarginRight(), GetMarginTop()+GetMarginBottom())-CIwSVec2(GetBorderLeft()+GetBorderRight(),GetBorderTop()+GetBorderBottom());
+	CIwSVec2 soff = CIwSVec2(combinedStyle.ShadowOffset.x.GetPx(1), combinedStyle.ShadowOffset.y.GetPx(1));
+	int ssize = combinedStyle.ShadowSize.GetPx(1);
+	CIwSVec2 llTT = leftTop+soff-CIwSVec2(ssize, ssize);
+	CIwSVec2 rrBB = rightBottom+soff+CIwSVec2(ssize, ssize);
+	if (rrBB.x > rightBottom.x) rrBB.x = rightBottom.x;
+	if (rrBB.y > rightBottom.y) rrBB.y = rightBottom.y;
+	if (llTT.x < leftTop.x) llTT.x = leftTop.x;
+	if (llTT.y < leftTop.y) llTT.y = leftTop.y;
+
+	uint32 i = 0;
+	col[i] = combinedStyle.ShadowColor;
+	v[i++] = CIwSVec2(leftTop.x,leftTop.y);
+	col[i] = combinedStyle.BorderColor;
+	v[i++] = CIwSVec2(rightBottom.x,leftTop.y);
+	col[i] = combinedStyle.BorderColor;
+	v[i++] = CIwSVec2(rightBottom.x,rightBottom.y);
+	col[i] = combinedStyle.BorderColor;
+	v[i++] = CIwSVec2(leftTop.x,rightBottom.y);
+
+	CIwColour transparent = col[0] = col[1] = col[2] = col[3] = combinedStyle.ShadowColor;
+	transparent.a = 0;
+
+	col[i] = combinedStyle.BorderColor;
+	v[i++] = CIwSVec2(llTT.x,llTT.y);
+	col[i] = combinedStyle.BorderColor;
+	v[i++] = CIwSVec2(rrBB.x,llTT.y);
+	col[i] = combinedStyle.BorderColor;
+	v[i++] = CIwSVec2(rrBB.x,rrBB.y);
+	col[i] = combinedStyle.BorderColor;
+	v[i++] = CIwSVec2(llTT.x,rrBB.y);
+
+	col[4] = col[5] = col[6] = col[7] = transparent;
+
+	i = 0;
+	indices[i++] = 0;	indices[i++] = 4;	indices[i++] = 1;
+	indices[i++] = 1;	indices[i++] = 4;	indices[i++] = 5;
+
+	indices[i++] = 1;	indices[i++] = 5;	indices[i++] = 2;
+	indices[i++] = 2;	indices[i++] = 5;	indices[i++] = 6;
+
+	indices[i++] = 2;	indices[i++] = 6;	indices[i++] = 3;
+	indices[i++] = 3;	indices[i++] = 6;	indices[i++] = 7;
+
+	indices[i++] = 3;	indices[i++] = 7;	indices[i++] = 0;
+	indices[i++] = 0;	indices[i++] = 7;	indices[i++] = 4;
+
+	m->SetAlphaMode(CIwMaterial::ALPHA_BLEND);
+	IwGxSetMaterial(m);
+	//toeTransformScreenSpace3D(v,v+vertices,renderContext->transformation, renderContext->viewportSize);
+	IwGxSetVertStreamScreenSpace(v,vertices);
+	IwGxSetColStream(col);
+	IwGxDrawPrims(IW_GX_TRI_LIST, indices, i);
+}
 void CsmItem::RenderShadow(smItemContext* renderContext)
 {
 	if (!combinedStyle.DropShadow)
@@ -188,9 +258,9 @@ void CsmItem::RenderShadow(smItemContext* renderContext)
 	v[i++] = CIwSVec2((llTT.x*2+leftTop.x)/3,(rrBB.y*2+rightBottom.y)/3);
 	v[i++] = CIwSVec2(llTT.x,rightBottom.y);
 
-	col[0] = col[1] = col[2] = col[3] = combinedStyle.ShadowColor;
-	CIwColour transparent;
-	transparent.Set(0);
+	CIwColour transparent = col[0] = col[1] = col[2] = col[3] = combinedStyle.ShadowColor;
+	transparent.a = 0;
+	
 	col[4] = col[5] = col[6] = col[7] = transparent;
 	col[8] = col[9] = col[10] = col[11] = transparent;
 	col[12] = col[13] = col[14] = col[15] = transparent;
@@ -301,9 +371,16 @@ void CsmItem::Render(smItemContext* renderContext)
 	smItemContext context = *renderContext;
 	context.parentStyle = &combinedStyle;
 
-	RenderShadow(renderContext);
+	if (combinedStyle.ShadowSize.Value >= 0)
+		RenderShadow(renderContext);
+
 	RenderBackgroud(renderContext);
+
 	RenderBorder(renderContext);
+
+	if (combinedStyle.ShadowSize.Value < 0)
+		RenderInternalShadow(renderContext);
+
 	RenderChildren(renderContext);
 	
 }

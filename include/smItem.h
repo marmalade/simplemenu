@@ -147,6 +147,7 @@ namespace SimpleMenu
 	protected:
 		void RenderBackgroud(smItemContext* renderContext);
 		void RenderShadow(smItemContext* renderContext);
+		void RenderInternalShadow(smItemContext* renderContext);
 		void RenderBorder(smItemContext* renderContext);
 		void SendLazyEvent(CsmLazyEvent*);
 	public:

@@ -22,9 +22,10 @@ MemSize=8388608
 #MemoryBreakpoint=346
 
 [Trace]
-#ALL=1
+
 
 [GX] 
+DisplayFrameRate=1
 #Rasterisation=HW
 #Rasterisation=SW
 UseRGBLighting=1

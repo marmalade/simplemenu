@@ -54,8 +54,8 @@ int main(int argc, char* argv[])
 				break;
 
 
-			//IwGxClear(IW_GX_DEPTH_BUFFER_F);
-			IwGxClear(IW_GX_COLOUR_BUFFER_F | IW_GX_DEPTH_BUFFER_F);
+			IwGxClear(IW_GX_DEPTH_BUFFER_F);
+			//IwGxClear(IW_GX_COLOUR_BUFFER_F | IW_GX_DEPTH_BUFFER_F);
 			m->Update(30);
 			m->Render();
 

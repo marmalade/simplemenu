@@ -2,6 +2,10 @@ CsmMenu
 {
 	name "mainmenu"
 
+	onload "
+		CsmLocation.WaitForGPS()
+	"
+
 	styleSheet "menu"
 	CsmItem
 	{
@@ -15,30 +19,12 @@ CsmMenu
 			{
 				style 
 				{
-					font "fontbold"
-					font-size 12 pt
-					font-colour { 220 220 230 255 }
-					text-shadow-offset -1 px -1 px
-
-					horizontal-alignment 0.5
-
-					padding 10 px
-
-					background
-					{
-						point { 92 70 122 } 0 px
-						point { 66 46 96 } 100 %
-					}
-
-					border-top 1 pt
-					border-left 1 pt
-					#border-colour { 220 220 230 }
-					border-colour { 118 93 149 }
-					
-
 					drop-shadow true
-					shadow-size 2 pt
+					shadow-size -2 pt
 					shadow-offset 1 pt 1 pt
+					padding 20 pt
+					border 1 px
+					#border-colour { 255, 255, 0 }
 				}
 
 				text "Sample"
