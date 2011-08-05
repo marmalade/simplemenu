@@ -44,7 +44,7 @@ namespace SimpleMenu
 		virtual void Render(smItemContext* renderContext);
 		//Gets the element name hash to select an apropriate style
 		virtual uint32 GetElementNameHash();
-		//Check if element can interact with user
+		//Check if element can interact with user (receive clicks and keys)
 		virtual bool IsActive() const {return true;}
 		virtual void TouchReleased(smTouchContext* touchContext);
 #ifdef IW_BUILD_RESOURCES

@@ -48,6 +48,7 @@ subprojects
 	#simplemenu
 	../simplemenu.mkf
 	../simplemenu.lua.mkf
+	../simplemenu.3d.mkf
 	../simplemenu.features.mkf
 	../simplemenu.svg.mkf
 	#../simplemenu.curl.mkf

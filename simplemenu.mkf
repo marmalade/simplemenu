@@ -38,6 +38,7 @@ files
 	smCheckbox.cpp
 	smGrid.cpp
 	smRow.cpp
+	smWindowHistory.cpp 
 
 	["include"]
 	(include)
@@ -69,6 +70,7 @@ files
 	smCheckbox.h
 	smGrid.h
 	smRow.h
+	smWindowHistory.h
 }
 
 packages

@@ -12,7 +12,7 @@ CsmMenu
 			{
 				style { padding 10 px }
 
-				CsmItem
+				CsmTextBox
 				{
 					style 
 					{

@@ -9,6 +9,7 @@
 #include <smLuaState.h>
 #include <smAllFeatures.h>
 #include <smConfig.h>
+#include <sm3DModel.h>
 
 using namespace FreeTypeHelper;
 
@@ -24,6 +25,7 @@ int main(int argc, char* argv[])
 	SimpleMenu::smInit();
 	SimpleMenu::smLuaInit();
 	SimpleMenu::smFeaturesInit();
+	SimpleMenu::sm3DInit();
 
 	IwGxSetColClear(0x1f, 0x1f, 0xc0, 0x7f);
 
@@ -68,6 +70,7 @@ int main(int argc, char* argv[])
 	delete lua;
 	input->UnRegister();
 
+	SimpleMenu::sm3DTerminate();
 	SimpleMenu::smFeaturesTerminate();
 	SimpleMenu::smLuaTerminate();
 	SimpleMenu::smTerminate();

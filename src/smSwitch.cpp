@@ -58,6 +58,10 @@ void CsmSwitch::TouchReleased(smTouchContext* smTouchContext)
 void CsmSwitch::TouchCanceled(smTouchContext* smTouchContext)
 {
 	CsmSlider::TouchCanceled(smTouchContext);
+	if (sliderValue < IW_GEOM_ONE/2)
+		sliderValue = 0;
+	else
+		sliderValue = IW_GEOM_ONE;
 }
 void CsmSwitch::TouchMotion(smTouchContext* smTouchContext)
 {

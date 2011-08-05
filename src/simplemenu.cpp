@@ -77,6 +77,7 @@ void SimpleMenu::smInit()
 	IW_CLASS_REGISTER(CsmGallery);
 	IW_CLASS_REGISTER(CsmItem);
 	IW_CLASS_REGISTER(CsmTextBlock);
+	IW_CLASS_REGISTER(CsmTextBox);
 	IW_CLASS_REGISTER(CsmStyleSheet);
 	IW_CLASS_REGISTER(CsmSelect);
 	IW_CLASS_REGISTER(CsmSwitch);

@@ -69,11 +69,15 @@ void CsmRow::RearrangeChildItems()
 	topLeft.x += GetContentOffsetLeft();
 	topLeft.y += GetContentOffsetTop();
 	int16 contentWidth = size.x - GetContentOffsetLeft()-GetContentOffsetRight();
+	int16 contentHeiht = size.y -GetContentOffsetTop()-GetContentOffsetBottom();
 	int16 cellWidth = contentWidth/childItems.GetSize();
 	for (CIwManaged** i = childItems.GetBegin(); i!=childItems.GetEnd(); ++i)
 	{
 		CsmItem* item = static_cast<CsmItem*>(*i);
-		item->SetOrigin(topLeft);
+		CIwSVec2 alignedPos = topLeft;
+		alignedPos.x += (cellWidth-item->GetSize().x)*combinedStyle.HorizontalAlignment/IW_GEOM_ONE;
+		alignedPos.y += (contentHeiht-item->GetSize().y)*combinedStyle.VerticalAlignment/IW_GEOM_ONE;
+		item->SetOrigin(alignedPos);
 		topLeft.x += cellWidth;
 	}
 }

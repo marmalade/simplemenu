@@ -8,13 +8,17 @@ files
 	["src"]
 	(src)
 	sm3DModel.cpp
+	sm3D.cpp
 
 	["include"]
 	(include)
 	sm3DModel.h
+	sm3D.h
 }
 
 subprojects
 {
 	./simplemenu.mkf
+	iwgraphics
+	iwanim 
 }
