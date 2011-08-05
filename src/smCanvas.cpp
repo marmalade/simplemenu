@@ -43,6 +43,11 @@ void CsmCanvas::Serialise ()
 {
 	CsmItem::Serialise();
 }
+uint32 CsmCanvas::GetElementNameHash()
+{
+	static uint32 name = IwHashString("Canvas");
+	return name;
+}
 void CsmCanvas::PrepareChildItems(smItemContext* context,int16 width)
 {
 	int16 contentWidth = width - GetContentOffsetLeft()-GetContentOffsetRight();
@@ -75,11 +80,7 @@ void CsmCanvas::Render(smItemContext* renderContext)
 {
 	CsmItem::Render(renderContext);
 }
-uint32 CsmCanvas::GetElementNameHash()
-{
-	static uint32 name = IwHashString("Canvas");
-	return name;
-}
+
 
 #ifdef IW_BUILD_RESOURCES
 

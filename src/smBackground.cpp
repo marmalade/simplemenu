@@ -114,7 +114,7 @@ bool	CsmBackground::ParseAttribute(CIwTextParserITX* pParser, const char* pAttrN
 {
 	if (!stricmp("color", pAttrName) || !stricmp("colour", pAttrName))
 	{
-		uint8 c[4];
+		uint8 c[4]={255,255,255,255};
 		pParser->ReadUInt8Array(c,4);
 		CIwColour col;
 		col.Set(c[0],c[1],c[2],c[3]);
@@ -126,7 +126,7 @@ bool	CsmBackground::ParseAttribute(CIwTextParserITX* pParser, const char* pAttrN
 	}
 	if (!stricmp("point", pAttrName))
 	{
-		uint8 c[4];
+		uint8 c[4]={255,255,255,255};
 		pParser->ReadUInt8Array(c,4);
 		CIwColour col;
 		col.Set(c[0],c[1],c[2],c[3]);

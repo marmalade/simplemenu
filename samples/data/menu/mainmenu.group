@@ -9,6 +9,7 @@ CIwResGroup
 
 	#Menu css-like style file
 	./menu.simplemenustyle
+	./purplestyle.simplemenustyle
 
 	#Menu file
 	./mainmenu.simplemenu

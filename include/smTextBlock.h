@@ -29,6 +29,8 @@ namespace SimpleMenu
 
 		//Reads/writes a binary file using @a IwSerialise interface.
 		virtual void Serialise ();
+		//Gets the element name hash to select an apropriate style
+		virtual uint32 GetElementNameHash();
 
 		virtual void Prepare(smItemContext* renderContext,int16 width);
 		//Render image on the screen surface

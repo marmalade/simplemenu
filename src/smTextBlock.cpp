@@ -67,6 +67,11 @@ void CsmTextBlock::Serialise ()
 		}
 	}
 }
+uint32 CsmTextBlock::GetElementNameHash()
+{
+	static uint32 name = IwHashString("TextBlock");
+	return name;
+}
 //Get scriptable class declaration
 CsmScriptableClassDeclaration* CsmTextBlock::GetClassDescription()
 {
@@ -130,9 +135,12 @@ void CsmTextBlock::Prepare(smItemContext* renderContext,int16 width)
 void CsmTextBlock::Render(smItemContext* renderContext)
 {
 	if (!IsVisible(renderContext)) return;
-	RenderShadow(renderContext);
+	if (combinedStyle.ShadowSize.Value >= 0)
+		RenderShadow(renderContext);
 	RenderBackgroud(renderContext);
 	RenderBorder(renderContext);
+	if (combinedStyle.ShadowSize.Value < 0)
+		RenderInternalShadow(renderContext);
 	CIwSVec2 p = GetOrigin()+CIwSVec2(GetMarginLeft()+GetPaddingLeft(),GetMarginTop()+GetPaddingTop());
 	layoutData.RenderAt(p,renderContext->viewportSize,renderContext->transformation,combinedStyle.FontColor);
 	

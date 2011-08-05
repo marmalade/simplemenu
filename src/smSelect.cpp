@@ -33,7 +33,11 @@ void CsmSelect::Serialise ()
 {
 	CsmItem::Serialise();
 }
-
+uint32 CsmSelect::GetElementNameHash()
+{
+	static uint32 name = IwHashString("Select");
+	return name;
+}
 void CsmSelect::RearrangeChildItems()
 {
 	if (isOpened)

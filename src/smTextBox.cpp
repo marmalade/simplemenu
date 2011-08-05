@@ -149,9 +149,13 @@ void CsmTextBox::Prepare(smItemContext* renderContext,int16 width)
 void CsmTextBox::Render(smItemContext* renderContext)
 {
 	if (!IsVisible(renderContext)) return;
-	RenderShadow(renderContext);
+	if (combinedStyle.ShadowSize.Value >= 0)
+		RenderShadow(renderContext);
 	RenderBackgroud(renderContext);
 	RenderBorder(renderContext);
+	if (combinedStyle.ShadowSize.Value < 0)
+		RenderInternalShadow(renderContext);
+
 	CIwSVec2 p = GetOrigin()+CIwSVec2(GetMarginLeft()+GetPaddingLeft(),GetMarginTop()+GetPaddingTop());
 	layoutData.RenderAt(p,renderContext->viewportSize,renderContext->transformation,combinedStyle.FontColor);
 	
@@ -165,7 +169,11 @@ void CsmTextBox::OnTextChanged()
 	if (onChanged.size() != 0 && GetRoot())
 		GetRoot()->Eval(this, onChanged.c_str());
 }
-
+uint32 CsmTextBox::GetElementNameHash()
+{
+	static uint32 name = IwHashString("TextBox");
+	return name;
+}
 #ifdef IW_BUILD_RESOURCES
 
 //Parses from text file: parses attribute/value pair.

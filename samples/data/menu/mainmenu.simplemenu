@@ -2,31 +2,15 @@ CsmMenu
 {
 	name "mainmenu"
 
-	styleSheet "menu"
+	styleSheet "purplestyle"
 
 	CsmItem
 	{
-		style { padding 10 px }
 
-			CsmItem
-			{
-				style { padding 10 px }
-
-				CsmTextBox
-				{
-					style 
-					{
-						drop-shadow true
-						shadow-size -2 pt
-						shadow-offset 1 pt 1 pt
-						padding 20 pt
-						border 1 px
-						#border-colour { 255, 255, 0 }
-					}
-
-					text "Sample"
-				}
-			}
+		CsmTextBox
+		{
+			text "Sample. Click to modify!"
+		}
 
 		CsmTextBlock
 		{
@@ -54,42 +38,89 @@ CsmMenu
 		}
 		CsmSelect
 		{
-			text "OPTION 0"
-			text "OPTION 1"
-			text "OPTION 2"
-			text "OPTION 3"
+			CsmTextBlock
+			{
+				styleClass "Sliderknob"
+				text "Moscow"
+			}
+			CsmTextBlock
+			{
+				styleClass "Sliderknob"
+				text "New York"
+			}
+			CsmTextBlock
+			{
+				styleClass "Sliderknob"
+				text "Katmandu"
+			}
 		}
 		CsmGallery
 		{
-			text "--------------"
-			text "ABABA"
+			CsmTextBlock
+			{
+				styleClass "AREA"
+				text "--------------"
+			}
+			CsmTextBlock
+			{
+				styleClass "AREA"
+				text "ABABA"
+			}
 			CsmItem
 			{
-			text "Line 1"
-			text "Line 2!"
+				styleClass "AREA"
+				text "Line 1"
+				text "Line 2!"
 			}
+		}
+		CsmItem
+		{
+			styleClass "AREA"
+			CsmTextBlock
+			{
+				styleClass "H2"
+				text "GPS"
+			}
+			CsmTextBlock
+			{
+				text "Searching for GPS"
+
+				onupdate "
+					if CsmLocation.IsAvailable() then
+						self:SetText( 'GPS is available!' .. CsmLocation.GetLongitude() .. 'x' .. CsmLocation.GetLatitude() .. ' received at ' .. CsmLocation.GetDataTimestamp() )
+					else
+						self:SetText( 'GPS is not available!')
+					end
+				"
+			}
+			CsmButton
+			{
+				text "Wait for GPS signal"
+				onclick "CsmLocation.WaitForGPS()"
+			}
+		}
+	}
+	CsmItem
+	{
+		styleClass "Header"
+		CsmTextBlock
+		{
+			styleClass "H1"
+			style
+			{
+				horizontal-alignment 0.5
+			}
+			text "Simple Menu"
 		}
 		CsmTextBlock
 		{
-			text "Searching for GPS"
-
-			onupdate "
-				if CsmLocation.IsAvailable() then
-					self:SetText( 'GPS is available!' .. CsmLocation.GetLongitude() .. 'x' .. CsmLocation.GetLatitude() .. ' received at ' .. CsmLocation.GetDataTimestamp() )
-				else
-					self:SetText( 'GPS is not available!')
-				end
-			"
+			styleClass "H2"
+			style
+			{
+				horizontal-alignment 0.5
+			}
+			text "Application sample"
 		}
-		CsmButton
-		{
-			text "Wait for GPS signal"
-			onclick "CsmLocation.WaitForGPS()"
-		}
-	}
-	CsmTextBlock
-	{
-		text "HEADER"
 	}
 	CsmRow
 	{

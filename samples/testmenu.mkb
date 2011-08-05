@@ -29,6 +29,7 @@ files
 	(./data/menu)
 	mainmenu.simplemenu
 	menu.simplemenustyle
+	purplestyle.simplemenustyle
 	mainmenu.group
 }
 

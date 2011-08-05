@@ -1,0 +1,131 @@
+CsmStyleSheet
+{
+	name "purplestyle"
+
+	bindto "SIMPLEMENU" "*" "*"
+	style
+	{
+		font "font"
+		fontSize 10 pt
+		fontColor {0,0,0,255}
+		shadowColor {0,0,0,64}
+		shadow-size 3 pt
+		shadow-offset 1 pt 1 pt
+		background
+		{
+			color {231,231,238,255}
+		}
+	}
+	bindto "*" "HEADER" "*"
+	style
+	{
+		horizontal-alignment 0.5
+		background
+		{
+			color {90,65,120,255}
+		}
+		font "fontbold"
+		font-size 14 pt
+		font-colour { 220 220 230 255 }
+		text-shadow-offset -1 px -1 px
+
+		border-colour { 220 220 230 255 }
+		border-bottom 1 px
+		drop-shadow true
+
+		padding 3 pt
+	}
+	bindto "GALLERY" "*" "*"
+	style
+	{
+		horizontal-alignment 0.5
+	}
+	bindto "TEXTBOX" "*" "*"
+	bindto "*" "AREA" "*"
+	style
+	{
+		background
+		{
+			color { 220 220 230 }
+		}
+		drop-shadow true
+		shadow-size -2 pt
+		shadow-offset 1 pt 1 pt
+		margin 3 px
+		padding 5 pt
+	}	
+	bindto "BUTTON" "*" "*"
+	bindto "*" "SLIDERKNOB" "*"
+	bindto "OPTION" "*" "*"
+	style 
+	{
+		font "fontbold"
+		font-size 12 pt
+		font-colour { 220 220 230 255 }
+		text-shadow-offset -1 px -1 px
+
+		horizontal-alignment 0.5
+
+		padding 5 px
+		margin 3 px
+
+		background
+		{
+			point { 92 70 122 } 0 px
+			point { 66 46 96 } 100 %
+		}
+
+		border-top 1 pt
+		border-left 1 pt
+		border-colour { 118 93 149 }
+
+
+		drop-shadow true
+		shadow-size 2 pt
+		shadow-offset 1 pt 1 pt
+	}
+	bindto "BUTTON" "*" "FOCUS"
+	bindto "*" "SLIDERKNOB" "FOCUS"
+	bindto "SLIDER" "*" "*"
+	bindto "SWITCH" "*" "*"
+	bindto "SELECT" "*" "*"
+	style
+	{
+		background
+		{
+			point { 49 34 71 } 0 px
+			point { 78 56 97 } 100 %
+		}
+
+		border-bottom 1 pt
+		border-right 1 pt
+		border-colour { 118 93 149 }
+
+		drop-shadow true
+		shadow-size -2 pt
+		shadow-offset 1 pt 1 pt
+	}
+	bindto "SLIDER" "*" "*"
+	bindto "SWITCH" "*" "*"
+	bindto "SELECT" "*" "*"
+	style
+	{
+		margin 3 px
+		padding 3 px
+		font "fontbold"
+		font-colour { 220 220 230 255 }
+		text-shadow-offset -1 px -1 px
+	}
+	bindto "*" "H1" "*"
+	style
+	{
+		font "fontbold"
+		fontSize 20 pt
+	}
+	bindto "*" "H2" "*"
+	style
+	{
+		font "fontbold"
+		fontSize 16 pt
+	}
+}

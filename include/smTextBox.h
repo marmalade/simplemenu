@@ -30,6 +30,8 @@ namespace SimpleMenu
 
 		//Reads/writes a binary file using @a IwSerialise interface.
 		virtual void Serialise ();
+		//Gets the element name hash to select an apropriate style
+		virtual uint32 GetElementNameHash();
 
 		//Check if element can interact with user (receive clicks and keys)
 		virtual bool IsActive() const {return true;}

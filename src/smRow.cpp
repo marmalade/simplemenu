@@ -43,6 +43,11 @@ void CsmRow::Serialise ()
 {
 	CsmItem::Serialise();
 }
+uint32 CsmRow::GetElementNameHash()
+{
+	static uint32 name = IwHashString("Row");
+	return name;
+}
 void CsmRow::PrepareChildItems(smItemContext* context,int16 width)
 {
 	if (childItems.GetSize() == 0)
@@ -87,11 +92,7 @@ void CsmRow::Render(smItemContext* renderContext)
 {
 	CsmItem::Render(renderContext);
 }
-uint32 CsmRow::GetElementNameHash()
-{
-	static uint32 name = IwHashString("Row");
-	return name;
-}
+
 
 #ifdef IW_BUILD_RESOURCES
 
