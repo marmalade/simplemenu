@@ -16,6 +16,17 @@ CsmStyleSheet
 			color {231,231,238,255}
 		}
 	}
+	bindto "*" "FOOTER" "*"
+	style
+	{
+		background
+		{
+			color {231,231,238,255}
+		}
+		border-colour { 220 220 230 255 }
+		border-top 1 px
+		drop-shadow true
+	}
 	bindto "*" "HEADER" "*"
 	style
 	{
@@ -53,7 +64,15 @@ CsmStyleSheet
 		shadow-offset 1 pt 1 pt
 		margin 3 px
 		padding 5 pt
-	}	
+	}
+	bindto "TEXTBOX" "*" "*"
+	style
+	{
+		background
+		{
+			color { 240 240 255 }
+		}
+	}
 	bindto "BUTTON" "*" "*"
 	bindto "*" "SLIDERKNOB" "*"
 	bindto "OPTION" "*" "*"

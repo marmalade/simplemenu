@@ -281,13 +281,17 @@ bool CsmMenu::VisitBackward(IsmVisitor* visitor) const
 
 CsmItem* CsmMenu::FindActiveItemAt(const CIwVec2 & coord)
 {
-	for (CIwManaged** i = childItems.GetBegin(); i!=childItems.GetEnd(); ++i)
+	if (childItems.GetSize() == 0)
+		return 0;
+	CIwManaged** i = childItems.GetEnd();
+	do
 	{
+		--i;
 		CsmItem* item = static_cast<CsmItem*>(*i);
 		CsmItem* foundItem = item->FindActiveItemAt(coord);
 		if (foundItem)
 			return foundItem;
-	}
+	} while (i!=childItems.GetBegin());
 	return 0;
 }
 bool CsmMenu::KeyEvent(smKeyContext* keyContext)

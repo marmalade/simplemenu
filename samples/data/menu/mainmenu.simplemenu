@@ -46,6 +46,7 @@ CsmMenu
 			CsmTextBlock
 			{
 				styleClass "Sliderknob"
+				state "FOCUS"
 				text "New York"
 			}
 			CsmTextBlock
@@ -124,6 +125,7 @@ CsmMenu
 	}
 	CsmRow
 	{
+		styleClass "Footer"
 		CsmButton
 		{
 			text "About"
