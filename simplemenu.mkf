@@ -39,6 +39,7 @@ files
 	smGrid.cpp
 	smRow.cpp
 	smWindowHistory.cpp 
+	smFloatingPanel.cpp 
 
 	["include"]
 	(include)
@@ -71,6 +72,7 @@ files
 	smGrid.h
 	smRow.h
 	smWindowHistory.h
+	smFloatingPanel.h
 }
 
 packages

@@ -6,6 +6,7 @@
 #include "smButton.h"
 #include "smImage.h"
 #include "smInput.h"
+#include "smFloatingPanel.h"
 #include "smTextBlock.h"
 #include "smTextBox.h"
 #include "smScriptProvider.h"
@@ -83,7 +84,7 @@ void SimpleMenu::smInit()
 	IW_CLASS_REGISTER(CsmSwitch);
 	IW_CLASS_REGISTER(CsmRow);
 	IW_CLASS_REGISTER(CsmGrid);
-
+	IW_CLASS_REGISTER(CsmFloatingPanel);
 
 	toe_scriptClassDeclarations = new CIwArray<CsmScriptableClassDeclaration*>;
 	smRegisterClass(CsmMenu::GetClassDescription());
