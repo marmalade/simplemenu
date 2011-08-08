@@ -1,5 +1,7 @@
 #include <simplemenu.h>
+#include <curl/curl.h>
 #include "smCurl.h"
+#include "smCurlRequest.h"
 
 using namespace SimpleMenu;
 
@@ -16,8 +18,10 @@ void SimpleMenu::smCurlInit()
 
 	smInit();
 
-	//IW_CLASS_REGISTER(CsmCurlModel);
-	//smRegisterClass(CsmCurlModel::GetClassDescription());
+	IW_CLASS_REGISTER(CsmCurlRequest);
+	smRegisterClass(CsmCurlRequest::GetClassDescription());
+
+	curl_easy_init();
 }
 
 void SimpleMenu::smCurlTerminate()
