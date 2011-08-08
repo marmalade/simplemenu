@@ -1,0 +1,221 @@
+CIwAnimSkel
+{
+name "male_skel_lod2"
+numBones 31
+CIwAnimBone
+{
+name "Root"
+pos {0 -32.7 530.3}
+rot {0.70710726587626 0 0 -0.707106225786538}
+}
+CIwAnimBone
+{
+name "Pelvis"
+parent "Root"
+pos {0 0 0}
+rot {0.5000006934 -0.499999256601031 -0.5 -0.499999950000069}
+}
+CIwAnimBone
+{
+name "Spine"
+parent "Pelvis"
+pos {56.4 -4.6 0}
+rot {0.999568394358285 -2.05893114629865E-06 0 -0.0293766991490877}
+}
+CIwAnimBone
+{
+name "Spine1"
+parent "Spine"
+pos {76.9 0 0}
+rot {0.997704552961447 0 0 -0.067717191226059}
+}
+CIwAnimBone
+{
+name "Spine2"
+parent "Spine1"
+pos {73.7 0 0}
+rot {0.996283769816612 0 0 0.086131685168168}
+}
+CIwAnimBone
+{
+name "Neck"
+parent "Spine2"
+pos {118 0 0}
+rot {0.994588218812188 0 0 0.103895208132877}
+}
+CIwAnimBone
+{
+name "Head"
+parent "Neck"
+pos {56.7 0 -0.1}
+rot {0.996430341268269 0 0 -0.0844190973680447}
+}
+CIwAnimBone
+{
+name "LeftClavicle"
+parent "Neck"
+pos {-21.2 4 22.2}
+rot {0.0388066107256608 0.589319671383118 -0.121528690300791 0.797763884067535}
+}
+CIwAnimBone
+{
+name "LeftUpperArm"
+parent "LeftClavicle"
+pos {88.1 0 0}
+rot {0.974732270933922 -0.0128455709053351 0.222657627608918 -0.0124731583867138}
+}
+CIwAnimBone
+{
+name "LeftForearm"
+parent "LeftUpperArm"
+pos {147.3 0 0}
+rot {0.97814592469631 0 0 -0.207919615943953}
+}
+CIwAnimBone
+{
+name "LeftHand"
+parent "LeftForearm"
+pos {143.8 0 0}
+rot {0.743103492119368 -0.667140048805429 -0.0406232379744366 0.0327280903776096}
+}
+CIwAnimBone
+{
+name "LeftFinger0"
+parent "LeftHand"
+pos {7.3 7.2 -13.7}
+rot {0.451287132988679 0.715608204606403 0.51763006993993 -0.127686560064326}
+}
+CIwAnimBone
+{
+name "LeftFinger01"
+parent "LeftFinger0"
+pos {24.3 0 0}
+rot {0.971616771160317 0 0 0.236560552290091}
+}
+CIwAnimBone
+{
+name "LeftFinger1"
+parent "LeftHand"
+pos {49 5.9 0}
+rot {0.951112887621653 -0.0753068862089608 -0.0112509278754056 0.299310001688509}
+}
+CIwAnimBone
+{
+name "LeftFinger11"
+parent "LeftFinger1"
+pos {21.7 0 0}
+rot {0.982277201201372 -0.0179579806783928 -0.000609561383759788 0.186570730518696}
+}
+CIwAnimBone
+{
+name "RightClavicle"
+parent "Neck"
+pos {-21.2 4 -22.2}
+rot {0.0388082233516805 -0.589319319136852 0.121526424030845 0.797764360904694}
+}
+CIwAnimBone
+{
+name "RightUpperArm"
+parent "RightClavicle"
+pos {88.1 0 0}
+rot {0.974732270933922 0.012845573470142 -0.222657601960849 -0.0124731635163275}
+}
+CIwAnimBone
+{
+name "RightForearm"
+parent "RightUpperArm"
+pos {147.3 0 0}
+rot {0.97814592469631 0 0 -0.207919641502512}
+}
+CIwAnimBone
+{
+name "RightHand"
+parent "RightForearm"
+pos {143.8 0 0}
+rot {0.743103525762057 0.667139951316476 0.0406232462280983 0.0327280851952079}
+}
+CIwAnimBone
+{
+name "RightFinger0"
+parent "RightHand"
+pos {7.3 7.2 13.7}
+rot {-0.451287126379256 0.715608215086998 0.517630097294184 0.127686558194265}
+}
+CIwAnimBone
+{
+name "RightFinger01"
+parent "RightFinger0"
+pos {24.3 0 0}
+rot {0.971616771160317 0 0 0.236560552290091}
+}
+CIwAnimBone
+{
+name "RightFinger1"
+parent "RightHand"
+pos {49 5.9 0}
+rot {0.951112913906651 0.0753068841277765 0.0112509275644745 0.299309993416765}
+}
+CIwAnimBone
+{
+name "RightFinger11"
+parent "RightFinger1"
+pos {21.7 0 0}
+rot {0.98227718847584 0.0179579860012537 0.000609554010848056 0.186570732935745}
+}
+CIwAnimBone
+{
+name "LeftThigh"
+parent "Spine"
+pos {-56.6 1.3 64.3}
+rot {-0.0122990627499864 -0.0635628192248297 0.997899413108826 0.00227765315836711}
+}
+CIwAnimBone
+{
+name "LeftCalf"
+parent "LeftThigh"
+pos {233.7 0 0}
+rot {0.998858010429911 0 0 -0.0477778242770059}
+}
+CIwAnimBone
+{
+name "LeftFoot"
+parent "LeftCalf"
+pos {236.3 0 0}
+rot {0.996000715361189 -0.0296015299439903 -0.0209261220183378 0.0816605086177123}
+}
+CIwAnimBone
+{
+name "LeftToe0"
+parent "LeftFoot"
+pos {56.4 72.7 0}
+rot {0.707093522815452 0.00433522635756778 -0.00433519959954442 0.70709348744875}
+}
+CIwAnimBone
+{
+name "RightThigh"
+parent "Spine"
+pos {-56.6 1.3 -64.3}
+rot {0.0122993258025511 -0.0635627941722045 0.997899413108826 -0.00227488609591199}
+}
+CIwAnimBone
+{
+name "RightCalf"
+parent "RightThigh"
+pos {233.7 0 0}
+rot {0.998858010429911 0 0 -0.0477778217741477}
+}
+CIwAnimBone
+{
+name "RightFoot"
+parent "RightCalf"
+pos {236.3 0 0}
+rot {0.996000715361189 0.0296015199038369 0.0209262098696804 0.0816605086177123}
+}
+CIwAnimBone
+{
+name "RightToe0"
+parent "RightFoot"
+pos {56.4 72.7 0}
+rot {0.707093505127159 -0.00433522679528606 0.00433519970799158 0.70709346978104}
+}
+}

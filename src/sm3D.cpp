@@ -1,3 +1,4 @@
+#include <IwAnim.h>
 #include "sm3D.h"
 #include "simplemenu.h"
 #include <pugixml.hpp>
@@ -16,7 +17,10 @@ void SimpleMenu::sm3DInit()
 	if (init3DCounter != 1)
 		return;
 
+	IwAnimInit();
 	smInit();
+
+	IW_CLASS_REGISTER(Csm3DModel);
 	smRegisterClass(Csm3DModel::GetClassDescription());
 }
 
@@ -29,4 +33,5 @@ void SimpleMenu::sm3DTerminate()
 		return;
 
 	smTerminate();
+	IwAnimTerminate();
 }

@@ -12,6 +12,8 @@ assets
 	./menu/fontbold.ttf
 	(./data-ram/data-gles1)
 	./menu/mainmenu.group.bin
+	(./data-ram/)
+	./3d.group.bin
 }
 
 files
@@ -52,7 +54,7 @@ subprojects
 	../simplemenu.3d.mkf
 	../simplemenu.features.mkf
 	../simplemenu.svg.mkf
-	#../simplemenu.curl.mkf
+	../simplemenu.curl.mkf
 	freetype
 	freetypehelper
 }

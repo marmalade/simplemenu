@@ -20,7 +20,10 @@ IW_MANAGED_IMPLEMENT(CsmFloatingPanel);
 //Constructor
 CsmFloatingPanel::CsmFloatingPanel()
 {
-
+	position.x = DPI::CdpiLength(IW_GEOM_ONE/2, DPI::CdpiLength::PERCENT);
+	position.y = DPI::CdpiLength(IW_GEOM_ONE/2, DPI::CdpiLength::PERCENT);
+	pivot.x = DPI::CdpiLength(IW_GEOM_ONE/2, DPI::CdpiLength::PERCENT);
+	pivot.y = DPI::CdpiLength(IW_GEOM_ONE/2, DPI::CdpiLength::PERCENT);
 }
 //Desctructor
 CsmFloatingPanel::~CsmFloatingPanel()
@@ -48,15 +51,16 @@ uint32 CsmFloatingPanel::GetElementNameHash()
 	static uint32 name = IwHashString("FloatingPanel");
 	return name;
 }
-void CsmFloatingPanel::PrepareChildItems(smItemContext* context,int16 width)
+void CsmFloatingPanel::PrepareChildItems(smItemContext* context, const CIwSVec2& recommendedSize)
 {
-	int16 contentWidth = width - GetContentOffsetLeft()-GetContentOffsetRight();
-	size.x = width;
+	int16 contentWidth = recommendedSize.x - GetContentOffsetLeft()-GetContentOffsetRight();
+	size.x = recommendedSize.x;
 	size.y = 0;
+	CIwSVec2 chRecSize (contentWidth,recommendedSize.y);
 	for (CIwManaged** i = childItems.GetBegin(); i!=childItems.GetEnd(); ++i)
 	{
 		CsmItem* item = static_cast<CsmItem*>(*i);
-		item->Prepare(context,contentWidth);
+		item->Prepare(context,chRecSize);
 		int32 height = item->GetSize().y;
 		if (size.y < height)
 		size.y = height;
@@ -87,6 +91,16 @@ void CsmFloatingPanel::Render(smItemContext* renderContext)
 //Parses from text file: parses attribute/value pair.
 bool	CsmFloatingPanel::ParseAttribute(CIwTextParserITX* pParser, const char* pAttrName)
 {
+	if (!stricmp("pivot",pAttrName))
+	{
+		pivot.ParseAttribute(pParser);
+		return true;
+	}
+	if (!stricmp("position",pAttrName))
+	{
+		position.ParseAttribute(pParser);
+		return true;
+	}
 	return CsmItem::ParseAttribute(pParser, pAttrName);
 }
 

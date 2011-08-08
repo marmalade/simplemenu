@@ -48,18 +48,19 @@ uint32 CsmRow::GetElementNameHash()
 	static uint32 name = IwHashString("Row");
 	return name;
 }
-void CsmRow::PrepareChildItems(smItemContext* context,int16 width)
+void CsmRow::PrepareChildItems(smItemContext* context, const CIwSVec2& recommendedSize)
 {
 	if (childItems.GetSize() == 0)
 		return;
-	int16 contentWidth = width - GetContentOffsetLeft()-GetContentOffsetRight();
-	size.x = width;
+	int16 contentWidth = recommendedSize.x - GetContentOffsetLeft()-GetContentOffsetRight();
+	size.x = recommendedSize.x;
 	size.y = 0;
 	int16 cellWidth = contentWidth/childItems.GetSize();
+	CIwSVec2 chRecSize (cellWidth, recommendedSize.y);
 	for (CIwManaged** i = childItems.GetBegin(); i!=childItems.GetEnd(); ++i)
 	{
 		CsmItem* item = static_cast<CsmItem*>(*i);
-		item->Prepare(context,cellWidth);
+		item->Prepare(context,chRecSize);
 		int32 height = item->GetSize().y;
 		if (size.y < height)
 		size.y = height;

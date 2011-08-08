@@ -20,7 +20,8 @@ namespace SimpleMenu
 		virtual bool TouchEvent(smTouchContext* smTouchContext) = 0;
 		virtual bool TouchReleaseEvent(smTouchContext* smTouchContext) = 0;
 		virtual bool TouchMotionEvent(smTouchContext* smTouchContext) = 0;
-		virtual bool KeyEvent(smKeyContext* smKeyContext) = 0;
+		virtual bool KeyPressedEvent(smKeyContext* smKeyContext) = 0;
+		virtual bool KeyReleasedEvent(smKeyContext* smKeyContext) = 0;
 	};
 	class CsmInputRecieversList: public TsmIntrusiveList<IsmInputReciever>
 	{
@@ -31,6 +32,11 @@ namespace SimpleMenu
 		s3eKey key;
 		// Whether the key was pressed (1) or released (0).
 		bool pressed;
+
+		IsmInputReciever* receiver;
+		void* receiverContextPointer;
+
+		void Init(s3eKey key);
 	};
 	struct smTouchContext
 	{
@@ -62,11 +68,16 @@ namespace SimpleMenu
 		bool TouchEvent(smTouchContext*,int32,int32);
 		bool TouchReleaseEvent(smTouchContext*,int32,int32);
 		bool TouchMotionEvent(smTouchContext*,int32,int32);
+		bool KeyboardKeyPressedEvent(smKeyContext* item);
+		bool KeyboardKeyReleasedEvent(smKeyContext* item);
 
 
 		int32 FindTouchContextIndex(uint32 touchId) const;
 		int32 GetTouchContextIndex(uint32 touchId);
 		void ReleaseTouchContextAt(int32 touchIndex);
+		int32 FindKeyContextIndex(s3eKey key) const;
+		int32 GetKeyContextIndex(s3eKey key);
+		void ReleaseKeyContextAt(int32 keyIndex);
 
 		int32 OnKeyboardKeyEvent(s3eKeyboardEvent*e);
 		int32 OnPointerTouchEvent(s3ePointerTouchEvent*e);

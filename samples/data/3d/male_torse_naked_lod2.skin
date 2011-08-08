@@ -1,0 +1,305 @@
+CIwAnimSkin
+{
+name "male_torse_naked_lod2"
+skeleton "male_skel_lod2"
+model "male_torse_naked_lod2"
+CIwAnimSkinSet
+{
+useBones { RightClavicle }
+numVerts 18
+vertWeights {0,1}
+vertWeights {2,1}
+vertWeights {6,1}
+vertWeights {8,1}
+vertWeights {20,1}
+vertWeights {22,1}
+vertWeights {23,1}
+vertWeights {24,1}
+vertWeights {25,1}
+vertWeights {26,1}
+vertWeights {41,1}
+vertWeights {53,1}
+vertWeights {62,1}
+vertWeights {66,1}
+vertWeights {67,1}
+vertWeights {68,1}
+vertWeights {69,1}
+vertWeights {243,1}
+}
+CIwAnimSkinSet
+{
+useBones { Spine2 }
+numVerts 17
+vertWeights {1,1}
+vertWeights {3,1}
+vertWeights {4,1}
+vertWeights {7,1}
+vertWeights {15,1}
+vertWeights {37,1}
+vertWeights {40,1}
+vertWeights {60,1}
+vertWeights {61,1}
+vertWeights {63,1}
+vertWeights {70,1}
+vertWeights {129,1}
+vertWeights {130,1}
+vertWeights {132,1}
+vertWeights {133,1}
+vertWeights {162,1}
+vertWeights {165,1}
+}
+CIwAnimSkinSet
+{
+useBones { RightUpperArm }
+numVerts 17
+vertWeights {5,1}
+vertWeights {9,1}
+vertWeights {10,1}
+vertWeights {11,1}
+vertWeights {12,1}
+vertWeights {16,1}
+vertWeights {17,1}
+vertWeights {18,1}
+vertWeights {19,1}
+vertWeights {21,1}
+vertWeights {27,1}
+vertWeights {28,1}
+vertWeights {29,1}
+vertWeights {30,1}
+vertWeights {51,1}
+vertWeights {52,1}
+vertWeights {54,1}
+}
+CIwAnimSkinSet
+{
+useBones { Spine }
+numVerts 10
+vertWeights {13,1}
+vertWeights {14,1}
+vertWeights {38,1}
+vertWeights {39,1}
+vertWeights {43,1}
+vertWeights {64,1}
+vertWeights {140,1}
+vertWeights {163,1}
+vertWeights {164,1}
+vertWeights {168,1}
+}
+CIwAnimSkinSet
+{
+useBones { RightForearm }
+numVerts 10
+vertWeights {31,1}
+vertWeights {34,1}
+vertWeights {35,1}
+vertWeights {42,1}
+vertWeights {44,1}
+vertWeights {45,1}
+vertWeights {46,1}
+vertWeights {47,1}
+vertWeights {48,1}
+vertWeights {71,1}
+}
+CIwAnimSkinSet
+{
+useBones { RightHand }
+numVerts 64
+vertWeights {32,1}
+vertWeights {33,1}
+vertWeights {36,1}
+vertWeights {49,1}
+vertWeights {50,1}
+vertWeights {72,1}
+vertWeights {73,1}
+vertWeights {74,1}
+vertWeights {75,1}
+vertWeights {76,1}
+vertWeights {77,1}
+vertWeights {78,1}
+vertWeights {79,1}
+vertWeights {80,1}
+vertWeights {81,1}
+vertWeights {82,1}
+vertWeights {83,1}
+vertWeights {84,1}
+vertWeights {85,1}
+vertWeights {86,1}
+vertWeights {87,1}
+vertWeights {88,1}
+vertWeights {89,1}
+vertWeights {90,1}
+vertWeights {91,1}
+vertWeights {92,1}
+vertWeights {93,1}
+vertWeights {94,1}
+vertWeights {95,1}
+vertWeights {96,1}
+vertWeights {97,1}
+vertWeights {98,1}
+vertWeights {99,1}
+vertWeights {100,1}
+vertWeights {101,1}
+vertWeights {102,1}
+vertWeights {103,1}
+vertWeights {104,1}
+vertWeights {105,1}
+vertWeights {106,1}
+vertWeights {107,1}
+vertWeights {108,1}
+vertWeights {109,1}
+vertWeights {110,1}
+vertWeights {111,1}
+vertWeights {112,1}
+vertWeights {113,1}
+vertWeights {114,1}
+vertWeights {115,1}
+vertWeights {116,1}
+vertWeights {117,1}
+vertWeights {118,1}
+vertWeights {119,1}
+vertWeights {120,1}
+vertWeights {121,1}
+vertWeights {122,1}
+vertWeights {123,1}
+vertWeights {124,1}
+vertWeights {125,1}
+vertWeights {126,1}
+vertWeights {238,1}
+vertWeights {239,1}
+vertWeights {240,1}
+vertWeights {241,1}
+}
+CIwAnimSkinSet
+{
+useBones { Pelvis }
+numVerts 10
+vertWeights {55,1}
+vertWeights {56,1}
+vertWeights {57,1}
+vertWeights {58,1}
+vertWeights {59,1}
+vertWeights {65,1}
+vertWeights {182,1}
+vertWeights {183,1}
+vertWeights {184,1}
+vertWeights {185,1}
+}
+CIwAnimSkinSet
+{
+useBones { LeftClavicle }
+numVerts 18
+vertWeights {127,1}
+vertWeights {128,1}
+vertWeights {134,1}
+vertWeights {135,1}
+vertWeights {145,1}
+vertWeights {146,1}
+vertWeights {148,1}
+vertWeights {149,1}
+vertWeights {150,1}
+vertWeights {151,1}
+vertWeights {166,1}
+vertWeights {180,1}
+vertWeights {186,1}
+vertWeights {187,1}
+vertWeights {188,1}
+vertWeights {189,1}
+vertWeights {190,1}
+vertWeights {242,1}
+}
+CIwAnimSkinSet
+{
+useBones { LeftUpperArm }
+numVerts 17
+vertWeights {131,1}
+vertWeights {136,1}
+vertWeights {137,1}
+vertWeights {138,1}
+vertWeights {139,1}
+vertWeights {141,1}
+vertWeights {142,1}
+vertWeights {143,1}
+vertWeights {144,1}
+vertWeights {147,1}
+vertWeights {152,1}
+vertWeights {153,1}
+vertWeights {154,1}
+vertWeights {155,1}
+vertWeights {178,1}
+vertWeights {179,1}
+vertWeights {181,1}
+}
+CIwAnimSkinSet
+{
+useBones { LeftForearm }
+numVerts 10
+vertWeights {156,1}
+vertWeights {157,1}
+vertWeights {160,1}
+vertWeights {167,1}
+vertWeights {169,1}
+vertWeights {170,1}
+vertWeights {171,1}
+vertWeights {172,1}
+vertWeights {173,1}
+vertWeights {176,1}
+}
+CIwAnimSkinSet
+{
+useBones { LeftHand }
+numVerts 53
+vertWeights {158,1}
+vertWeights {159,1}
+vertWeights {161,1}
+vertWeights {174,1}
+vertWeights {175,1}
+vertWeights {177,1}
+vertWeights {191,1}
+vertWeights {192,1}
+vertWeights {193,1}
+vertWeights {194,1}
+vertWeights {195,1}
+vertWeights {196,1}
+vertWeights {197,1}
+vertWeights {198,1}
+vertWeights {199,1}
+vertWeights {200,1}
+vertWeights {201,1}
+vertWeights {202,1}
+vertWeights {203,1}
+vertWeights {204,1}
+vertWeights {205,1}
+vertWeights {206,1}
+vertWeights {207,1}
+vertWeights {208,1}
+vertWeights {209,1}
+vertWeights {210,1}
+vertWeights {211,1}
+vertWeights {212,1}
+vertWeights {213,1}
+vertWeights {214,1}
+vertWeights {215,1}
+vertWeights {216,1}
+vertWeights {217,1}
+vertWeights {218,1}
+vertWeights {219,1}
+vertWeights {220,1}
+vertWeights {221,1}
+vertWeights {222,1}
+vertWeights {223,1}
+vertWeights {224,1}
+vertWeights {225,1}
+vertWeights {226,1}
+vertWeights {227,1}
+vertWeights {228,1}
+vertWeights {229,1}
+vertWeights {230,1}
+vertWeights {231,1}
+vertWeights {232,1}
+vertWeights {233,1}
+vertWeights {234,1}
+vertWeights {235,1}
+vertWeights {236,1}
+vertWeights {237,1}
+}
+}

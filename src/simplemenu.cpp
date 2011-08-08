@@ -17,6 +17,7 @@
 #include "smSwitch.h"
 #include "smRow.h"
 #include "smGrid.h"
+#include "smFloatingPanel.h"
 
 namespace SimpleMenu
 {

@@ -1,0 +1,8 @@
+CIwMaterial
+{
+	name "no_skin"
+	colEmissive {0,0,0}
+	texture0 "no_skin.png"
+	colAmbient {0, 128, 255, 255} 
+	colDiffuse {0, 128, 255, 255} 
+}

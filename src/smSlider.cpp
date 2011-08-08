@@ -45,17 +45,18 @@ void CsmSlider::Serialise ()
 	CsmItem::Serialise();
 	IwSerialiseInt32(sliderWidth);
 }
-void CsmSlider::PrepareChildItems(smItemContext* context,int16 width)
+void CsmSlider::PrepareChildItems(smItemContext* context, const CIwSVec2& recommendedSize)
 {
-	int16 contentWidth = width - GetContentOffsetLeft()-GetContentOffsetRight();
-	size.x = width;
+	int16 contentWidth = recommendedSize.x - GetContentOffsetLeft()-GetContentOffsetRight();
+	size.x = recommendedSize.x;
 	size.y = 0;
 	int16 sliderContentWidth = contentWidth*sliderWidth/IW_GEOM_ONE;
+	CIwSVec2 chRecSize (sliderContentWidth,recommendedSize.y);
 
 	for (CIwManaged** i = childItems.GetBegin(); i!=childItems.GetEnd(); ++i)
 	{
 		CsmItem* item = static_cast<CsmItem*>(*i);
-		item->Prepare(context,sliderContentWidth);
+		item->Prepare(context,chRecSize);
 		int32 height = item->GetSize().y;
 		if (size.y < height)
 		size.y = height;
@@ -98,6 +99,43 @@ uint32 CsmSlider::GetElementNameHash()
 {
 	static uint32 name = IwHashString("Slider");
 	return name;
+}
+void CsmSlider::ApplyChildStyle(smItemContext* renderContext, CsmItem*child)
+{
+	static uint32 sliderknob = IwHashString("Sliderknob");
+	if (renderContext->styleSheet != 0)
+		renderContext->styleSheet->Apply(child->GetCombinedStyle(), sliderknob, styleClass, state);
+}
+bool CsmSlider::KeyReleasedEvent(smKeyContext* keyContext)
+{
+	switch (keyContext->key)
+	{
+	case s3eKey::s3eKeyLeft:
+		sliderValue -= IW_GEOM_ONE/10;
+		if (sliderValue < 0)
+			sliderValue = 0;
+		return true;
+	case s3eKey::s3eKeyRight:
+		sliderValue += IW_GEOM_ONE/10;
+		if (sliderValue > IW_GEOM_ONE)
+			sliderValue = IW_GEOM_ONE;
+		return true;
+	default:
+		break;
+	}
+	return false;
+}
+bool CsmSlider::KeyPressedEvent(smKeyContext* keyContext)
+{
+	switch (keyContext->key)
+	{
+	case s3eKey::s3eKeyLeft:
+	case s3eKey::s3eKeyRight:
+		return true;
+	default:
+		break;
+	}
+	return false;
 }
 
 #ifdef IW_BUILD_RESOURCES

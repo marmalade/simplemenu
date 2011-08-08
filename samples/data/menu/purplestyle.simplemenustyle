@@ -64,17 +64,26 @@ CsmStyleSheet
 		shadow-offset 1 pt 1 pt
 		margin 3 px
 		padding 5 pt
+		border-colour { 220 220 230 255 }
+		border 1 px
 	}
 	bindto "TEXTBOX" "*" "*"
 	style
 	{
 		background
 		{
-			color { 240 240 255 }
+			color { 240 240 250 }
 		}
 	}
+	bindto "TEXTBOX" "*" "FOCUS"
+	style
+	{
+		border-colour { 92 70 122 255 }
+		border 2 px
+	}
+
 	bindto "BUTTON" "*" "*"
-	bindto "*" "SLIDERKNOB" "*"
+	bindto "SLIDERKNOB" "*" "*"
 	bindto "OPTION" "*" "*"
 	style 
 	{
@@ -104,7 +113,8 @@ CsmStyleSheet
 		shadow-offset 1 pt 1 pt
 	}
 	bindto "BUTTON" "*" "FOCUS"
-	bindto "*" "SLIDERKNOB" "FOCUS"
+	bindto "SLIDERKNOB" "*" "FOCUS"
+	bindto "OPTION" "*" "FOCUS"
 	bindto "SLIDER" "*" "*"
 	bindto "SWITCH" "*" "*"
 	bindto "SELECT" "*" "*"

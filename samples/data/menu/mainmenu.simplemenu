@@ -24,7 +24,6 @@ CsmMenu
 		{
 			CsmTextBlock
 			{
-			styleClass "SLIDERKNOB"
 			text "Slider"
 			}
 		}
@@ -32,7 +31,6 @@ CsmMenu
 		{
 			CsmTextBlock
 			{
-			styleClass "SLIDERKNOB"
 			text "Switch"
 			}
 		}
@@ -57,10 +55,9 @@ CsmMenu
 		}
 		CsmGallery
 		{
-			CsmTextBlock
+			Csm3DModel
 			{
-				styleClass "AREA"
-				text "--------------"
+				model "male_torse_naked_lod2"
 			}
 			CsmTextBlock
 			{
@@ -99,6 +96,12 @@ CsmMenu
 				text "Wait for GPS signal"
 				onclick "CsmLocation.WaitForGPS()"
 			}
+		}
+		CsmFloatingPanel
+		{
+			pivot 100 % 100 %
+			position 100 % 100 %
+			text "notification"
 		}
 	}
 	CsmItem

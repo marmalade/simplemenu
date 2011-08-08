@@ -75,7 +75,7 @@ namespace SimpleMenu
 		//Animate item and all child items
 		virtual void Animate(iwfixed timespan);
 		//Evaluates size of item and prepares all nessesary things to render it
-		virtual void Prepare(smItemContext* renderContext,int16 width);
+		virtual void Prepare(smItemContext* renderContext, const CIwSVec2& recommendedSize);
 		//Render image on the screen surface
 		virtual void Render(smItemContext* renderContext);
 
@@ -95,9 +95,11 @@ namespace SimpleMenu
 		virtual uint32 GetElementStateHash();
 		//Gets the element name ID hash
 		uint32 GetElementIdHash() { return idHash; }
+		//Gets combined style. The return value is only valid after Prepare()
+		CsmStyleSettings* GetCombinedStyle() { return &combinedStyle; }
 
 		virtual void RearrangeChildItems();
-		virtual void PrepareChildItems(smItemContext* renderContext,int16 width);
+		virtual void PrepareChildItems(smItemContext* renderContext, const CIwSVec2& recommendedSize);
 		virtual void RenderChildren(smItemContext* renderContext);
 
 		inline int16 GetMarginLeft()const {return combinedStyle.GetMarginLeft(1);}
@@ -125,10 +127,6 @@ namespace SimpleMenu
 		inline CsmItem*GetChildAt(int i)const{return static_cast<CsmItem*>(childItems[i]);}
 		inline int GetChildItemsCount()const{return (int)childItems.GetSize();}
 
-		void CombineStyle(smItemContext* renderContext);
-		virtual void InheritStyle(CsmStyleSettings* parentSettings);
-		virtual void ApplyStyleSheet(CsmStyleSheet* styleSheet);
-		virtual void ApplyStyle(CsmStyle* style);
 		//Finds an active item in children
 		virtual CsmItem* FindActiveItemAt(const CIwVec2 & item);
 		virtual void SetFocus(bool f);
@@ -136,6 +134,8 @@ namespace SimpleMenu
 		virtual void TouchReleased(smTouchContext* smTouchContext);
 		virtual void TouchCanceled(smTouchContext* smTouchContext);
 		virtual void TouchMotion(smTouchContext* smTouchContext);
+		virtual bool KeyReleasedEvent(smKeyContext* keyContext);
+		virtual bool KeyPressedEvent(smKeyContext* keyContext);
 		//Check if element can interact with user
 		virtual bool IsActive() const {return false;}
 
@@ -150,6 +150,12 @@ namespace SimpleMenu
 		void RenderInternalShadow(smItemContext* renderContext);
 		void RenderBorder(smItemContext* renderContext);
 		void SendLazyEvent(CsmLazyEvent*);
+
+		void CombineStyle(smItemContext* renderContext);
+		virtual void InheritStyle(CsmStyleSettings* parentSettings);
+		virtual void ApplyStyleSheet(CsmStyleSheet* styleSheet);
+		virtual void ApplyStyle(CsmStyle* style);
+		virtual void ApplyChildStyle(smItemContext* renderContext, CsmItem*child);
 	public:
 #ifdef IW_BUILD_RESOURCES
 		//Parses from text file: start block.

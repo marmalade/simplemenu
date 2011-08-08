@@ -10,6 +10,9 @@ namespace SimpleMenu
 {
 	class CsmFloatingPanel : public CsmItem
 	{
+	protected:
+		DPI::CdpiLength2 pivot;
+		DPI::CdpiLength2 position;
 	public:
 		//Declare managed class
 		IW_MANAGED_DECLARE(CsmFloatingPanel);
@@ -26,7 +29,7 @@ namespace SimpleMenu
 		//Reads/writes a binary file using @a IwSerialise interface.
 		virtual void Serialise ();
 
-		virtual void PrepareChildItems(smItemContext* context,int16 width);
+		virtual void PrepareChildItems(smItemContext* context, const CIwSVec2& recommendedSize);
 		virtual void RearrangeChildItems();
 		//Render image on the screen surface
 		virtual void Render(smItemContext* renderContext);

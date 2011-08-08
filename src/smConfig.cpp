@@ -114,8 +114,10 @@ int64 CsmConfig::GetLong(const char* name)
 	if (!v || !*v)
 		return r;
 
-	std::stringstream stream = std::stringstream(std::string(v));
-	stream >> r;
+//	std::stringstream stream = std::stringstream(std::string(v));
+	std::stringstream(std::string(v)) >> r;
+
+	//stream >> r;
 	//sscanf(v,"%ld",&r);
 	return r;
 }

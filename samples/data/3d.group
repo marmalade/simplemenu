@@ -1,0 +1,11 @@
+CIwResGroup
+{
+	name "3d"
+	shared true
+
+	"3d/no_skin.png"
+	"3d/no_skin.mtl"
+	"3d/male_torse_naked_lod2.geo"
+	"3d/male_skel_lod2.skel"
+	"3d/male_torse_naked_lod2.skin"
+}

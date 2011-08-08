@@ -51,10 +51,6 @@ void CsmBackground::Render(const CIwSVec2& origin, const CIwSVec2& size,const CI
 	CIwSVec2* uv = IW_GX_ALLOC(CIwSVec2,vertices);
 	CIwColour* col =IW_GX_ALLOC(CIwColour,vertices);
 	uint16* indices = IW_GX_ALLOC(uint16,points.size()*4);
-	CIwMaterial* m = IW_GX_ALLOC_MATERIAL();
-	if (texture)
-		m->SetTexture(texture);
-	m->SetColAmbient(255,255,255,255);
 	uint32 numIndices = 0;
 	uint32 numP = 0;
 	bool alpha = false;
@@ -97,9 +93,16 @@ void CsmBackground::Render(const CIwSVec2& origin, const CIwSVec2& size,const CI
 	uv[numP].y = IW_GEOM_ONE;
 	col[numP] = points.back().Colour;
 	++numP;
+
+	//Set up material
+	CIwMaterial* m = IW_GX_ALLOC_MATERIAL();
+	if (texture)
+		m->SetTexture(texture);
+	m->SetColAmbient(255,255,255,255);
 	if (alpha)
 		m->SetAlphaMode(CIwMaterial::ALPHA_BLEND);
 	IwGxSetMaterial(m);
+
 	//toeTransformScreenSpace3D(v,v+numP,transformation, viewport);
 	IwGxSetVertStreamScreenSpace(v,vertices);
 	IwGxSetUVStream(uv);

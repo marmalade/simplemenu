@@ -81,4 +81,5 @@ int32 CsmCamera::CameraUpdate(void* systemData, void* userData)
 		return 0;
 	if (g_currentFeed->feedUpdated)
 		return 0;
+	return 0;
 }

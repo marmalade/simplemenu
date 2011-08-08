@@ -115,34 +115,34 @@ void CsmTextBox::TouchReleased(smTouchContext* touchContext)
 		SetText(s);
 }
 
-void CsmTextBox::Prepare(smItemContext* renderContext,int16 width)
+void CsmTextBox::Prepare(smItemContext* renderContext, const CIwSVec2& recommendedSize)
 {
 	EvalUpdate();
 	CombineStyle(renderContext);
-	if (cachedWithWidth == width && combinedStyle == cachedWithCombinedStyle)
+	if (cachedWithWidth == recommendedSize.x && combinedStyle == cachedWithCombinedStyle)
 		return;
 	cachedWithCombinedStyle = combinedStyle;
-	cachedWithWidth = width;
+	cachedWithWidth = recommendedSize.x;
 	FreeTypeHelper::CfthFont* f = combinedStyle.Font;
 	if (!f)
 		return;
-	int16 contentWidth = width - GetMarginLeft() - GetMarginRight() - GetPaddingLeft() - GetPaddingRight();
+	int16 contentWidth = recommendedSize.x - GetMarginLeft() - GetMarginRight() - GetPaddingLeft() - GetPaddingRight();
 	CIwArray<FreeTypeHelper::CfthGlyphLayout> layout;
 	layoutData.origin = CIwSVec2::g_Zero;
 	layoutData.shadowOffset = CIwSVec2(combinedStyle.TextShadowOffset.x.GetPx(1),combinedStyle.TextShadowOffset.y.GetPx(1));
 	layoutData.shadowColour = combinedStyle.TextShadowColor;
 	layoutData.size.x = contentWidth;
-	layoutData.size.y = combinedStyle.FontSize.GetPx(width);
+	layoutData.size.y = combinedStyle.FontSize.GetPx(recommendedSize.y);
 	layoutData.textAlignment = combinedStyle.HorizontalAlignment;//IW_GEOM_ONE/3;
 	layoutData.isRightToLeft = false;//CtoeFreeTypeFont::IsRightToLeft();
 	layoutData.actualSize.y = 0;
-	layoutData.actualSize.x = width;
+	layoutData.actualSize.x = recommendedSize.x;
 	if (utf8string)
 	{
 		f->LayoutGlyphs(utf8string, layoutData);
 	}
 
-	size.x = width;
+	size.x = recommendedSize.x;
 	size.y = layoutData.actualSize.y + GetMarginTop()+GetMarginBottom()+GetPaddingTop()+GetPaddingBottom();
 }
 //Render image on the screen surface

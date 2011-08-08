@@ -43,15 +43,16 @@ void CsmGrid::Serialise ()
 {
 	CsmItem::Serialise();
 }
-void CsmGrid::PrepareChildItems(smItemContext* context,int16 width)
+void CsmGrid::PrepareChildItems(smItemContext* context, const CIwSVec2& recommendedSize)
 {
-	int16 contentWidth = width - GetContentOffsetLeft()-GetContentOffsetRight();
-	size.x = width;
+	int16 contentWidth = recommendedSize.x - GetContentOffsetLeft()-GetContentOffsetRight();
+	size.x = recommendedSize.x;
 	size.y = 0;
+	CIwSVec2 chRecSize (contentWidth,recommendedSize.y);
 	for (CIwManaged** i = childItems.GetBegin(); i!=childItems.GetEnd(); ++i)
 	{
 		CsmItem* item = static_cast<CsmItem*>(*i);
-		item->Prepare(context,contentWidth);
+		item->Prepare(context,chRecSize);
 		int32 height = item->GetSize().y;
 		if (size.y < height)
 		size.y = height;

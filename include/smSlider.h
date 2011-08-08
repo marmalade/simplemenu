@@ -29,7 +29,7 @@ namespace SimpleMenu
 		//Reads/writes a binary file using @a IwSerialise interface.
 		virtual void Serialise ();
 
-		virtual void PrepareChildItems(smItemContext* context,int16 width);
+		virtual void PrepareChildItems(smItemContext* context, const CIwSVec2& recommendedSize);
 		virtual void RearrangeChildItems();
 		//Render image on the screen surface
 		virtual void Render(smItemContext* renderContext);
@@ -40,6 +40,11 @@ namespace SimpleMenu
 		virtual bool IsActive() const {return true;}
 
 		virtual void TouchMotion(smTouchContext* smTouchContext);
+		virtual bool KeyReleasedEvent(smKeyContext* keyContext);
+		virtual bool KeyPressedEvent(smKeyContext* keyContext);
+	protected:
+		virtual void ApplyChildStyle(smItemContext* renderContext, CsmItem*child);
+	public:
 #ifdef IW_BUILD_RESOURCES
 		//Parses from text file: parses attribute/value pair.
 		virtual	bool	ParseAttribute(CIwTextParserITX* pParser, const char* pAttrName);

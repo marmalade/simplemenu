@@ -37,7 +37,7 @@ namespace SimpleMenu
 		virtual bool IsActive() const {return true;}
 		virtual void TouchReleased(smTouchContext* touchContext);
 
-		virtual void Prepare(smItemContext* renderContext,int16 width);
+		virtual void Prepare(smItemContext* renderContext, const CIwSVec2& recommendedSize);
 		//Render image on the screen surface
 		virtual void Render(smItemContext* renderContext);
 		virtual void RearrangeChildItems();

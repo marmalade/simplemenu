@@ -2,6 +2,7 @@
 
 #include <IwResManager.h>
 #include <IwManagedList.h>
+#include <IwModel.h>
 #include "smTerminalItem.h"
 #include "sm3D.h"
 
@@ -11,15 +12,8 @@ namespace SimpleMenu
 	class Csm3DModel : public CsmTerminalItem
 	{
 	private:
-		uint32 textureHash;
-		CIwTexture* texture;
-		CIwMaterial* material;
-		CIwSVec2 rectPos;
-		CIwSVec2 rectSize;
-		CIwColour rectColour;
-
-		uint32 styleSheetHash;
-		CsmStyleSheet* styleSheet;
+		uint32 modelHash;
+		CIwModel* model;
 	public:
 		//Declare managed class
 		IW_MANAGED_DECLARE(Csm3DModel);
@@ -38,7 +32,7 @@ namespace SimpleMenu
 		//Reads/writes a binary file using @a IwSerialise interface.
 		virtual void Serialise ();
 
-		virtual void Prepare(smItemContext* renderContext,int16 width);
+		virtual void Prepare(smItemContext* renderContext, const CIwSVec2& recommendedSize);
 		//Render 3DModel on the screen surface
 		virtual void Render(smItemContext* renderContext);
 

@@ -8,10 +8,12 @@ files
 	["src"]
 	(src)
 	smCurl.cpp
+	smCurlRequest.cpp
 
 	["include"]
 	(include)
 	smCurl.h
+	smCurlRequest.h
 }
 
 packages

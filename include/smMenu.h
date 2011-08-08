@@ -34,6 +34,11 @@ namespace SimpleMenu
 		CsmItem* activeItem;
 		IsmScriptProvider* scriptProvider;
 		TsmIntrusiveList<CsmLazyEvent> lazyEvents;
+		CIwMaterial* material;
+		CIwMaterial* blendMaterial;
+
+		// Flag to indicate if there is enough space for content. If it's true than there isn't enough space and we should scroll the header too.
+		bool isHeaderScrollable;
 	public:
 		//Declare managed class
 		IW_MANAGED_DECLARE(CsmMenu);
@@ -52,6 +57,8 @@ namespace SimpleMenu
 		virtual void Serialise ();
 		//Render image on the screen surface
 		void Render();
+		CIwMaterial* GetFlatMaterial();
+		CIwMaterial* GetBlendedMaterial();
 		//Update
 		void Update(iwfixed dt);
 
@@ -70,9 +77,10 @@ namespace SimpleMenu
 		virtual bool TouchEvent(smTouchContext* smTouchContext);
 		virtual bool TouchReleaseEvent(smTouchContext* smTouchContext);
 		virtual bool TouchMotionEvent(smTouchContext* smTouchContext);
-		virtual bool KeyEvent(smKeyContext* smKeyContext);
+		virtual bool KeyPressedEvent(smKeyContext* smKeyContext);
+		virtual bool KeyReleasedEvent(smKeyContext* smKeyContext);
 		void SetFocusTo(CsmItem*);
-		void ScrollToItem(CsmItem*);
+		bool ScrollToItem(CsmItem*);
 		void Eval(CsmItem*, const char*s);
 
 #ifdef IW_BUILD_RESOURCES

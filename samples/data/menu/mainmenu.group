@@ -11,6 +11,9 @@ CIwResGroup
 	./menu.simplemenustyle
 	./purplestyle.simplemenustyle
 
+	#3D sample
+	../3d.group
+
 	#Menu file
 	./mainmenu.simplemenu
 }

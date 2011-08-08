@@ -32,7 +32,7 @@ namespace SimpleMenu
 		//Gets the element name hash to select an apropriate style
 		virtual uint32 GetElementNameHash();
 
-		virtual void Prepare(smItemContext* renderContext,int16 width);
+		virtual void Prepare(smItemContext* renderContext, const CIwSVec2& recommendedSize);
 		//Render image on the screen surface
 		virtual void Render(smItemContext* renderContext);
 		virtual void RearrangeChildItems();

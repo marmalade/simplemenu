@@ -44,9 +44,9 @@ void CsmClickable::Serialise ()
 	CsmItem::Serialise();
 	smSerialiseString(onClick);
 }
-void CsmClickable::Prepare(smItemContext* renderContext,int16 width)
+void CsmClickable::Prepare(smItemContext* renderContext, const CIwSVec2& recommendedSize)
 {
-	CsmItem::Prepare(renderContext,width);
+	CsmItem::Prepare(renderContext,recommendedSize);
 }
 
 //Render image on the screen surface

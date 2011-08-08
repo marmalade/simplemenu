@@ -10,8 +10,14 @@ void smTouchContext::Init(uint32 tid)
 {
 	touchID = tid;
 	receiver = 0;
+	receiverContextPointer = 0;
 }
-
+void smKeyContext::Init(s3eKey k)
+{
+	key = k;
+	receiver = 0;
+	receiverContextPointer = 0;
+}
 CsmInputFilter::CsmInputFilter()
 {
 }
@@ -76,6 +82,38 @@ bool CsmInputFilter::TouchMotionEvent(smTouchContext* touchContext,int32 x,int32
 	touchContext->lastKnownPoistion.y = touchContext->currentPoistion.y = y;
 	return wasHandled;
 }
+
+bool CsmInputFilter::KeyboardKeyPressedEvent(smKeyContext* item)
+{
+	for (IsmInputReciever* r = receivers.GetLastChild(); r; r = r->GetPrevious())
+	{
+		if (r->KeyPressedEvent(item))
+		{
+			item->receiver = r;
+			return true;
+		}
+	}
+
+	return false;
+}
+bool CsmInputFilter::KeyboardKeyReleasedEvent(smKeyContext* item)
+{
+	if (item->receiver)
+	{
+		item->receiver->KeyReleasedEvent(item);
+		return true;
+	}
+	for (IsmInputReciever* r = receivers.GetLastChild(); r; r = r->GetPrevious())
+	{
+		if (r->KeyReleasedEvent(item))
+		{
+			item->receiver = r;
+			return true;
+		}
+	}
+	return false;
+}
+
 int32 CsmInputFilter::FindTouchContextIndex(uint32 touchId) const
 {
 	for (uint32 i=0; i<activePointers.size(); ++i)
@@ -100,11 +138,46 @@ void CsmInputFilter::ReleaseTouchContextAt(int32 touchIndex)
 {
 	activePointers.erase_fast(touchIndex);
 }
+int32 CsmInputFilter::FindKeyContextIndex(s3eKey key) const
+{
+	for (uint32 i=0; i<activeKeys.size(); ++i)
+	{
+		smKeyContext& item = activeKeys[i];
+		if (item.key == key)
+			return (int32)i;
+	}
+	return -1;
+}
+int32 CsmInputFilter::GetKeyContextIndex(s3eKey key)
+{
+	int32 i = FindKeyContextIndex(key);
+	if (i >= 0) return i;
+	i = (int32)activeKeys.size();
+	activeKeys.push_back();
+	smKeyContext& item = activeKeys[i];
+	item.Init(key);
+	return i;
+}
+void CsmInputFilter::ReleaseKeyContextAt(int32 keyIndex)
+{
+	activeKeys.erase_fast(keyIndex);
+}
 
 
 int32 CsmInputFilter::OnKeyboardKeyEvent(s3eKeyboardEvent*e)
 {
+	int32 index = GetKeyContextIndex(e->m_Key);
+	smKeyContext* item = &activeKeys[index];
 	bool wasHandled = false;
+	if (e->m_Pressed)
+	{
+		wasHandled = KeyboardKeyPressedEvent(item);
+	}
+	else
+	{
+		wasHandled = KeyboardKeyReleasedEvent(item);
+		ReleaseKeyContextAt(index);
+	}
 	return wasHandled?1:0;
 }
 int32 CsmInputFilter::OnPointerTouchEvent(s3ePointerTouchEvent*e)

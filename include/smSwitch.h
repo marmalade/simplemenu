@@ -26,5 +26,7 @@ namespace SimpleMenu
 		virtual void TouchReleased(smTouchContext* smTouchContext);
 		virtual void TouchCanceled(smTouchContext* smTouchContext);
 		virtual void TouchMotion(smTouchContext* smTouchContext);
+		virtual bool KeyReleasedEvent(smKeyContext* keyContext);
+		virtual bool KeyPressedEvent(smKeyContext* keyContext);
 	};
 }

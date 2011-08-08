@@ -78,7 +78,7 @@ void CsmItem::Animate(iwfixed timespan)
 	}
 }
 
-void CsmItem::Prepare(smItemContext* renderContext,int16 width)
+void CsmItem::Prepare(smItemContext* renderContext, const CIwSVec2& recommendedSize)
 {
 	EvalUpdate();
 
@@ -87,19 +87,20 @@ void CsmItem::Prepare(smItemContext* renderContext,int16 width)
 	context.parentStyle = &combinedStyle;
 	if (childItems.GetSize() > 0)
 	{
-		PrepareChildItems(&context, width);
+		PrepareChildItems(&context, recommendedSize);
 		RearrangeChildItems();
 	}
 }
-void CsmItem::PrepareChildItems(smItemContext* context,int16 width)
+void CsmItem::PrepareChildItems(smItemContext* context, const CIwSVec2& recommendedSize)
 {
-	int16 contentWidth = width - GetContentOffsetLeft()-GetContentOffsetRight();
-	size.x = width;
+	int16 contentWidth = recommendedSize.x - GetContentOffsetLeft()-GetContentOffsetRight();
+	size.x = recommendedSize.x;
 	size.y = 0;
+	CIwSVec2 chRecSize (contentWidth, recommendedSize.y);
 	for (CIwManaged** i = childItems.GetBegin(); i!=childItems.GetEnd(); ++i)
 	{
 		CsmItem* item = static_cast<CsmItem*>(*i);
-		item->Prepare(context,contentWidth);
+		item->Prepare(context,chRecSize);
 		size.y += item->GetSize().y;
 	}
 	size.y += GetContentOffsetTop()+GetContentOffsetBottom();
@@ -158,9 +159,8 @@ void CsmItem::RenderInternalShadow(smItemContext* renderContext)
 	CIwSVec2* v = IW_GX_ALLOC(CIwSVec2,vertices);
 	CIwColour* col =IW_GX_ALLOC(CIwColour,vertices);
 	uint16* indices = IW_GX_ALLOC(uint16,numIndices);
-	CIwMaterial* m = IW_GX_ALLOC_MATERIAL();
-	m->SetColAmbient(255,255,255,255);
-	//m->SetCullMode(CIwMaterial::CULL_NONE);
+	CIwMaterial* m = GetRoot()->GetBlendedMaterial();
+
 	CIwSVec2 leftTop = GetOrigin()+ CIwSVec2(GetMarginLeft(), GetMarginTop())+CIwSVec2(GetBorderLeft(),GetBorderTop());
 	CIwSVec2 rightBottom = leftTop + GetSize()- CIwSVec2(GetMarginLeft()+GetMarginRight(), GetMarginTop()+GetMarginBottom())-CIwSVec2(GetBorderLeft()+GetBorderRight(),GetBorderTop()+GetBorderBottom());
 	CIwSVec2 soff = CIwSVec2(combinedStyle.ShadowOffset.x.GetPx(1), combinedStyle.ShadowOffset.y.GetPx(1));
@@ -209,7 +209,6 @@ void CsmItem::RenderInternalShadow(smItemContext* renderContext)
 	indices[i++] = 3;	indices[i++] = 7;	indices[i++] = 0;
 	indices[i++] = 0;	indices[i++] = 7;	indices[i++] = 4;
 
-	m->SetAlphaMode(CIwMaterial::ALPHA_BLEND);
 	IwGxSetMaterial(m);
 	//toeTransformScreenSpace3D(v,v+vertices,renderContext->transformation, renderContext->viewportSize);
 	IwGxSetVertStreamScreenSpace(v,vertices);
@@ -230,8 +229,7 @@ void CsmItem::RenderShadow(smItemContext* renderContext)
 	CIwSVec2* v = IW_GX_ALLOC(CIwSVec2,vertices);
 	CIwColour* col =IW_GX_ALLOC(CIwColour,vertices);
 	uint16* indices = IW_GX_ALLOC(uint16,numIndices);
-	CIwMaterial* m = IW_GX_ALLOC_MATERIAL();
-	m->SetColAmbient(255,255,255,255);
+	CIwMaterial* m = GetRoot()->GetBlendedMaterial();
 
 	CIwSVec2 shadowSize;
 	shadowSize.x=shadowSize.y= combinedStyle.ShadowSize.GetPx(1);
@@ -296,7 +294,6 @@ void CsmItem::RenderShadow(smItemContext* renderContext)
 	indices[i++] = 15;	indices[i++] = 3;	indices[i++] = 4;
 	indices[i++] = 4;	indices[i++] = 3;	indices[i++] = 0;
 
-	m->SetAlphaMode(CIwMaterial::ALPHA_BLEND);
 	IwGxSetMaterial(m);
 
 	//toeTransformScreenSpace3D(v,v+vertices,renderContext->transformation, renderContext->viewportSize);
@@ -318,8 +315,11 @@ void CsmItem::RenderBorder(smItemContext* renderContext)
 	CIwSVec2* v = IW_GX_ALLOC(CIwSVec2,vertices);
 	CIwColour* col =IW_GX_ALLOC(CIwColour,vertices);
 	uint16* indices = IW_GX_ALLOC(uint16,numIndices);
-	CIwMaterial* m = IW_GX_ALLOC_MATERIAL();
-	m->SetColAmbient(255,255,255,255);
+	CIwMaterial* m;
+	if (combinedStyle.BorderColor.a != 255)
+		m = GetRoot()->GetBlendedMaterial();
+	else
+		m = GetRoot()->GetFlatMaterial();
 
 	CIwSVec2 leftTop = GetOrigin()+ CIwSVec2(GetMarginLeft(), GetMarginTop());
 	CIwSVec2 rightBottom = leftTop + GetSize()- CIwSVec2(GetMarginLeft()+GetMarginRight(), GetMarginTop()+GetMarginBottom());
@@ -358,8 +358,6 @@ void CsmItem::RenderBorder(smItemContext* renderContext)
 	indices[i++] = 3;	indices[i++] = 7;	indices[i++] = 0;
 	indices[i++] = 0;	indices[i++] = 7;	indices[i++] = 4;
 
-	if (combinedStyle.BorderColor.a != 255)
-		m->SetAlphaMode(CIwMaterial::ALPHA_BLEND);
 	IwGxSetMaterial(m);
 	//toeTransformScreenSpace3D(v,v+vertices,renderContext->transformation, renderContext->viewportSize);
 	IwGxSetVertStreamScreenSpace(v,vertices);
@@ -395,9 +393,14 @@ void CsmItem::RenderChildren(smItemContext* renderContext)
 		item->Render(renderContext);
 	}
 }
+void CsmItem::ApplyChildStyle(smItemContext* renderContext, CsmItem*child)
+{
+}
 void CsmItem::CombineStyle(smItemContext* renderContext)
 {
 	InheritStyle(renderContext->parentStyle);
+	if (parent)
+		parent->ApplyChildStyle(renderContext, this);
 	ApplyStyleSheet(renderContext->styleSheet);
 	ApplyStyle(&style);
 }
@@ -477,6 +480,15 @@ void CsmItem::TouchMotion(smTouchContext* touchContext)
 void CsmItem::TouchCanceled(smTouchContext* smTouchContext)
 {
 }
+bool CsmItem::KeyReleasedEvent(smKeyContext* keyContext)
+{
+	return false;
+}
+bool CsmItem::KeyPressedEvent(smKeyContext* keyContext)
+{
+	return false;
+}
+
 uint32 CsmItem::GetElementNameHash() { return SM_ANYSTYLE; }
 uint32 CsmItem::GetElementClassHash() { return styleClass; }
 uint32 CsmItem::GetElementStateHash() { return state; }

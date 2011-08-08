@@ -62,11 +62,41 @@ CsmMenu::CsmMenu()
 	activeTouch = 0;
 	activeItem = 0;
 	isVerticalScrolled = false;
+	material = 0;
+	blendMaterial = 0;
+	isHeaderScrollable = false;
 }
 //Desctructor
 CsmMenu::~CsmMenu()
 {
+	if (material)
+		delete material;
+	if (blendMaterial)
+		delete blendMaterial;
 	childItems.Delete();
+}
+CIwMaterial* CsmMenu::GetFlatMaterial()
+{
+	if (material)
+		return material;
+	material = new CIwMaterial();
+	material->SetColAmbient(255,255,255,255);
+	material->SetColEmissive(255,255,255,255);
+	material->SetColDiffuse(255,255,255,255);
+	material->SetModulateMode(CIwMaterial::MODULATE_RGB);
+	return material;
+}
+CIwMaterial* CsmMenu::GetBlendedMaterial()
+{
+	if (blendMaterial)
+		return blendMaterial;
+	blendMaterial = new CIwMaterial();
+	blendMaterial->SetColAmbient(255,255,255,255);
+	blendMaterial->SetColEmissive(255,255,255,255);
+	blendMaterial->SetColDiffuse(255,255,255,255);
+	blendMaterial->SetModulateMode(CIwMaterial::MODULATE_RGB);
+	blendMaterial->SetAlphaMode(CIwMaterial::ALPHA_BLEND);
+	return blendMaterial;
 }
 //Get scriptable class declaration
 CsmScriptableClassDeclaration* CsmMenu::GetClassDescription()
@@ -115,21 +145,35 @@ void CsmMenu::Render()
 	//renderContext.font = (CtoeFreeTypeFont*)IwGetResManager()->GetResNamed("font","CtoeFreeTypeFont");
 	int16 w = IwGxGetScreenWidth();
 	int16 h = IwGxGetScreenHeight();
-	renderContext.viewportSize = CIwSVec2(w,h);
+	CIwSVec2 recommendedSize = renderContext.viewportSize = CIwSVec2(w,h);
 	//renderContext.transformation.SetRotY(IW_GEOM_ONE/16);
 	styleSettings.Background.Render(CIwSVec2::g_Zero,CIwSVec2(w,h), renderContext.viewportSize, renderContext.transformation);
 	
-	for (CIwManaged** i = childItems.GetBegin(); i!=childItems.GetEnd(); ++i)
+	int16 contentAreaLeftover = h;
+	CsmItem* item;
+	item = GetHeader();
+	if (item) { item->Prepare(&renderContext,recommendedSize); contentAreaLeftover -= item->GetSize().y; }
+	item = GetFooter();
+	if (item) { item->Prepare(&renderContext,recommendedSize); contentAreaLeftover -= item->GetSize().y; }
+	isHeaderScrollable = contentAreaLeftover < h/3;
+	//isHeaderScrollable = true;
+	item = GetContent();
+	if (item) 
 	{
-		CsmItem* item = static_cast<CsmItem*>(*i);
-		item->Prepare(&renderContext,w);
+		recommendedSize.y = (isHeaderScrollable)?h:contentAreaLeftover;
+		item->Prepare(&renderContext,recommendedSize);
 	}
+	
 	AlignBlocks();
-	for (CIwManaged** i = childItems.GetBegin(); i!=childItems.GetEnd(); ++i)
-	{
-		CsmItem* item = static_cast<CsmItem*>(*i);
-		item->Render(&renderContext);
-	}
+
+	// Render Content
+	if (item) { item->Render(&renderContext);}
+	// Render Header
+	item = GetHeader();
+	if (item) { item->Render(&renderContext);}
+	// Render Footer
+	item = GetFooter();
+	if (item) { item->Render(&renderContext);}
 
 	//render scroll
 	CsmItem* content=GetContent();
@@ -170,13 +214,24 @@ void CsmMenu::Update(iwfixed dt)
 			int16 contentHeight = content->GetSize().y;
 			int16 minContent = 0;
 			int16 maxContent = 0;
-			if (contentHeight > contentAreaHeight)
+			if (isHeaderScrollable)
 			{
-				minContent = contentAreaHeight-contentHeight;
+				CsmItem* content=GetContent();
+				CsmItem* header=GetHeader();
+				CsmItem* footer=GetFooter();
+				maxContent = header?header->GetSize().y:0;
+				minContent = contentAreaHeight-( (content?content->GetSize().y:0) + (footer?footer->GetSize().y:0));
 			}
 			else
 			{
-				maxContent = minContent = (contentAreaHeight-contentHeight)/2;
+				if (contentHeight > contentAreaHeight)
+				{
+					minContent = contentAreaHeight-contentHeight;
+				}
+				else
+				{
+					maxContent = minContent = (contentAreaHeight-contentHeight)/2;
+				}
 			}
 			if (contentOffset < minContent)
 			{
@@ -226,22 +281,37 @@ void CsmMenu::Update(iwfixed dt)
 }
 void CsmMenu::AlignBlocks()
 {
-	//CsmItem* content=GetContent();
+	CsmItem* content=GetContent();
 	CsmItem* header=GetHeader();
 	CsmItem* footer=GetFooter();
 
 	contentAreaHeight = (int16)IwGxGetScreenHeight();
 	contentAreaOffset =0;
-	if (header)
+
+	if (isHeaderScrollable)
 	{
-		header->SetOrigin(CIwSVec2(0,0));
-		contentAreaOffset += header->GetSize().y;
-		contentAreaHeight -= header->GetSize().y;
+		if (header)
+		{
+			header->SetOrigin(CIwSVec2(0,contentOffset-header->GetSize().y));
+		}
+		if (footer)
+		{
+			footer->SetOrigin(CIwSVec2(0,contentOffset+((content)?content->GetSize().y:0)));
+		}
 	}
-	if (footer)
+	else
 	{
-		footer->SetOrigin(CIwSVec2(0,contentAreaOffset+contentAreaHeight-footer->GetSize().y));
-		contentAreaHeight -= footer->GetSize().y;
+		if (header)
+		{
+			header->SetOrigin(CIwSVec2(0,0));
+			contentAreaOffset += header->GetSize().y;
+			contentAreaHeight -= header->GetSize().y;
+		}
+		if (footer)
+		{
+			footer->SetOrigin(CIwSVec2(0,contentAreaOffset+contentAreaHeight-footer->GetSize().y));
+			contentAreaHeight -= footer->GetSize().y;
+		}
 	}
 
 }
@@ -294,55 +364,69 @@ CsmItem* CsmMenu::FindActiveItemAt(const CIwVec2 & coord)
 	} while (i!=childItems.GetBegin());
 	return 0;
 }
-bool CsmMenu::KeyEvent(smKeyContext* keyContext)
+bool CsmMenu::KeyReleasedEvent(smKeyContext* keyContext)
 {
-	if (keyContext->pressed)
+	if (keyContext->receiver == this && keyContext->receiverContextPointer)
 	{
-		switch (keyContext->key)
+		if (((CsmItem*)keyContext->receiverContextPointer)->KeyReleasedEvent(keyContext))
+			return true;
+	}
+	return false;
+}
+bool CsmMenu::KeyPressedEvent(smKeyContext* keyContext)
+{
+	if (activeItem)
+	{
+		if (activeItem->KeyPressedEvent(keyContext))
 		{
-		case s3eKeyUp:
-			{
-				CsmNextActive v(activeItem);
-				VisitBackward(&v);
-				if (v.m_found)
-				{
-					SetFocusTo(v.m_found);
-					ScrollToItem(v.m_found);
-				}
-			}
-			break;
-		case s3eKeyDown:
-			{
-				CsmNextActive v(activeItem);
-				VisitForward(&v);
-				if (v.m_found)
-				{
-					SetFocusTo(v.m_found);
-					ScrollToItem(v.m_found);
-				}
-			}
-			break;
-		case s3eKeyEnter:
-		case s3eKeyOk:
-			{
-				CsmItem* skip = activeItem;
-				if (skip)
-				{
-					smTouchContext c;
-					c.touchID = 0;
-					c.lastKnownPoistion = c.firstKnownPoistion = c.currentPoistion = CIwSVec2::g_Zero;
-					skip->Touch(&c);
-					skip->TouchReleased(&c);
-				}
-			}
-			break;
-		default:
-			break;
+			keyContext->receiverContextPointer = activeItem;
+			return true;
 		}
+	}
+	switch (keyContext->key)
+	{
+	case s3eKeyUp:
+		{
+			CsmNextActive v(activeItem);
+			VisitBackward(&v);
+			if (v.m_found)
+			{
+				SetFocusTo(v.m_found);
+				ScrollToItem(v.m_found);
+			}
+		}
+		break;
+	case s3eKeyDown:
+		{
+			CsmNextActive v(activeItem);
+			VisitForward(&v);
+			if (v.m_found)
+			{
+				SetFocusTo(v.m_found);
+				ScrollToItem(v.m_found);
+			}
+		}
+		break;
+	case s3eKeyEnter:
+	case s3eKeyOk:
+		{
+			CsmItem* skip = activeItem;
+			if (skip)
+			{
+				smTouchContext c;
+				c.touchID = 0;
+				c.lastKnownPoistion = c.firstKnownPoistion = c.currentPoistion = CIwSVec2::g_Zero;
+				skip->Touch(&c);
+				skip->TouchReleased(&c);
+			}
+		}
+		break;
+	default:
+		break;
 	}
 	return true;
 }
-void CsmMenu::ScrollToItem(CsmItem*i)
+bool CsmMenu::ScrollToItem(CsmItem*i)
 {
 	CsmItem*p=i;
 	while(p->GetParent()) p = p->GetParent();
@@ -361,6 +445,7 @@ void CsmMenu::ScrollToItem(CsmItem*i)
 				contentOffset = minContent;
 		}
 	}
+	return true;
 }
 void CsmMenu::Initialize(IsmScriptProvider* sp)
 {

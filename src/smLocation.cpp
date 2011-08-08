@@ -115,6 +115,7 @@ bool CsmLocation::WaitForGPS()
 		s3eDeviceYield(30);
 		s3eKeyboardUpdate();
 	}
+	return (rr != r);
 }
 float CsmLocation::GetLatitude()
 {
