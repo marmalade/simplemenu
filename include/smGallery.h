@@ -41,8 +41,9 @@ namespace SimpleMenu
 		virtual void Touch(smTouchContext* smTouchContext);
 		virtual void TouchReleased(smTouchContext* smTouchContext);
 		virtual void TouchCanceled(smTouchContext* smTouchContext);
-
 		virtual void TouchMotion(smTouchContext* smTouchContext);
+		virtual bool KeyReleasedEvent(smKeyContext* keyContext);
+		virtual bool KeyPressedEvent(smKeyContext* keyContext);
 #ifdef IW_BUILD_RESOURCES
 		//Parses from text file: parses attribute/value pair.
 		virtual	bool	ParseAttribute(CIwTextParserITX* pParser, const char* pAttrName);

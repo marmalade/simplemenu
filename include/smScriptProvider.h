@@ -58,6 +58,9 @@ namespace SimpleMenu
 		virtual void* PopArgClass(CsmScriptableClassDeclaration*)=0;
 	};
 
+	IsmScriptProvider* smGetDefaultScriptProvider();
+	void smSetDefaultScriptProvider(IsmScriptProvider*);
+
 	void smRegisterScriptableClasses(IsmScriptProvider* system);
 	void smRegisterClass(CsmScriptableClassDeclaration* c);
 }

@@ -19,6 +19,7 @@
 #include "smRow.h"
 #include "smGrid.h"
 #include "smFloatingPanel.h"
+#include "smWindowHistory.h"
 
 namespace SimpleMenu
 {
@@ -27,17 +28,58 @@ namespace SimpleMenu
 	iwangle g_toeLoadingAngle = 0;
 	CIwArray<CsmScriptableClassDeclaration*>* toe_scriptClassDeclarations=0;
 
-	CsmInputFilter* smGetInputFilter() {return g_inputFilter;}
+	CsmInputFilter* smGetInputFilter() 
+	{
+		if (!g_inputFilter)
+		{
+			g_inputFilter = new CsmInputFilter();
+			g_inputFilter->Register();
+		}
+		return g_inputFilter;
+	}
 
 	smCloseState sm_menuCloseState = SM_KEEP_OPEN;
-	smCloseState smGetCloseState() { return sm_menuCloseState; }
+	smCloseState smGetCloseState() 
+	{ 
+		return sm_menuCloseState; 
+	}
 	class CsmUtils
 	{
 	public:
-		static void CloseAllMenus() {sm_menuCloseState= SM_CLOSE_ALL;}
-		static void CloseMenu() {sm_menuCloseState= SM_CLOSE_CURRENT;}
+		static void CloseAllMenus() 
+		{
+			sm_menuCloseState = SM_CLOSE_ALL;
+		}
+		static void CloseMenu() 
+		{
+			sm_menuCloseState = SM_CLOSE_CURRENT;
+		}
 		static int GetDPI() {
 			return DPI::dpiGetScreenDPI();
+		}
+		static int GetDeviceOS()
+		{
+			return s3eDeviceGetInt(S3E_DEVICE_OS);
+		}
+		static const char* GetDeviceOSName()
+		{
+			return s3eDeviceGetString(S3E_DEVICE_OS);
+		}
+		static int GetDeviceID()
+		{
+			return s3eDeviceGetInt(S3E_DEVICE_ID);
+		}
+		static const char* GetDeviceIDName()
+		{
+			return s3eDeviceGetString(S3E_DEVICE_ID);
+		}
+		static int HashString(const char* s)
+		{
+			return (int)IwHashString(s);
+		}
+		static void OpenMenuAtGroup(const char* s)
+		{
+			smOpenMenuAtGroup(s);
 		}
 	};
 
@@ -47,6 +89,13 @@ namespace SimpleMenu
 			ScriptTraits::Method("CloseMenu", &CsmUtils::CloseMenu),
 			ScriptTraits::Method("CloseAllMenus", &CsmUtils::CloseAllMenus),
 			ScriptTraits::Method("GetDPI", &CsmUtils::GetDPI),
+			ScriptTraits::Method("GetDeviceOSName", &CsmUtils::GetDeviceOSName),
+			ScriptTraits::Method("GetDeviceOS", &CsmUtils::GetDeviceOS),
+			ScriptTraits::Method("GetDeviceIDName", &CsmUtils::GetDeviceIDName),
+			ScriptTraits::Method("GetDeviceID", &CsmUtils::GetDeviceID),
+			ScriptTraits::Method("HashString", &CsmUtils::HashString),
+			ScriptTraits::Method("OpenMenuAtGroup", &CsmUtils::OpenMenuAtGroup),
+			
 				0);
 		return &d;
 	}
@@ -98,7 +147,7 @@ void SimpleMenu::smInit()
 	smRegisterClass(CsmTextBlock::GetClassDescription());
 	smRegisterClass(smGetClassDescription());
 
-	g_inputFilter = new CsmInputFilter();
+	
 }
 
 void SimpleMenu::smTerminate()
@@ -112,8 +161,12 @@ void SimpleMenu::smTerminate()
 	FreeTypeHelper::fthTerminate();
 	DPI::dpiTerminate();
 
-	delete g_inputFilter;
-	g_inputFilter = 0;
+	if (g_inputFilter)
+	{
+		g_inputFilter->UnRegister();
+		delete g_inputFilter;
+		g_inputFilter = 0;
+	}
 
 	if (toe_scriptClassDeclarations)
 	{

@@ -7,105 +7,27 @@ CsmMenu
 	CsmItem
 	{
 
-		CsmTextBox
+		CsmButton
 		{
-			text "Sample. Click to modify!"
+			text "Controls"
+			onclick "CsmUtils.OpenMenuAtGroup('menu/controls.group')"
+		}
+		CsmButton
+		{
+			text "Notifications"
+			onclick "CsmUtils.OpenMenuAtGroup('menu/notifications.group')"
+		}
+		CsmButton
+		{
+			text "3D Model"
+			onclick "CsmUtils.OpenMenuAtGroup('menu/3dmodel.group')"
+		}
+		CsmButton
+		{
+			text "Long text block"
+			onclick "CsmUtils.OpenMenuAtGroup('menu/longtext.group')"
 		}
 
-		CsmTextBlock
-		{
-			text ""
-
-			onupdate "
-				self:SetText( 'DPI = ' .. CsmUtils.GetDPI() )
-			"
-		}
-		CsmSlider
-		{
-			CsmTextBlock
-			{
-			text "Slider"
-			}
-		}
-		CsmSwitch
-		{
-			CsmTextBlock
-			{
-			text "Switch"
-			}
-		}
-		CsmSelect
-		{
-			CsmTextBlock
-			{
-				styleClass "Sliderknob"
-				text "Moscow"
-			}
-			CsmTextBlock
-			{
-				styleClass "Sliderknob"
-				state "FOCUS"
-				text "New York"
-			}
-			CsmTextBlock
-			{
-				styleClass "Sliderknob"
-				text "Katmandu"
-			}
-		}
-		CsmGallery
-		{
-			CsmImage
-			{
-				Csm3DModel
-				{
-					model "male_torse_naked_lod2"
-				}
-			}
-			CsmTextBlock
-			{
-				styleClass "AREA"
-				text "ABABA"
-			}
-			CsmItem
-			{
-				styleClass "AREA"
-				text "Line 1"
-				text "Line 2!"
-			}
-		}
-		CsmItem
-		{
-			styleClass "AREA"
-			CsmTextBlock
-			{
-				styleClass "H2"
-				text "GPS"
-			}
-			CsmTextBlock
-			{
-				text "Searching for GPS"
-
-				onupdate "
-					if CsmLocation.IsAvailable() then
-						self:SetText( 'GPS is available!' .. CsmLocation.GetLongitude() .. 'x' .. CsmLocation.GetLatitude() .. ' received at ' .. CsmLocation.GetDataTimestamp() )
-					else
-						self:SetText( 'GPS is not available!')
-					end
-				"
-			}
-			CsmButton
-			{
-				text "Wait for GPS signal"
-				onclick "CsmLocation.WaitForGPS()"
-			}
-		}
-		CsmFloatingPanel
-		{
-			pivot 100 % 100 %
-			position 100 % 100 %
-			text "notification"
-		}
 	}
 	CsmItem
 	{
@@ -135,6 +57,7 @@ CsmMenu
 		CsmButton
 		{
 			text "About"
+			onclick "CsmUtils.OpenMenuAtGroup('menu/about.group')"
 		}
 		CsmButton
 		{

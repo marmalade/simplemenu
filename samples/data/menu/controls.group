@@ -1,0 +1,8 @@
+CIwResGroup
+{
+	name "controls"
+
+	./style.group
+
+	./controls.simplemenu
+}

@@ -1,0 +1,8 @@
+CIwResGroup
+{
+	name "longtext"
+
+	./style.group
+
+	./longtext.simplemenu
+}

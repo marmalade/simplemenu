@@ -1,0 +1,10 @@
+CIwResGroup
+{
+	name "3dmodel"
+
+	./style.group
+
+	../3d.group
+
+	./3dmodel.simplemenu
+}

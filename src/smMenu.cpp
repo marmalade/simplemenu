@@ -286,7 +286,7 @@ void CsmMenu::AlignBlocks()
 	CsmItem* footer=GetFooter();
 
 	contentAreaHeight = (int16)IwGxGetScreenHeight();
-	contentAreaOffset =0;
+	contentAreaOffset = 0;
 
 	if (isHeaderScrollable)
 	{
@@ -391,8 +391,8 @@ bool CsmMenu::KeyPressedEvent(smKeyContext* keyContext)
 			VisitBackward(&v);
 			if (v.m_found)
 			{
-				SetFocusTo(v.m_found);
-				ScrollToItem(v.m_found);
+				if (ScrollToItem(v.m_found))
+					SetFocusTo(v.m_found);
 			}
 		}
 		break;
@@ -402,8 +402,8 @@ bool CsmMenu::KeyPressedEvent(smKeyContext* keyContext)
 			VisitForward(&v);
 			if (v.m_found)
 			{
-				SetFocusTo(v.m_found);
-				ScrollToItem(v.m_found);
+				if (ScrollToItem(v.m_found))
+					SetFocusTo(v.m_found);
 			}
 		}
 		break;
@@ -431,6 +431,10 @@ bool CsmMenu::ScrollToItem(CsmItem*i)
 	CsmItem*p=i;
 	while(p->GetParent()) p = p->GetParent();
 	CsmItem*content=GetContent();
+	CsmItem*footer=GetFooter();
+	CsmItem*header=GetHeader();
+	int16 itemPosition = i->GetOrigin().y;
+
 	if (p == content)
 	{
 		int16 contentHeight = content->GetSize().y;
@@ -438,7 +442,16 @@ bool CsmMenu::ScrollToItem(CsmItem*i)
 		{
 			int16 minContent = contentAreaHeight-contentHeight;
 			int16 curY = i->GetSize().y/2 + i->GetOrigin().y-contentAreaOffset;
-			contentOffset = -curY+contentAreaHeight/2;
+			int16 newContentOffset = -curY+contentAreaHeight/2;
+			if (abs(contentOffset-newContentOffset) > contentAreaHeight/2)
+			{
+				if (newContentOffset < contentOffset)
+					contentOffset -= contentAreaHeight/2;
+				else
+					contentOffset += contentAreaHeight/2;
+				return false;
+			}
+			contentOffset = newContentOffset;
 			if (contentOffset > 0)
 				contentOffset = 0;
 			else if (contentOffset < minContent)

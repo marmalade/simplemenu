@@ -1,0 +1,35 @@
+CsmMenu
+{
+	name "notifications"
+
+	styleSheet "purplestyle"
+
+	CsmItem
+	{
+		styleClass "Content"
+		CsmFloatingPanel
+		{
+			pivot 100 % 100 %
+			position 100 % 100 %
+			text "notification"
+		}
+	}
+	CsmItem
+	{
+		styleClass "Header"
+	}
+	CsmRow
+	{
+		styleClass "Footer"
+		CsmButton
+		{
+			text "Back"
+			onclick "CsmUtils.CloseMenu()"
+		}
+		CsmButton
+		{
+			text "Close"
+			onclick "CsmUtils.CloseAllMenus()"
+		}
+	}
+}

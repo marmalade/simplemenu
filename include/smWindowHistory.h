@@ -11,4 +11,6 @@ namespace SimpleMenu
 	void smShowMenu(CsmMenu* m, CsmInputFilter* input, IsmScriptProvider* script, smUpdateCallback callback, void* context);
 
 	void smOpenWaitDialog(const char* s, smUpdateCallback callback, void* context);
+
+	void smOpenMenuAtGroup(const char*);
 }

@@ -6,6 +6,8 @@
 namespace SimpleMenu
 {
 	int initLuaCounter = 0;
+
+	extern CsmLuaState* g_smLuaDefaultState;
 }
 
 using namespace SimpleMenu;
@@ -26,6 +28,11 @@ void SimpleMenu::smLuaInit()
 	smInit();
 }
 
+void SimpleMenu::smSetLuaAsDefaultScript()
+{
+	smSetDefaultScriptProvider(smGetLuaDefaultState());
+}
+
 void SimpleMenu::smLuaTerminate()
 {
 	--initLuaCounter;
@@ -33,6 +40,14 @@ void SimpleMenu::smLuaTerminate()
 		IwAssertMsg(SIMPLEMENU,false,("smLuaTerminate doesn't match smLuaInit"));
 	if (initLuaCounter != 0)
 		return;
+
+	if (g_smLuaDefaultState)
+	{
+		if (smGetDefaultScriptProvider() == g_smLuaDefaultState)
+			smSetDefaultScriptProvider(0);
+		delete g_smLuaDefaultState;
+		g_smLuaDefaultState = 0;
+	}
 
 	smTerminate();
 }

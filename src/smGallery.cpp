@@ -109,6 +109,36 @@ void CsmGallery::TouchCanceled(smTouchContext* smTouchContext)
 	touched = false;
 	
 }
+bool CsmGallery::KeyReleasedEvent(smKeyContext* keyContext)
+{
+	switch (keyContext->key)
+	{
+	case s3eKeyLeft:
+		carouselPosition -= IW_GEOM_ONE;
+		if (carouselPosition < 0) carouselPosition = 0;
+		return true;
+	case s3eKeyRight:
+		carouselPosition += IW_GEOM_ONE;
+		if (carouselPosition > IW_GEOM_ONE*((int32)childItems.GetSize()-1)) 
+			carouselPosition = IW_GEOM_ONE*(childItems.GetSize()-1);
+		return true;
+	default:
+		break;
+	}
+	return false;
+}
+bool CsmGallery::KeyPressedEvent(smKeyContext* keyContext)
+{
+	switch (keyContext->key)
+	{
+	case s3eKeyLeft:
+	case s3eKeyRight:
+		return true;
+	default:
+		break;
+	}
+	return false;
+}
 //Render image on the screen surface
 void CsmGallery::Render(smItemContext* renderContext)
 {

@@ -1,0 +1,73 @@
+CsmMenu
+{
+	name "about"
+
+	styleSheet "purplestyle"
+
+	CsmItem
+	{
+		styleClass "Content"
+
+		CsmTextBlock
+		{
+			onupdate "self:SetText( 'DPI = ' .. CsmUtils.GetDPI() )"
+		}
+		CsmTextBlock
+		{
+			onupdate "self:SetText( 'DeviceOS = ' .. CsmUtils.GetDeviceOSName() .. ', ' .. CsmUtils.GetDeviceOS() )"
+		}
+		CsmTextBlock
+		{
+			onupdate "self:SetText( 'DeviceID = ' .. CsmUtils.GetDeviceIDName() .. ', ' .. CsmUtils.GetDeviceID() )"
+		}
+		CsmItem
+		{
+			styleClass "AREA"
+			CsmTextBlock
+			{
+				styleClass "H2"
+				text "GPS"
+			}
+			CsmTextBlock
+			{
+				text "Searching for GPS"
+
+				onupdate "
+					if CsmLocation.IsAvailable() then
+						self:SetText( 'GPS is available!' .. CsmLocation.GetLongitude() .. 'x' .. CsmLocation.GetLatitude() .. ' received at ' .. CsmLocation.GetDataTimestamp() )
+					else
+						self:SetText( 'GPS is not available!')
+					end
+				"
+			}
+			CsmButton
+			{
+				text "Wait for GPS signal"
+				onclick "CsmLocation.WaitForGPS()"
+			}
+		}
+	}
+	CsmItem
+	{
+		styleClass "Header"
+		CsmTextBlock
+		{
+			styleClass "H1"
+			text "About"
+		}
+	}
+	CsmRow
+	{
+		styleClass "Footer"
+		CsmButton
+		{
+			text "Back"
+			onclick "CsmUtils.CloseMenu()"
+		}
+		CsmButton
+		{
+			text "Close"
+			onclick "CsmUtils.CloseAllMenus()"
+		}
+	}
+}

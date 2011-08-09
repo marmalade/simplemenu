@@ -11,5 +11,6 @@ extern "C" {
 namespace SimpleMenu
 {
 	void smLuaInit();
+	void smSetLuaAsDefaultScript();
 	void smLuaTerminate();
 }

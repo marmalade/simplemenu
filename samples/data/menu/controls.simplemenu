@@ -1,0 +1,78 @@
+CsmMenu
+{
+	name "controls"
+
+	styleSheet "purplestyle"
+
+	CsmItem
+	{
+		styleClass "Content"
+
+		CsmTextBox
+		{
+			text "CsmTextBox"
+		}
+
+		CsmSlider
+		{
+			CsmTextBlock
+			{
+			text "CsmSlider"
+			}
+		}
+		CsmSwitch
+		{
+			CsmTextBlock
+			{
+			text "CsmSwitch"
+			}
+		}
+		CsmSelect
+		{
+			CsmTextBlock
+			{
+				text "Moscow"
+			}
+			CsmTextBlock
+			{
+				text "New York"
+			}
+			CsmTextBlock
+			{
+				text "Katmandu"
+			}
+		}
+		CsmGallery
+		{
+			CsmTextBlock
+			{
+				styleClass "AREA"
+				text "ABABA"
+			}
+			CsmItem
+			{
+				styleClass "AREA"
+				text "Line 1"
+				text "Line 2!"
+			}
+		}
+	}
+	CsmItem
+	{
+		styleClass "Header"
+	}
+	CsmRow
+	{
+		styleClass "Footer"
+		CsmButton
+		{
+			text "Back"
+			onclick "CsmUtils.CloseMenu()"
+		}
+		CsmButton
+		{
+			text "Close"
+			onclick "CsmUtils.CloseAllMenus()"
+		}
+	}
+}

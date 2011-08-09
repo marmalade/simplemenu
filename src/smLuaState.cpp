@@ -15,6 +15,18 @@ IW_MANAGED_IMPLEMENT(CsmLuaState);
 
 namespace SimpleMenu
 {
+	CsmLuaState* g_smLuaDefaultState = 0;
+
+	CsmLuaState* smGetLuaDefaultState()
+	{
+		if (!g_smLuaDefaultState)
+		{
+			g_smLuaDefaultState = new CsmLuaState();
+			g_smLuaDefaultState->Initialize();
+		}
+		return g_smLuaDefaultState;
+	}
+
 	struct smLuaUserDataContainer
 	{
 		void* userData;

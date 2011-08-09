@@ -12,6 +12,13 @@ assets
 	./menu/fontbold.ttf
 	(./data-ram/data-gles1)
 	./menu/mainmenu.group.bin
+	./menu/3dmodel.group.bin
+	./menu/about.group.bin
+	./menu/controls.group.bin
+	./menu/longtext.group.bin
+	./menu/notifications.group.bin
+	./menu/style.group.bin
+
 	(./data-ram/)
 	./3d.group.bin
 }
@@ -29,10 +36,14 @@ files
 
 	[Data/Menu]
 	(./data/menu)
+	mainmenu.group
 	mainmenu.simplemenu
+
+	longtext.group
+	longtext.simplemenu
+
 	menu.simplemenustyle
 	purplestyle.simplemenustyle
-	mainmenu.group
 }
 
 deployments
@@ -55,6 +66,9 @@ subprojects
 	../simplemenu.features.mkf
 	../simplemenu.svg.mkf
 	../simplemenu.curl.mkf
+	../simplemenu.curl.facebook.mkf
+	../simplemenu.curl.osm.mkf
+	../simplemenu.sqlite.mkf
 	freetype
 	freetypehelper
 }

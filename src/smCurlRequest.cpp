@@ -11,7 +11,7 @@ namespace SimpleMenu
 CsmScriptableClassDeclaration* CsmCurlRequest::GetClassDescription()
 {
 	static  TsmScriptableClassDeclaration<CsmCurlRequest> d ("CsmCurlRequest",
-			//ScriptTraits::Method("Create", &CsmCurlRequest::Create),
+			ScriptTraits::Method("Create", &CsmCurlRequest::Create),
 			//ScriptTraits::Method("Destroy", &CsmCurlRequest::Destroy),
 			ScriptTraits::Method("SetUrl", &CsmCurlRequest::SetUrl),
 			ScriptTraits::Method("Perform", &CsmCurlRequest::Perform),

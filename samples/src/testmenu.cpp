@@ -11,6 +11,7 @@
 #include <smConfig.h>
 #include <sm3DModel.h>
 #include <smCurl.h>
+#include <smLuaState.h>
 #include <smWindowHistory.h>
 
 using namespace FreeTypeHelper;
@@ -29,21 +30,19 @@ int main(int argc, char* argv[])
 	SimpleMenu::smFeaturesInit();
 	SimpleMenu::sm3DInit();
 	SimpleMenu::smCurlInit();
-
+	SimpleMenu::smSetLuaAsDefaultScript();
 	IwGxSetColClear(0x1f, 0x1f, 0xc0, 0x7f);
 
 	SimpleMenu::CsmInputFilter* input = SimpleMenu::smGetInputFilter();
-	input->Register();
-	SimpleMenu::CsmLuaState* lua = new SimpleMenu::CsmLuaState();
-	lua->Initialize();
+
+	SimpleMenu::CsmLuaState* lua = SimpleMenu::smGetLuaDefaultState();
+
 	CIwResGroup* sampleGroup =  IwGetResManager()->LoadGroup("menu/mainmenu.group");
 	SimpleMenu::CsmMenu* m = (SimpleMenu::CsmMenu*)sampleGroup->GetResNamed("mainmenu", "CsmMenu");
 
 	SimpleMenu::smShowMenu(m, input, lua, 0, 0);
 
 	IwGetResManager()->DestroyGroup(sampleGroup);
-	delete lua;
-	input->UnRegister();
 
 	SimpleMenu::smCurlTerminate();
 	SimpleMenu::sm3DTerminate();

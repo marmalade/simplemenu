@@ -15,8 +15,8 @@ namespace SimpleMenu
 	enum smCloseState
 	{
 		SM_KEEP_OPEN = 0,
-		SM_CLOSE_CURRENT = 0,
-		SM_CLOSE_ALL = 1
+		SM_CLOSE_CURRENT = 1,
+		SM_CLOSE_ALL = 2
 	};
 
 	smCloseState smGetCloseState();

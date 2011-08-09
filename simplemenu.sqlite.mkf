@@ -7,20 +7,17 @@ files
 {
 	["src"]
 	(src)
-	sm3DModel.cpp
-	sm3DScene.cpp
-	sm3D.cpp
+	smSQLite.cpp
 
 	["include"]
 	(include)
-	sm3DModel.h
-	sm3DScene.h
-	sm3D.h
+	smSQLite.h
 }
+
+package sqlite
 
 subprojects
 {
 	./simplemenu.mkf
-	iwgraphics
-	iwanim 
+	sqlite
 }

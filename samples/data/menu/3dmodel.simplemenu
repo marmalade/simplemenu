@@ -1,0 +1,37 @@
+CsmMenu
+{
+	name "3dmodel"
+
+	styleSheet "purplestyle"
+
+	CsmItem
+	{
+		styleClass "Content"
+
+			CsmImage
+			{
+				Csm3DModel
+				{
+					model "male_torse_naked_lod2"
+				}
+			}
+	}
+	CsmItem
+	{
+		styleClass "Header"
+	}
+	CsmRow
+	{
+		styleClass "Footer"
+		CsmButton
+		{
+			text "Back"
+			onclick "CsmUtils.CloseMenu()"
+		}
+		CsmButton
+		{
+			text "Close"
+			onclick "CsmUtils.CloseAllMenus()"
+		}
+	}
+}

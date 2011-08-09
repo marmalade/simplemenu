@@ -4,6 +4,22 @@
 
 using namespace SimpleMenu;
 
+namespace SimpleMenu
+{
+	IsmScriptProvider* g_smDefaultScriptProvider = 0;
+}
+
+IsmScriptProvider* SimpleMenu::smGetDefaultScriptProvider()
+{
+	return g_smDefaultScriptProvider;
+}
+
+void SimpleMenu::smSetDefaultScriptProvider(IsmScriptProvider* sp)
+{
+	g_smDefaultScriptProvider = sp;
+}
+
+
 IsmScriptProvider::~IsmScriptProvider()
 {
 	

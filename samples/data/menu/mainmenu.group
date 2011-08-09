@@ -3,16 +3,7 @@ CIwResGroup
 	#Name of resource group
 	name "mainmenu"
 
-	#Font files
-	./font.ttf
-	./fontbold.ttf
-
-	#Menu css-like style file
-	./menu.simplemenustyle
-	./purplestyle.simplemenustyle
-
-	#3D sample
-	../3d.group
+	./style.group
 
 	#Menu file
 	./mainmenu.simplemenu

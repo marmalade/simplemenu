@@ -46,13 +46,13 @@ void CsmLocation::SaveToConfig()
 {
 	CsmConfig::SetFloat("sm-location-latitude", (float)l.m_Latitude);
 	CsmConfig::SetFloat("sm-location-longitude", (float)l.m_Longitude);
-	CsmConfig::SetLong("sm-location-m_received-at", (long)m_receivedAt);
+	CsmConfig::SetInteger("sm-location-m_received-at", (int)m_receivedAt);
 }
 void CsmLocation::LoadFromConfig()
 {
 	l.m_Latitude = CsmConfig::GetFloat("sm-location-latitude");
 	l.m_Longitude = CsmConfig::GetFloat("sm-location-longitude");
-	m_receivedAt = CsmConfig::GetLong("sm-location-m_received-at");
+	m_receivedAt = (time_t)CsmConfig::GetInteger("sm-location-m_received-at");
 }
 void CsmLocation::StartFeature()
 {

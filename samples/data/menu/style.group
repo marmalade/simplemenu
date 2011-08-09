@@ -1,0 +1,10 @@
+CIwResGroup
+{
+	name "style"
+	shared true
+
+	./font.ttf
+	./fontbold.ttf
+
+	./purplestyle.simplemenustyle
+}

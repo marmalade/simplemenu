@@ -1,0 +1,8 @@
+CIwResGroup
+{
+	name "notifications"
+
+	./style.group
+
+	./notifications.simplemenu
+}

@@ -62,4 +62,6 @@ namespace SimpleMenu
 		virtual	bool	ParseAttribute(CIwTextParserITX* pParser, const char* pAttrName);
 #endif
 	};
+
+	CsmLuaState* smGetLuaDefaultState();
 }

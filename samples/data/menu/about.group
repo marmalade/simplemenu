@@ -1,0 +1,8 @@
+CIwResGroup
+{
+	name "about"
+
+	./style.group
+
+	./about.simplemenu
+}

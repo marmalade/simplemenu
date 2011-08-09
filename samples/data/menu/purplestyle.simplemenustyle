@@ -6,7 +6,7 @@ CsmStyleSheet
 	style
 	{
 		font "font"
-		fontSize 10 pt
+		fontSize 8 pt
 		fontColor {0,0,0,255}
 		shadowColor {0,0,0,64}
 		shadow-size 3 pt
@@ -36,7 +36,7 @@ CsmStyleSheet
 			color {90,65,120,255}
 		}
 		font "fontbold"
-		font-size 14 pt
+		font-size 10 pt
 		font-colour { 220 220 230 255 }
 		text-shadow-offset -1 px -1 px
 
@@ -50,7 +50,7 @@ CsmStyleSheet
 	style
 	{
 		horizontal-alignment 0.5
-		margin 10 px
+		#margin 10 px
 	}
 	bindto "TEXTBOX" "*" "*"
 	bindto "*" "AREA" "*"
@@ -89,7 +89,7 @@ CsmStyleSheet
 	style 
 	{
 		font "fontbold"
-		font-size 12 pt
+		#font-size 10 pt
 		font-colour { 220 220 230 255 }
 		text-shadow-offset -1 px -1 px
 
@@ -150,12 +150,12 @@ CsmStyleSheet
 	style
 	{
 		font "fontbold"
-		fontSize 20 pt
+		fontSize 14 pt
 	}
 	bindto "*" "H2" "*"
 	style
 	{
 		font "fontbold"
-		fontSize 16 pt
+		fontSize 12 pt
 	}
 }

@@ -30,6 +30,6 @@ DisplayFrameRate=1
 #Rasterisation=SW
 UseRGBLighting=1
 DataCacheSize=65536
-VertCacheSize=8192
+VertCacheSize=16384
 NumTPages=32
 NumTPagesNoMipMap=8
