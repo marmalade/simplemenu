@@ -1,5 +1,6 @@
 #pragma once
 #include <s3eCamera.h>
+#include <smImageSource.h>
 #include "smFeatures.h"
 
 namespace SimpleMenu
@@ -25,5 +26,9 @@ namespace SimpleMenu
 		static int32 CameraUpdate(void* systemData, void* userData);
 		void CloseFeed();
 		void OpenFeed();
+	};
+
+	class CsmCameraImage: public CsmImageSource
+	{
 	};
 }

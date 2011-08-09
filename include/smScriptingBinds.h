@@ -59,7 +59,7 @@ namespace SimpleMenu
 			OneArgFunction(const char* name, METHOD mm):CsmScriptableMethodDeclaration(name),m(mm) {}
 			R MakeCall(IsmScriptProvider* system, CsmScriptableClassDeclaration* cls, void* instance)
 			{
-				return m(FetchArgument<A>(system));
+				return m((A)FetchArgument<A>(system));
 			}
 		};
 		template <typename R, typename A1, typename A2> class TwoArgFunction: public CsmScriptableMethodDeclaration

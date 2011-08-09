@@ -114,11 +114,11 @@ bool CsmSelect::KeyReleasedEvent(smKeyContext* keyContext)
 	{
 		switch (keyContext->key)
 		{
-		case s3eKey::s3eKeyUp:
+		case s3eKeyUp:
 			if (selectedItemIndex > 0)
 				--selectedItemIndex;
 			return true;
-		case s3eKey::s3eKeyDown:
+		case s3eKeyDown:
 			if (selectedItemIndex < (int32)childItems.GetSize()-1)
 				++selectedItemIndex;
 			return true;
@@ -134,8 +134,8 @@ bool CsmSelect::KeyPressedEvent(smKeyContext* keyContext)
 	{
 		switch (keyContext->key)
 		{
-		case s3eKey::s3eKeyUp:
-		case s3eKey::s3eKeyDown:
+		case s3eKeyUp:
+		case s3eKeyDown:
 			return true;
 		default:
 			break;

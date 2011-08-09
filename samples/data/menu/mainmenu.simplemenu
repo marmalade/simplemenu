@@ -55,9 +55,12 @@ CsmMenu
 		}
 		CsmGallery
 		{
-			Csm3DModel
+			CsmImage
 			{
-				model "male_torse_naked_lod2"
+				Csm3DModel
+				{
+					model "male_torse_naked_lod2"
+				}
 			}
 			CsmTextBlock
 			{

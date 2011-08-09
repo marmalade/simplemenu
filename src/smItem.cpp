@@ -29,6 +29,7 @@ CsmItem::CsmItem()
 	styleClass = SM_ANYSTYLE;
 	state = SM_ANYSTYLE;
 	idHash = 0;
+	isValid = false;
 }
 //Desctructor
 CsmItem::~CsmItem()

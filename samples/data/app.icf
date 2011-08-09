@@ -19,7 +19,7 @@
 MemSize=8388608
 
 [Util]
-#MemoryBreakpoint=346
+#MemoryBreakpoint=316
 
 [Trace]
 

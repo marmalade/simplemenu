@@ -50,6 +50,7 @@ CsmStyleSheet
 	style
 	{
 		horizontal-alignment 0.5
+		margin 10 px
 	}
 	bindto "TEXTBOX" "*" "*"
 	bindto "*" "AREA" "*"

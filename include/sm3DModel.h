@@ -3,17 +3,23 @@
 #include <IwResManager.h>
 #include <IwManagedList.h>
 #include <IwModel.h>
-#include "smTerminalItem.h"
+#include "smImageSource.h"
 #include "sm3D.h"
 
 namespace SimpleMenu
 {
 
-	class Csm3DModel : public CsmTerminalItem
+	class Csm3DModel : public CsmImageSource
 	{
 	private:
 		uint32 modelHash;
 		CIwModel* model;
+		// Texture object
+		CIwTexture* texture;
+		// Texture object to receive surface
+		CIwGxSurface* surface;
+		CIwMaterial* material;
+		bool isValid;
 	public:
 		//Declare managed class
 		IW_MANAGED_DECLARE(Csm3DModel);
@@ -32,13 +38,11 @@ namespace SimpleMenu
 		//Reads/writes a binary file using @a IwSerialise interface.
 		virtual void Serialise ();
 
-		virtual void Prepare(smItemContext* renderContext, const CIwSVec2& recommendedSize);
-		//Render 3DModel on the screen surface
-		virtual void Render(smItemContext* renderContext);
+		virtual bool IsAvailable() const;
+		virtual CIwSVec2 GetRecommendedSize(const CIwSVec2& area) const;
+		virtual void Prepare(const CIwSVec2& recommendedSize);
+		virtual CIwMaterial* GetMaterial();
 
-		virtual void RearrangeChildItems();
-
-		virtual uint32 GetElementNameHash();
 #ifdef IW_BUILD_RESOURCES
 		//Parses from text file: parses attribute/value pair.
 		virtual	bool	ParseAttribute(CIwTextParserITX* pParser, const char* pAttrName);

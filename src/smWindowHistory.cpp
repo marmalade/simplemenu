@@ -6,12 +6,19 @@ using namespace SimpleMenu;
 namespace SimpleMenu
 {
 	extern smCloseState sm_menuCloseState;
+
+	CsmMenu* g_currentMenu = 0;
 }
 
 void SimpleMenu::smShowMenu(CsmMenu* m, CsmInputFilter* input, IsmScriptProvider* script, smUpdateCallback callback, void* context)
 {
+	if (!m)
+		return;
+
 	input->RegisterReceiver(m);
 	m->Initialize(script);
+	CsmMenu* prevMenu = g_currentMenu;
+	g_currentMenu = m;
 
 	for (;;)
 	{
@@ -49,4 +56,5 @@ void SimpleMenu::smShowMenu(CsmMenu* m, CsmInputFilter* input, IsmScriptProvider
 	}
 
 	input->UnRegisterReceiver(m);
+	g_currentMenu = prevMenu;
 }

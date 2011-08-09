@@ -71,10 +71,10 @@ bool CsmSwitch::KeyReleasedEvent(smKeyContext* keyContext)
 {
 	switch (keyContext->key)
 	{
-	case s3eKey::s3eKeyLeft:
+	case s3eKeyLeft:
 		sliderValue = 0;
 		return true;
-	case s3eKey::s3eKeyRight:
+	case s3eKeyRight:
 		sliderValue = IW_GEOM_ONE;
 		return true;
 	default:
@@ -86,8 +86,8 @@ bool CsmSwitch::KeyPressedEvent(smKeyContext* keyContext)
 {
 	switch (keyContext->key)
 	{
-	case s3eKey::s3eKeyLeft:
-	case s3eKey::s3eKeyRight:
+	case s3eKeyLeft:
+	case s3eKeyRight:
 		return true;
 	default:
 		break;

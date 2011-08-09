@@ -2,6 +2,7 @@
 #include <IwResManager.h>
 #include <IwGx.h>
 #include "smImage.h"
+#include "smImageSource.h"
 #include "smMenu.h"
 #include "fthFont.h"
 
@@ -37,19 +38,17 @@ CsmImage::CsmImage()
 CsmImage::CsmImage(uint32 t)
 {
 	InitImage();
-	textureHash = t;
+	source = new CsmImageTexture(t);
 }
 //Desctructor
 CsmImage::~CsmImage()
 {
-	if (material)
-		delete material;
+	if (source)
+		delete source;
 }
 void CsmImage::InitImage()
 {
-	textureHash = 0;
-	texture = 0;
-	material = 0;
+	source = 0;
 	rectPos = CIwSVec2::g_Zero;
 	rectColour.Set(0xFFFFFFFF);
 
@@ -62,34 +61,37 @@ void CsmImage::InitImage()
 void CsmImage::Serialise ()
 {
 	CsmTerminalItem::Serialise();
-	IwSerialiseUInt32(textureHash);
+	CIwManaged* m = source;
+	IwSerialiseManagedObject(m);
+	if (m) source = static_cast<CsmImageSource*>(m);
 }
-void CsmImage::Prepare(smItemContext* renderContext,int16 width)
+void CsmImage::Prepare(smItemContext* renderContext, const CIwSVec2& recommendedSize)
 {
-	if (textureHash == 0)
-		return;
 	CombineStyle(renderContext);
-	if (!material)
+
+	if (source == 0)
+		return;
+	if (!source->IsAvailable())
+		return;
+
+	int16 contentWidth = recommendedSize.x - GetContentOffsetLeft()-GetContentOffsetRight();
+	int16 contentHeight = recommendedSize.y - GetContentOffsetTop()-GetContentOffsetBottom();
+
+	rectSize = source->GetRecommendedSize(CIwSVec2(contentWidth,contentHeight));
+
+	if (rectSize.x > contentWidth)
 	{
-		texture = (CIwTexture*)IwGetResManager()->GetResHashed(textureHash, IW_GX_RESTYPE_TEXTURE);
-		//CIwImage::Format f = texture->GetFormat();
-		material = new CIwMaterial();
-		material->SetTexture(texture);
+		rectSize.y = (int16)((int32)rectSize.y*(int32)contentWidth/(int32)rectSize.x);
+		rectSize.x = contentWidth;
 	}
-	rectSize = CIwSVec2::g_Zero;
-	if (texture)
+	if (rectSize.y > contentHeight)
 	{
-		rectSize.x = texture->GetWidth();
-		rectSize.y = texture->GetHeight();
-		int16 contentWidth = width-(GetMarginLeft()+GetPaddingLeft()+GetMarginRight()+GetPaddingRight());
-		if (rectSize.x > contentWidth)
-		{
-			rectSize.y = (int16)((int32)rectSize.y*(int32)width/(int32)rectSize.x);
-			rectSize.x = contentWidth;
-		}
-		size.y = rectSize.y;
-		size.x = contentWidth;
+		rectSize.x = (int16)((int32)rectSize.x*(int32)contentHeight/(int32)rectSize.y);
+		rectSize.y = contentHeight;
 	}
+	size.y = rectSize.y+ GetContentOffsetTop()+GetContentOffsetBottom();
+	size.x = recommendedSize.x;
+	source->Prepare(rectSize);
 	RearrangeChildItems();
 }
 void CsmImage::RearrangeChildItems()
@@ -98,9 +100,13 @@ void CsmImage::RearrangeChildItems()
 //Render image on the screen surface
 void CsmImage::Render(smItemContext* renderContext)
 {
-	if (textureHash == 0)
+	if (source == 0)
 		return;
-
+	if (!source->IsAvailable())
+		return;
+	CIwMaterial* m = source->GetMaterial();
+	if (!m)
+		return;
 	CIwSVec2 rectPos = GetOrigin();
 	rectPos.y += GetMarginTop()+GetPaddingTop();
 	int16 width = GetSize().x;
@@ -108,7 +114,7 @@ void CsmImage::Render(smItemContext* renderContext)
 	int16 contentWidth = width-(GetMarginLeft()+GetPaddingLeft()+GetMarginRight()+GetPaddingRight());
 	rectPos.x += (contentWidth-rectSize.x)*combinedStyle.HorizontalAlignment/IW_GEOM_ONE;
 
-	IwGxSetMaterial(material);
+	IwGxSetMaterial(m);
 	CIwSVec2* v = IW_GX_ALLOC(CIwSVec2,4);
 	v[0] = CIwSVec2(rectPos.x, rectPos.y);
 	v[1] = CIwSVec2(rectPos.x, rectPos.y+rectSize.y);
@@ -139,11 +145,6 @@ uint32 CsmImage::GetElementNameHash()
 //Parses from text file: parses attribute/value pair.
 bool	CsmImage::ParseAttribute(CIwTextParserITX* pParser, const char* pAttrName)
 {
-	if (!stricmp("texture",pAttrName))
-	{
-		pParser->ReadStringHash(&textureHash);
-		return true;
-	}
 	if (!stricmp("styleSheet",pAttrName))
 	{
 		pParser->ReadStringHash(&styleSheetHash);
@@ -151,5 +152,15 @@ bool	CsmImage::ParseAttribute(CIwTextParserITX* pParser, const char* pAttrName)
 	}
 	return CsmTerminalItem::ParseAttribute(pParser, pAttrName);
 }
-
+//Extends CIwParseable interface with this extra function: called on any "parent" object, if the "child" has not implemented ParseClose.
+void	CsmImage::ParseCloseChild(CIwTextParserITX* pParser, CIwManaged* pChild)
+{
+	CsmImageSource* s = dynamic_cast<CsmImageSource*>(pChild);
+	if (s)
+	{
+		source = s;
+		return;
+	}
+	CsmTerminalItem::ParseCloseChild(pParser, pChild);
+}
 #endif

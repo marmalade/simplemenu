@@ -18,10 +18,8 @@ void SimpleMenu::smCurlInit()
 
 	smInit();
 
-	IW_CLASS_REGISTER(CsmCurlRequest);
+	//IW_CLASS_REGISTER(CsmCurlRequest);
 	smRegisterClass(CsmCurlRequest::GetClassDescription());
-
-	curl_easy_init();
 }
 
 void SimpleMenu::smCurlTerminate()

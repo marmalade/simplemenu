@@ -5,6 +5,7 @@
 #include "smMenu.h"
 #include "smButton.h"
 #include "smImage.h"
+#include "smImageSource.h"
 #include "smInput.h"
 #include "smFloatingPanel.h"
 #include "smTextBlock.h"
@@ -74,6 +75,7 @@ void SimpleMenu::smInit()
 	IW_CLASS_REGISTER(CsmButton);
 	IW_CLASS_REGISTER(CsmClickable);
 	IW_CLASS_REGISTER(CsmImage);
+	IW_CLASS_REGISTER(CsmImageTexture);
 	IW_CLASS_REGISTER(CsmSlider);
 	IW_CLASS_REGISTER(CsmCanvas);
 	IW_CLASS_REGISTER(CsmGallery);

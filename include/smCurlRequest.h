@@ -1,6 +1,7 @@
 #pragma once
 
 #include <smScriptProvider.h>
+#include <curl/curlbuild.h>
 #include <curl/curl.h>
 
 namespace SimpleMenu

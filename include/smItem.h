@@ -56,6 +56,7 @@ namespace SimpleMenu
 		CsmStyleSettings combinedStyle;
 		TsmIntrusiveList<CsmLazyEvent,CsmItem> lazyEvents;
 		std::string onUpdate;
+		bool isValid;
 	public:
 		//Declare managed class
 		IW_MANAGED_DECLARE(CsmItem);

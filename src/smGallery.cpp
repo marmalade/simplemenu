@@ -48,9 +48,10 @@ void CsmGallery::Serialise ()
 void CsmGallery::PrepareChildItems(smItemContext* context, const CIwSVec2& recommendedSize)
 {
 	int16 contentWidth = recommendedSize.x - GetContentOffsetLeft()-GetContentOffsetRight();
+	int16 contentHeight = recommendedSize.y - GetContentOffsetTop()-GetContentOffsetBottom();
 	size.x = recommendedSize.x;
 	size.y = 0;
-	CIwSVec2 chRecSize (contentWidth,recommendedSize.y);
+	CIwSVec2 chRecSize (contentWidth,contentHeight);
 	if (!touched)
 	{
 		iwfixed desiredPosition = carouselPosition & ~(IW_GEOM_ONE-1);

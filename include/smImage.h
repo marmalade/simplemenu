@@ -6,15 +6,15 @@
 
 namespace SimpleMenu
 {
+	class CsmImageSource;
+
 	class CsmImage : public CsmTerminalItem
 	{
 	private:
-		uint32 textureHash;
-		CIwTexture* texture;
-		CIwMaterial* material;
 		CIwSVec2 rectPos;
 		CIwSVec2 rectSize;
 		CIwColour rectColour;
+		CsmImageSource* source;
 
 		uint32 styleSheetHash;
 		CsmStyleSheet* styleSheet;
@@ -36,7 +36,7 @@ namespace SimpleMenu
 		//Reads/writes a binary file using @a IwSerialise interface.
 		virtual void Serialise ();
 
-		virtual void Prepare(smItemContext* renderContext,int16 width);
+		virtual void Prepare(smItemContext* renderContext, const CIwSVec2& recommendedSize);
 		//Render image on the screen surface
 		virtual void Render(smItemContext* renderContext);
 
@@ -46,6 +46,8 @@ namespace SimpleMenu
 #ifdef IW_BUILD_RESOURCES
 		//Parses from text file: parses attribute/value pair.
 		virtual	bool	ParseAttribute(CIwTextParserITX* pParser, const char* pAttrName);
+		//Extends CIwParseable interface with this extra function: called on any "parent" object, if the "child" has not implemented ParseClose.
+		virtual	void	ParseCloseChild(CIwTextParserITX* pParser, CIwManaged* pChild);
 #endif
 	protected:
 		void InitImage();

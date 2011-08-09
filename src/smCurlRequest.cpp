@@ -11,8 +11,8 @@ namespace SimpleMenu
 CsmScriptableClassDeclaration* CsmCurlRequest::GetClassDescription()
 {
 	static  TsmScriptableClassDeclaration<CsmCurlRequest> d ("CsmCurlRequest",
-			ScriptTraits::Method("Create", &CsmCurlRequest::Create),
-			ScriptTraits::Method("Destroy", &CsmCurlRequest::Destroy),
+			//ScriptTraits::Method("Create", &CsmCurlRequest::Create),
+			//ScriptTraits::Method("Destroy", &CsmCurlRequest::Destroy),
 			ScriptTraits::Method("SetUrl", &CsmCurlRequest::SetUrl),
 			ScriptTraits::Method("Perform", &CsmCurlRequest::Perform),
 			0);
@@ -49,7 +49,7 @@ CURL* CsmCurlRequest::GetCurl()
 		curl_easy_setopt(curl, CURLOPT_READFUNCTION, ReadFunction);
 		curl_easy_setopt(curl, CURLOPT_READDATA, this);
 	}
-	return;
+	return curl;
 }
 void CsmCurlRequest::Perform()
 {
