@@ -1,0 +1,8 @@
+CIwResGroup
+{
+	name "networking"
+
+	./style.group
+
+	./networking.simplemenu
+}

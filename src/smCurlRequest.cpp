@@ -1,4 +1,5 @@
 #include "smCurlRequest.h"
+#include "smWindowHistory.h"
 
 using namespace SimpleMenu;
 
@@ -15,6 +16,7 @@ CsmScriptableClassDeclaration* CsmCurlRequest::GetClassDescription()
 			//ScriptTraits::Method("Destroy", &CsmCurlRequest::Destroy),
 			ScriptTraits::Method("SetUrl", &CsmCurlRequest::SetUrl),
 			ScriptTraits::Method("Perform", &CsmCurlRequest::Perform),
+			ScriptTraits::Method("GetString", &CsmCurlRequest::GetString),
 			0);
 	return &d;
 }
@@ -23,6 +25,7 @@ CsmScriptableClassDeclaration* CsmCurlRequest::GetClassDescription()
 CsmCurlRequest::CsmCurlRequest()
 {
 	curl = 0;
+	curlm = 0;
 }
 
 //Desctructor
@@ -30,12 +33,13 @@ CsmCurlRequest::~CsmCurlRequest()
 {
 	if (curlm)
 	{
+		curl_multi_remove_handle(curlm, curl);
 		curl_multi_cleanup(curlm);
 		curlm = 0;
 	}
 	if (curl)
 	{
-		curl_free(curl);
+		curl_easy_cleanup(curl);
 		curl = 0;
 	}
 }
@@ -51,19 +55,6 @@ CURL* CsmCurlRequest::GetCurl()
 	}
 	return curl;
 }
-void CsmCurlRequest::Perform()
-{
-	// TODO: add the waiting dialog box
-
-
-	int running_handles;
-	CURLMcode res = curl_multi_perform(GetCurlM(), &running_handles);
-	if (res != CURLM_OK)
-	{
-
-	}
-}
-
 CURLM* CsmCurlRequest::GetCurlM()
 {
 	if (!curlm)
@@ -73,6 +64,26 @@ CURLM* CsmCurlRequest::GetCurlM()
 	}
 	return curlm;
 }
+bool CsmCurlRequest::PerformCallback(CsmMenu*m, CsmCurlRequest* r)
+{
+	int running_handles;
+	CURLMcode res = CURLM_CALL_MULTI_PERFORM;
+	while (res == CURLM_CALL_MULTI_PERFORM)
+	{
+		res = curl_multi_perform(r->GetCurlM(), &running_handles);
+	}
+	if (res != CURLM_OK)
+	{
+		smAlert("ERROR!", "curl_multi_perform(...) != CURLM_OK");
+	}
+	return (running_handles == 1);
+}
+void CsmCurlRequest::Perform(const char* title, const char* message)
+{
+	smOpenWaitDialog(title, message, (smUpdateCallback)PerformCallback, this);
+}
+
+
 void CsmCurlRequest::SetUrl(const char* url)
 {
 	curl_easy_setopt(GetCurl(), CURLOPT_URL, url);
@@ -104,4 +115,34 @@ CsmCurlRequest* CsmCurlRequest::Create()
 void CsmCurlRequest::Destroy(CsmCurlRequest* r)
 {
 	delete r;
+}
+
+std::string CsmCurlRequest::GetString(const char* title,const char* message,const char* url)
+{
+	CsmCurlMemoryRequest r;
+	r.SetUrl(url);
+	r.Perform(title, message);
+	const char* s = (const char*)r.GetInputBuffer();
+	std::string res(s, s+ r.GetInputBufferSize());
+	return res;
+}
+
+CsmCurlMemoryRequest::CsmCurlMemoryRequest()
+{
+}
+CsmCurlMemoryRequest::~CsmCurlMemoryRequest()
+{
+}
+
+size_t CsmCurlMemoryRequest::OnWrite(void *buffer, size_t size, size_t nmemb)
+{
+	size_t real_size = size * nmemb;
+	size_t pos = inputBuffer.size();
+	inputBuffer.resize(pos+real_size);
+	memcpy(&inputBuffer[pos], buffer,real_size);
+	return real_size;
+}
+size_t CsmCurlMemoryRequest::OnRead(void *buffer, size_t size, size_t nmemb)
+{
+	return 0;
 }

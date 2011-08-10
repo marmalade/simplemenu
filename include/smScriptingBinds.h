@@ -77,6 +77,22 @@ namespace SimpleMenu
 				return m(a1, FetchArgument<A2>(system));
 			}
 		};
+		template <typename R, typename A1, typename A2, typename A3> class ThreeArgFunction: public CsmScriptableMethodDeclaration
+		{
+		public:
+			typedef R(* METHOD)(A1,A2,A3);
+		protected:
+			METHOD m;
+		public:
+			virtual bool IsStatic() const {return true;}
+			ThreeArgFunction(const char* name, METHOD mm):CsmScriptableMethodDeclaration(name),m(mm) {}
+			R MakeCall(IsmScriptProvider* system, CsmScriptableClassDeclaration* cls, void* instance)
+			{
+				A1 a1 = FetchArgument<A1>(system);
+				A2 a2 = FetchArgument<A1>(system);
+				return m(a1, a2, FetchArgument<A3>(system));
+			}
+		};
 		template <class T, class R, typename mmm> class NoArgsMethod: public CsmScriptableMethodDeclaration
 		{
 		public:
@@ -104,6 +120,21 @@ namespace SimpleMenu
 			{
 				T* i = ((T*)instance);
 				return (i->*m)(FetchArgument<A>(system));
+			}
+		};
+		template <class T, class R, typename A1, typename A2, typename mmm> class TwoArgsMethod: public CsmScriptableMethodDeclaration
+		{
+		public:
+			typedef mmm METHOD;
+		protected:
+			METHOD m;
+		public:
+			TwoArgsMethod(const char* name, METHOD mm):CsmScriptableMethodDeclaration(name),m(mm) {}
+			R MakeCall(IsmScriptProvider* system, CsmScriptableClassDeclaration* cls, void* instance)
+			{
+				T* i = ((T*)instance);
+				A1 a1 = FetchArgument<A1>(system);
+				return (i->*m)(a1, FetchArgument<A2>(system));
 			}
 		};
 		template <class R, class Caller> class MethodBase: public Caller
@@ -137,6 +168,10 @@ namespace SimpleMenu
 		{
 			return new MethodBase<R,TwoArgFunction<R,A1,A2> >(name,fn);
 		};
+		template <typename R,typename A1,typename A2,typename A3> inline CsmScriptableMethodDeclaration* Method(const char* name, R (*fn) (A1,A2,A3))
+		{
+			return new MethodBase<R,ThreeArgFunction<R,A1,A2,A3> >(name,fn);
+		};
 		template <class T, typename R> inline CsmScriptableMethodDeclaration* Method(const char* name, R (T::*fn) ())
 		{
 			return new MethodBase<R,NoArgsMethod<T,R,R (T::*) ()> >(name,fn);
@@ -152,6 +187,14 @@ namespace SimpleMenu
 		template <class T, typename R,typename A> inline CsmScriptableMethodDeclaration* Method(const char* name, R (T::*fn)  (A) const)
 		{
 			return new MethodBase<R,OneArgsMethod<T,R,A,R (T::*)  (A) const> >(name,fn);
+		};
+		template <class T, typename R,typename A1,typename A2> inline CsmScriptableMethodDeclaration* Method(const char* name, R (T::*fn) (A1, A2))
+		{
+			return new MethodBase<R,TwoArgsMethod<T,R,A1,A2,R (T::*) (A1,A2)> >(name,fn);
+		};
+		template <class T, typename R,typename A1,typename A2> inline CsmScriptableMethodDeclaration* Method(const char* name, R (T::*fn)  (A1,A2) const)
+		{
+			return new MethodBase<R,TwoArgsMethod<T,R,A1,A2,R (T::*)  (A1,A2) const> >(name,fn);
 		};
 	}
 	template <class T> class TsmScriptableMethodDeclaration: public CsmScriptableMethodDeclaration

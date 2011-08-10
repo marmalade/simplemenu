@@ -1,12 +1,20 @@
 #include <s3eKeyboard.h>
 #include "smLocation.h"
 #include "smConfig.h"
+#include "smWindowHistory.h"
 
 using namespace SimpleMenu;
 
 namespace SimpleMenu
 {
 	CsmLocation* g_smLocation = 0;
+
+	bool smWaitForGPSCallback(CsmMenu*m, void*arg)
+	{
+		time_t* prevTime = (time_t*) arg;
+		time_t t = CsmLocation::GetDataTimestamp();
+		return (t == *prevTime);
+	}
 }
 
 //Get scriptable class declaration
@@ -91,31 +99,10 @@ bool CsmLocation::WaitForGPS()
 		return false;
 
 	time_t r = feature->m_receivedAt;
-	time_t rr = r;
-	while (rr == r)
-	{
-		s3eDeviceYield(30);
-		s3eKeyboardUpdate();
 
-		bool result = true;
-		if	(
-			(result == false) ||
-			(s3eKeyboardGetState(s3eKeyEsc) & S3E_KEY_STATE_DOWN) ||
-			(s3eKeyboardGetState(s3eKeyAbsBSK) & S3E_KEY_STATE_DOWN) ||
-			(s3eDeviceCheckQuitRequest()) ||
-			(SimpleMenu::smGetCloseState() != SimpleMenu::SM_KEEP_OPEN)
-			)
-			break;
+	smOpenWaitDialog("GPS","Waiting for GPS satellite signal...", smWaitForGPSCallback, &r);
 
-		smRenderLoading();
-		rr = feature->m_receivedAt;
-	}
-	while ((s3eKeyboardGetState(s3eKeyEsc) & S3E_KEY_STATE_DOWN))
-	{
-		s3eDeviceYield(30);
-		s3eKeyboardUpdate();
-	}
-	return (rr != r);
+	return (feature->m_receivedAt != r);
 }
 float CsmLocation::GetLatitude()
 {

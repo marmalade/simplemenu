@@ -81,6 +81,10 @@ namespace SimpleMenu
 		{
 			smOpenMenuAtGroup(s);
 		}
+		static void Alert(const char* s,const char* t)
+		{
+			smAlert(s,t);
+		}
 	};
 
 	CsmScriptableClassDeclaration* smGetClassDescription()
@@ -95,6 +99,7 @@ namespace SimpleMenu
 			ScriptTraits::Method("GetDeviceID", &CsmUtils::GetDeviceID),
 			ScriptTraits::Method("HashString", &CsmUtils::HashString),
 			ScriptTraits::Method("OpenMenuAtGroup", &CsmUtils::OpenMenuAtGroup),
+			ScriptTraits::Method("Alert", &CsmUtils::Alert),
 			
 				0);
 		return &d;

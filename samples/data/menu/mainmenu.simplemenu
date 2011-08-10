@@ -27,6 +27,16 @@ CsmMenu
 			text "Long text block"
 			onclick "CsmUtils.OpenMenuAtGroup('menu/longtext.group')"
 		}
+		CsmButton
+		{
+			text "Camera"
+			onclick "CsmUtils.OpenMenuAtGroup('menu/camera.group')"
+		}
+		CsmButton
+		{
+			text "Networking"
+			onclick "CsmUtils.OpenMenuAtGroup('menu/networking.group')"
+		}
 
 	}
 	CsmItem

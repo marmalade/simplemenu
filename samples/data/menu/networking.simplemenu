@@ -1,0 +1,40 @@
+CsmMenu
+{
+	name "networking"
+
+	styleSheet "purplestyle"
+
+	CsmItem
+	{
+		styleClass "Content"
+
+		CsmButton
+		{
+			text "HTTP GET www.google.com"
+			onclick "CsmUtils.Alert('Downloaded Text', CsmCurlRequest.GetString('Getting text','Please wait','http://www.google.ru'))"
+		}
+	}
+	CsmItem
+	{
+		styleClass "Header"
+		CsmTextBlock
+		{
+			styleClass "H1"
+			text "Networking"
+		}
+	}
+	CsmRow
+	{
+		styleClass "Footer"
+		CsmButton
+		{
+			text "Back"
+			onclick "CsmUtils.CloseMenu()"
+		}
+		CsmButton
+		{
+			text "Close"
+			onclick "CsmUtils.CloseAllMenus()"
+		}
+	}
+}

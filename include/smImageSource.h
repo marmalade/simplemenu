@@ -9,9 +9,13 @@ namespace SimpleMenu
 	class CsmImageSource : public CIwManaged
 	{
 	public:
+		// Check if imge is available (loaded, downloaded etc)
 		virtual bool IsAvailable() const = 0;
+		// Get recommended size of the image
 		virtual CIwSVec2 GetRecommendedSize(const CIwSVec2& area) const = 0;
+		// Prepare image source to render the image
 		virtual void Prepare(const CIwSVec2& recommendedSize) = 0;
+		// Get image material to draw quad
 		virtual CIwMaterial* GetMaterial() = 0;
 	};
 	class CsmImageTexture : public CsmImageSource

@@ -1,0 +1,8 @@
+CIwResGroup
+{
+	name "camera"
+
+	./style.group
+
+	./camera.simplemenu
+}

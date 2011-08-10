@@ -4,9 +4,11 @@ CsmMenu
 
 	styleSheet "purplestyle"
 
+
 	CsmItem
 	{
 		styleClass "Content"
+
 
 text " -- first line ---"
 

@@ -20,6 +20,8 @@ void SimpleMenu::smCurlInit()
 
 	//IW_CLASS_REGISTER(CsmCurlRequest);
 	smRegisterClass(CsmCurlRequest::GetClassDescription());
+
+	curl_global_init(0);
 }
 
 void SimpleMenu::smCurlTerminate()
@@ -29,6 +31,6 @@ void SimpleMenu::smCurlTerminate()
 		IwAssertMsg(SIMPLEMENU,false,("smCurlTerminate doesn't match smCurlInit"));
 	if (initCurlCounter != 0)
 		return;
-
+	curl_global_cleanup();
 	smTerminate();
 }

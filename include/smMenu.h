@@ -52,6 +52,7 @@ namespace SimpleMenu
 		virtual ~CsmMenu();
 
 		void Initialize(IsmScriptProvider* sp);
+		IsmScriptProvider* GetScriptProvider() const { return scriptProvider; };
 
 		//Reads/writes a binary file using @a IwSerialise interface.
 		virtual void Serialise ();
@@ -70,6 +71,9 @@ namespace SimpleMenu
 		CsmItem* GetItemById(const char*) const;
 		CsmItem* GetItemByHash(uint32 h) const;
 		CsmItem* FindActiveItemAt(const CIwVec2 & coord);
+
+		uint32 GetStyleSheetHash() const { return styleSheetHash;};
+		void SetStyleSheetHash(uint32 v);
 		
 		bool VisitForward(IsmVisitor* visitor) const;
 		bool VisitBackward(IsmVisitor* visitor) const;	
@@ -82,7 +86,7 @@ namespace SimpleMenu
 		void SetFocusTo(CsmItem*);
 		bool ScrollToItem(CsmItem*);
 		void Eval(CsmItem*, const char*s);
-
+		void AddItem(CsmItem* item);
 #ifdef IW_BUILD_RESOURCES
 		//Parses from text file: start block.
 		virtual	void	ParseOpen(CIwTextParserITX* pParser);

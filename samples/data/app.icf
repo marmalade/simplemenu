@@ -16,10 +16,10 @@
 # Some conditional operations are also permitted, see the
 # S3E documentation for details.
 [s3e]
-MemSize=8388608
+MemSize=16777216
 
 [Util]
-#MemoryBreakpoint=316
+#MemoryBreakpoint=1432
 
 [Trace]
 
@@ -30,6 +30,7 @@ DisplayFrameRate=1
 #Rasterisation=SW
 UseRGBLighting=1
 DataCacheSize=65536
-VertCacheSize=16384
+#VertCacheSize=16384
+VertCacheSize=262144
 NumTPages=32
 NumTPagesNoMipMap=8

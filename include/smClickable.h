@@ -47,6 +47,8 @@ namespace SimpleMenu
 		//Check if element can interact with user (receive clicks and keys)
 		virtual bool IsActive() const {return true;}
 		virtual void TouchReleased(smTouchContext* touchContext);
+
+		void SetOnClick(const char*s) {onClick = s;}
 #ifdef IW_BUILD_RESOURCES
 		//Parses from text file: parses attribute/value pair.
 		virtual	bool	ParseAttribute(CIwTextParserITX* pParser, const char* pAttrName);

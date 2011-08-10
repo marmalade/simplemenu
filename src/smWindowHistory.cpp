@@ -1,5 +1,7 @@
 #include "simplemenu.h"
 #include "smWindowHistory.h"
+#include "smButton.h"
+#include "smRow.h"
 
 using namespace SimpleMenu;
 
@@ -32,10 +34,12 @@ void SimpleMenu::smShowMenu(CsmMenu* m, CsmInputFilter* input, IsmScriptProvider
 	if (!m)
 		return;
 
-	input->RegisterReceiver(m);
-	m->Initialize(script);
+	CsmInputQueue* inputQueue = input->PushQueue();
 	CsmMenu* prevMenu = g_currentMenu;
 	g_currentMenu = m;
+
+	inputQueue->RegisterReceiver(m);
+	m->Initialize(script);
 
 	clock_t cur,prev;
 	cur = prev = clock();
@@ -80,7 +84,52 @@ void SimpleMenu::smShowMenu(CsmMenu* m, CsmInputFilter* input, IsmScriptProvider
 		sm_menuCloseState = SM_KEEP_OPEN;
 	}
 
-	input->UnRegisterReceiver(m);
+	inputQueue->UnRegisterReceiver(m);
+	input->PopQueue(inputQueue);
 	g_currentMenu = prevMenu;
 	IwGxClear(IW_GX_DEPTH_BUFFER_F);
+}
+void SimpleMenu::smShowMenu(CsmMenu* m, smUpdateCallback callback, void* context)
+{
+	CsmInputFilter* input = 0;
+	IsmScriptProvider* script = 0;
+	if (g_currentMenu)
+	{
+		script = g_currentMenu->GetScriptProvider();
+	}
+	if (!input) input = smGetInputFilter();
+	if (!script) script = smGetDefaultScriptProvider();
+	smShowMenu(m,input, script, callback, context);
+}
+CsmMenu* SimpleMenu::smCreateDialogWindow(const char* title, const char* text)
+{
+	CsmMenu* menu = new CsmMenu();
+	if (g_currentMenu)
+	{
+		menu->SetStyleSheetHash(g_currentMenu->GetStyleSheetHash());
+	}
+	CsmItem* content = new CsmItem(); content->SetStyleClass("Content"); menu->AddItem(content);
+	CsmItem* header = new CsmItem(); header->SetStyleClass("Header"); menu->AddItem(header);
+	CsmRow* footer = new CsmRow(); footer->SetStyleClass("Footer"); menu->AddItem(footer);
+	if (title)
+		header->AddTextBlock(title);
+	if (text)
+		content->AddTextBlock(text);
+	CsmButton* b;
+	b = new CsmButton(); footer->AddItem(b);
+	b->AddTextBlock("Cancel");
+	b->SetOnClick("CsmUtils.CloseMenu()");
+	return menu;
+}
+void SimpleMenu::smOpenWaitDialog(const char* title, const char* text, smUpdateCallback callback, void* context)
+{
+	CsmMenu* menu = smCreateDialogWindow(title, text);
+	smShowMenu(menu, callback, context);
+	delete menu;
+}
+void SimpleMenu::smAlert(const char* title, const char* text)
+{
+	CsmMenu* menu = smCreateDialogWindow(title, text);
+	smShowMenu(menu, 0, 0);
+	delete menu;
 }

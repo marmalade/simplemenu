@@ -6,6 +6,7 @@
 
 namespace SimpleMenu
 {
+	class CsmMenu;
 	class CsmCurlRequest
 	{
 	private:
@@ -29,15 +30,34 @@ namespace SimpleMenu
 		virtual size_t OnWrite(void *buffer, size_t size, size_t nmemb);
 		virtual size_t OnRead(void *buffer, size_t size, size_t nmemb);
 
-		void Perform();
+		void Perform(const char* title, const char* message);
 
 		static CsmCurlRequest* Create();
 		static void Destroy(CsmCurlRequest*);
+
+		static std::string GetString(const char* title,const char* message,const char* url);
 	protected:
 		CURL* GetCurl();
 		CURLM* GetCurlM();
 
 		static size_t WriteFunction(void *buffer, size_t size, size_t nmemb, void *userp);
 		static size_t ReadFunction(void *buffer, size_t size, size_t nmemb, void *userp);
+		static bool PerformCallback(CsmMenu*m, CsmCurlRequest*);
+	};
+
+	class CsmCurlMemoryRequest: public CsmCurlRequest
+	{
+		CIwArray<uint8> outputBuffer;
+		CIwArray<uint8> inputBuffer;
+	public:
+		//Constructor
+		CsmCurlMemoryRequest();
+		//Desctructor
+		virtual ~CsmCurlMemoryRequest();
+
+		const uint8* GetInputBuffer() const { if (inputBuffer.empty()) return 0; return &inputBuffer.front();}
+		size_t GetInputBufferSize() const {return inputBuffer.size();}
+		virtual size_t OnWrite(void *buffer, size_t size, size_t nmemb);
+		virtual size_t OnRead(void *buffer, size_t size, size_t nmemb);
 	};
 }

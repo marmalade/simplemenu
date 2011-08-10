@@ -498,13 +498,24 @@ void CsmItem::SendLazyEvent(CsmLazyEvent*e)
 	lazyEvents.AttachTail(e);
 	GetRoot()->lazyEvents.AttachTail(e);
 }
+void CsmItem::AddItem(CsmItem* item)
+{
+	childItems.Push(item);
+}
+CsmTextBlock* CsmItem::AddTextBlock(const char* text)
+{
+	CsmTextBlock* tb = new CsmTextBlock();
+	tb->SetText(text);
+	AddItem(tb);
+	return tb;
+}
+
 #ifdef IW_BUILD_RESOURCES
 //Parses from text file: start block.
 void	CsmItem::ParseOpen(CIwTextParserITX* pParser)
 {
 	CIwManaged::ParseOpen(pParser);
 }
-
 
 //Parses from text file: parses attribute/value pair.
 bool	CsmItem::ParseAttribute(CIwTextParserITX* pParser, const char* pAttrName)
@@ -526,8 +537,9 @@ bool	CsmItem::ParseAttribute(CIwTextParserITX* pParser, const char* pAttrName)
 	}
 	if (!stricmp("text", pAttrName))
 	{
-		CsmTextBlock* tb = new CsmTextBlock(pParser->ReadString());
-		childItems.Add(tb);
+		char* t = pParser->ReadString();
+		AddTextBlock(t);
+		delete [] t;
 		return true;
 	}
 	if (!stricmp("id", pAttrName))
@@ -557,6 +569,9 @@ void	CsmItem::ParseCloseChild(CIwTextParserITX* pParser, CIwManaged* pChild)
 	//CIwManaged::ParseCloseChild(pParser, pChild);
 	if (&style == (CsmStyle*)pChild)
 		return;
-	childItems.Add(pChild);
+	CsmItem* item = dynamic_cast<CsmItem*>(pChild);
+	if (!item)
+		IwAssertMsg(SM, false, ("CsmItem can only have a CsmItem derivatives as child items"));
+	AddItem(item);
 }
 #endif

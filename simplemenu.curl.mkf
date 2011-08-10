@@ -9,11 +9,13 @@ files
 	(src)
 	smCurl.cpp
 	smCurlRequest.cpp
+	smCurlImageSource.cpp
 
 	["include"]
 	(include)
 	smCurl.h
 	smCurlRequest.h
+	smCurlImageSource.h
 }
 
 packages

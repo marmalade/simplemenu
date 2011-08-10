@@ -50,27 +50,27 @@ namespace SimpleMenu
 
 		void Init(uint32 tid);
 	};
-	class CsmInputFilter
+	// Single list of recievers and active keys. Each "dialog window" or something similar requires new independed input queue
+	class CsmInputQueue: public TsmIntrusiveListItem<CsmInputQueue>
 	{
-		static int g_regCounter;
-		static CsmInputFilter* g_regFilter;
-
+	protected:
 		CIwArray<smTouchContext> activePointers;
 		CIwArray<smKeyContext> activeKeys;
 		CsmInputRecieversList receivers;
 	public:
-		CsmInputFilter();
-		~CsmInputFilter();
+		CsmInputQueue();
+		~CsmInputQueue();
 
 		void RegisterReceiver(IsmInputReciever*);
 		void UnRegisterReceiver(IsmInputReciever*);
+
+		void CancelAllEvents();
 
 		bool TouchEvent(smTouchContext*,int32,int32);
 		bool TouchReleaseEvent(smTouchContext*,int32,int32);
 		bool TouchMotionEvent(smTouchContext*,int32,int32);
 		bool KeyboardKeyPressedEvent(smKeyContext* item);
 		bool KeyboardKeyReleasedEvent(smKeyContext* item);
-
 
 		int32 FindTouchContextIndex(uint32 touchId) const;
 		int32 GetTouchContextIndex(uint32 touchId);
@@ -84,6 +84,26 @@ namespace SimpleMenu
 		int32 OnPointerTouchMotionEvent(s3ePointerTouchMotionEvent*e);
 		int32 OnPointerButtonEvent(s3ePointerEvent*e);
 		int32 OnPointerMotionEvent(s3ePointerMotionEvent*e);
+	};
+	class CsmInputQueueList: public TsmIntrusiveList<CsmInputQueue>
+	{
+	};
+	class CsmInputFilter
+	{
+	protected:
+		static int g_regCounter;
+		static CsmInputFilter* g_regFilter;
+
+		CsmInputQueueList m_inputQueue;
+
+		CsmInputQueue* GetCurrentQueue() { return m_inputQueue.GetLastChild(); }
+	public:
+		CsmInputFilter();
+		~CsmInputFilter();
+
+		CsmInputQueue* PushQueue();
+		void PopQueue(CsmInputQueue*);
+
 
 		void Register();
 		void UnRegister();

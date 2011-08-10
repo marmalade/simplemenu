@@ -18,6 +18,8 @@ assets
 	./menu/longtext.group.bin
 	./menu/notifications.group.bin
 	./menu/style.group.bin
+	./menu/networking.group.bin
+	./menu/camera.group.bin
 
 	(./data-ram/)
 	./3d.group.bin

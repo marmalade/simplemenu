@@ -120,15 +120,15 @@ void CsmMenu::Serialise ()
 	smSerialiseString(onLoad);
 	if (IwSerialiseIsReading())
 	{
-		if (styleSheetHash)
-		{
-			styleSheet = (CsmStyleSheet*)IwGetResManager()->GetResHashed(styleSheetHash,"CsmStyleSheet");
-		}
-		for (CIwManaged** i = childItems.GetBegin(); i!=childItems.GetEnd(); ++i)
-		{
-			CsmItem* item = static_cast<CsmItem*>(*i);
-			item->InitTree(this,0);
-		}
+		SetStyleSheetHash(styleSheetHash);
+	}
+}
+void CsmMenu::SetStyleSheetHash(uint32 v) 
+{
+	styleSheetHash = v;
+	if (styleSheetHash)
+	{
+		styleSheet = (CsmStyleSheet*)IwGetResManager()->GetResHashed(styleSheetHash,"CsmStyleSheet");
 	}
 }
 //Render image on the screen surface
@@ -465,6 +465,12 @@ void CsmMenu::Initialize(IsmScriptProvider* sp)
 	scriptProvider = sp;
 	if ((onLoad.size() > 0) && scriptProvider)
 		scriptProvider->Eval(onLoad.c_str(), this, this->GetInstanceClassDescription());
+
+	for (CIwManaged** i = childItems.GetBegin(); i!=childItems.GetEnd(); ++i)
+	{
+		CsmItem* item = static_cast<CsmItem*>(*i);
+		item->InitTree(this,0);
+	}
 }
 void CsmMenu::Eval(CsmItem*item, const char*s)
 {
@@ -548,6 +554,10 @@ bool CsmMenu::TouchMotionEvent(smTouchContext* touchContext)
 	return true;
 }
 
+void CsmMenu::AddItem(CsmItem* item)
+{
+	childItems.Push(item);
+}
 
 #ifdef IW_BUILD_RESOURCES
 //Parses from text file: start block.
@@ -591,8 +601,12 @@ void	CsmMenu::ParseCloseChild(CIwTextParserITX* pParser, CIwManaged* pChild)
 	if (&style == (CsmStyle*)pChild)
 		return;
 	//CIwResource::ParseCloseChild(pParser, pChild);
-	childItems.Add(pChild);
+	CsmItem* item = dynamic_cast<CsmItem*>(pChild);
+	if (!item)
+		IwAssertMsg(SM, false, ("CsmMenu can only have a CsmItem derivatives as child items"));
+	AddItem(item);
 }
+
 
 IW_MANAGED_IMPLEMENT(CsmMenuResHandler)
 

@@ -13,6 +13,7 @@
 namespace SimpleMenu
 {
 	class CsmItem;
+	class CsmTextBlock;
 
 	class IsmVisitor
 	{
@@ -94,6 +95,8 @@ namespace SimpleMenu
 		virtual uint32 GetElementClassHash();
 		//Gets the element name state to select an apropriate style
 		virtual uint32 GetElementStateHash();
+		virtual void SetStyleClass(const char* v) { styleClass = IwHashString(v); InvalidateItem();};
+		virtual void InvalidateItem() {isValid = false;}
 		//Gets the element name ID hash
 		uint32 GetElementIdHash() { return idHash; }
 		//Gets combined style. The return value is only valid after Prepare()
@@ -144,6 +147,8 @@ namespace SimpleMenu
 		virtual bool VisitBackward(IsmVisitor* visitor);
 
 		void InitTree(CsmMenu*,CsmItem*);
+		void AddItem(CsmItem* item);
+		CsmTextBlock* AddTextBlock(const char* text);
 		void EvalUpdate();
 	protected:
 		void RenderBackgroud(smItemContext* renderContext);

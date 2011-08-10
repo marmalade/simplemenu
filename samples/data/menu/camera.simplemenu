@@ -1,0 +1,35 @@
+CsmMenu
+{
+	name "camera"
+
+	styleSheet "purplestyle"
+
+	CsmItem
+	{
+		styleClass "Content"
+
+	}
+	CsmItem
+	{
+		styleClass "Header"
+		CsmTextBlock
+		{
+			styleClass "H1"
+			text "Camera"
+		}
+	}
+	CsmRow
+	{
+		styleClass "Footer"
+		CsmButton
+		{
+			text "Back"
+			onclick "CsmUtils.CloseMenu()"
+		}
+		CsmButton
+		{
+			text "Close"
+			onclick "CsmUtils.CloseAllMenus()"
+		}
+	}
+}
