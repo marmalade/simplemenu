@@ -52,6 +52,8 @@ CURL* CsmCurlRequest::GetCurl()
 		curl_easy_setopt(curl, CURLOPT_WRITEDATA, this);
 		curl_easy_setopt(curl, CURLOPT_READFUNCTION, ReadFunction);
 		curl_easy_setopt(curl, CURLOPT_READDATA, this);
+		curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT, 15);
+		curl_easy_setopt(curl, CURLOPT_TIMEOUT, 30);
 	}
 	return curl;
 }
@@ -72,9 +74,19 @@ bool CsmCurlRequest::PerformCallback(CsmMenu*m, CsmCurlRequest* r)
 	{
 		res = curl_multi_perform(r->GetCurlM(), &running_handles);
 	}
-	if (res != CURLM_OK)
+	
+	if (!running_handles)
 	{
-		smAlert("ERROR!", "curl_multi_perform(...) != CURLM_OK");
+		CURLMsg *msg;
+		int msgs_left;
+		while ((msg = curl_multi_info_read(r->GetCurlM(), &msgs_left))) {
+			if (msg->msg == CURLMSG_DONE) {
+				if( msg->data.result != CURLE_OK ) {
+					smAlert("Network error!", curl_easy_strerror(msg->data.result));
+					break;
+				}
+			}
+		}
 	}
 	return (running_handles == 1);
 }
