@@ -8,6 +8,12 @@ CsmMenu
 	{
 		styleClass "Content"
 
+		CsmImage
+		{
+			CsmCameraImage
+			{
+			}
+		}
 	}
 	CsmItem
 	{

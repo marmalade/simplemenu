@@ -42,6 +42,17 @@ CsmMenu
 				text "Katmandu"
 			}
 		}
+		CsmCheckbox
+		{
+			CsmTextBlock
+			{
+				text "CsmCheckbox OFF"
+			}
+			CsmTextBlock
+			{
+				text "CsmCheckbox ON"
+			}
+		}
 		CsmGallery
 		{
 			CsmTextBlock

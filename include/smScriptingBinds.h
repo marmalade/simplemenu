@@ -14,7 +14,7 @@ namespace SimpleMenu
 		template <class T> inline CsmScriptableClassDeclaration* GetInstanceClassDescription(T*t) { return t->GetInstanceClassDescription(); }
 		template <> inline CsmScriptableClassDeclaration* GetInstanceClassDescription<CIwManaged>(CIwManaged*t) { return GetManagedInstanceClassDescription(t); }
 
-		template <typename T> inline T FetchArgument(IsmScriptProvider* system) { return system->PopArgClass(StripPointer<T>::STRIPPED::GetClassDescription()); };
+		template <typename T> inline T FetchArgument(IsmScriptProvider* system) { return (T)system->PopArgClass(StripPointer<T>::STRIPPED::GetClassDescription()); };
 		template <> inline int FetchArgument<int>(IsmScriptProvider* system) { return system->PopArgInt(); };
 		template <> inline float FetchArgument<float>(IsmScriptProvider* system) { return system->PopArgFloat(); };
 		template <> inline double FetchArgument<double>(IsmScriptProvider* system) { return system->PopArgFloat(); };

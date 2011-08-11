@@ -7,7 +7,30 @@ namespace SimpleMenu
 {
 	class CsmCurlImageSource: public CsmImageSource
 	{
+	protected:
+		std::string url;
+		CsmCurlMemoryRequest request;
+		bool isActive;
+		CIwMaterial* material;
+		CIwTexture* texture;
+		CIwImage* image;
 	public:
+		//Declare managed class
+		IW_MANAGED_DECLARE(CsmCurlImageSource);
+		//Constructor
+		CsmCurlImageSource();
+		//Desctructor
+		virtual ~CsmCurlImageSource();
+
+		//Get scriptable class declaration
+		static CsmScriptableClassDeclaration* GetClassDescription();
+
+		//Reads/writes a binary file using @a IwSerialise interface.
+		virtual void Serialise ();
+
+		//Animate item and all child items
+		virtual void Animate(iwfixed timespan);
+
 		// Check if imge is available (loaded, downloaded etc)
 		virtual bool IsAvailable() const;
 		// Get recommended size of the image
@@ -16,5 +39,9 @@ namespace SimpleMenu
 		virtual void Prepare(const CIwSVec2& recommendedSize);
 		// Get image material to draw quad
 		virtual CIwMaterial* GetMaterial();
+#ifdef IW_BUILD_RESOURCES
+		//Parses from text file: parses attribute/value pair.
+		virtual	bool	ParseAttribute(CIwTextParserITX* pParser, const char* pAttrName);
+#endif
 	};
 }

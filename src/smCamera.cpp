@@ -83,3 +83,53 @@ int32 CsmCamera::CameraUpdate(void* systemData, void* userData)
 		return 0;
 	return 0;
 }
+
+
+// ================================================================
+
+//Instantiate the default factory function for a named class 
+IW_CLASS_FACTORY(CsmCameraImage);
+//This macro is required within some source file for every class derived from CIwManaged. It implements essential functionality
+IW_MANAGED_IMPLEMENT(CsmCameraImage);
+
+//Constructor
+CsmCameraImage::CsmCameraImage()
+{
+}
+//Desctructor
+CsmCameraImage::~CsmCameraImage()
+{
+}
+//Reads/writes a binary file using @a IwSerialise interface.
+void CsmCameraImage::Serialise ()
+{
+	CsmImageSource::Serialise();
+}
+
+// Check if imge is available (loaded, downloaded etc)
+bool CsmCameraImage::IsAvailable() const
+{
+	if (!CsmCamera::IsAvailable())
+		return false;
+
+	return false;
+}
+// Get recommended size of the image
+CIwSVec2 CsmCameraImage::GetRecommendedSize(const CIwSVec2& area) const
+{
+	return area;
+}
+// Prepare image source to render the image
+void CsmCameraImage::Prepare(const CIwSVec2& recommendedSize)
+{
+	
+}
+// Get image material to draw quad
+CIwMaterial* CsmCameraImage::GetMaterial()
+{
+	return 0;
+}
+//Animate item and all child items
+void CsmCameraImage::Animate(iwfixed timespan)
+{
+}

@@ -65,17 +65,24 @@ void CsmLocation::LoadFromConfig()
 void CsmLocation::StartFeature()
 {
 	m_receivedAt = 0;
-	s3eLocationStart();
+	if (S3E_RESULT_SUCCESS != s3eLocationRegister(S3E_LOCATION_CALLBACK_LOCATION_UPDATED, Callback, this))
+	{
+		smAlert("GPS Error!", s3eLocationGetErrorString());
+	}
+	if (S3E_RESULT_SUCCESS != s3eLocationStart())
+	{
+		smAlert("GPS Error!", s3eLocationGetErrorString());
+	}
 	if (CsmConfig::IsExist("sm-location-latitude"))
 	{
 		g_smLocation->LoadFromConfig();
 	}
 	else
 	{
-		s3eLocationGet(&l);
+		if (S3E_RESULT_SUCCESS != s3eLocationGet(&l))
+			smAlert("GPS Error!", s3eLocationGetErrorString());
 		SaveToConfig();
 	}
-	s3eLocationRegister(S3E_LOCATION_CALLBACK_LOCATION_UPDATED, Callback, this);
 }
 int32 CsmLocation::Callback (void* systemData, void* userData)
 {

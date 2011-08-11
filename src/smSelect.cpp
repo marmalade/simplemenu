@@ -81,10 +81,6 @@ void CsmSelect::RearrangeChildItems()
 void CsmSelect::Touch(smTouchContext* smTouchContext)
 {
 	CsmItem::Touch(smTouchContext);
-}
-void CsmSelect::TouchReleased(smTouchContext* smTouchContext)
-{
-	CsmItem::TouchReleased(smTouchContext);
 	if (isOpened)
 	{
 		int index = 0;
@@ -102,6 +98,27 @@ void CsmSelect::TouchReleased(smTouchContext* smTouchContext)
 			++index;
 		}
 	}
+}
+void CsmSelect::TouchReleased(smTouchContext* smTouchContext)
+{
+	CsmItem::TouchReleased(smTouchContext);
+	/*if (isOpened)
+	{
+		int index = 0;
+		for (CIwManaged** i = childItems.GetBegin(); i!=childItems.GetEnd(); ++i)
+		{
+			CsmItem* item = static_cast<CsmItem*>(*i);
+			const CIwVec2& pos = smTouchContext->currentPoistion;
+			CIwSVec2 o = item->GetOrigin();
+			CIwSVec2 s = item->GetSize();
+			if (pos.x >= o.x && pos.y >= o.y && pos.x < o.x+s.x && pos.y < o.y+s.y)
+			{
+				selectedItemIndex = index;
+				break;
+			}
+			++index;
+		}
+	}*/
 	isOpened = !isOpened;
 }
 void CsmSelect::TouchCanceled(smTouchContext* smTouchContext)

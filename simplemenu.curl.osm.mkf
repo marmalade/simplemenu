@@ -1,0 +1,28 @@
+includepaths
+{
+	"./include"
+}
+
+files
+{
+	["src"]
+	(src)
+	smOsm.cpp
+	smOsmXApiRequest.cpp
+
+	["include"]
+	(include)
+	smOsm.h
+	smOsmXApiRequest.h
+}
+
+packages
+{
+	pugixml
+}
+
+subprojects
+{
+	./simplemenu.curl.mkf
+}
+

@@ -1,0 +1,8 @@
+CIwResGroup
+{
+	name "osm"
+
+	./style.group
+
+	./osm.simplemenu
+}

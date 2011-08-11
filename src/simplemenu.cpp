@@ -15,6 +15,7 @@
 #include "smSlider.h"
 #include "smGallery.h"
 #include "smSelect.h"
+#include "smCheckbox.h"
 #include "smSwitch.h"
 #include "smRow.h"
 #include "smGrid.h"
@@ -138,6 +139,7 @@ void SimpleMenu::smInit()
 	IW_CLASS_REGISTER(CsmTextBox);
 	IW_CLASS_REGISTER(CsmStyleSheet);
 	IW_CLASS_REGISTER(CsmSelect);
+	IW_CLASS_REGISTER(CsmCheckbox);
 	IW_CLASS_REGISTER(CsmSwitch);
 	IW_CLASS_REGISTER(CsmRow);
 	IW_CLASS_REGISTER(CsmGrid);

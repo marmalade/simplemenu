@@ -20,32 +20,6 @@ CsmMenu
 		{
 			onupdate "self:SetText( 'DeviceID = ' .. CsmUtils.GetDeviceIDName() .. ', ' .. CsmUtils.GetDeviceID() )"
 		}
-		CsmItem
-		{
-			styleClass "AREA"
-			CsmTextBlock
-			{
-				styleClass "H2"
-				text "GPS"
-			}
-			CsmTextBlock
-			{
-				text "Searching for GPS"
-
-				onupdate "
-					if CsmLocation.IsAvailable() then
-						self:SetText( 'GPS is available!' .. CsmLocation.GetLongitude() .. 'x' .. CsmLocation.GetLatitude() .. ' received at ' .. CsmLocation.GetDataTimestamp() )
-					else
-						self:SetText( 'GPS is not available!')
-					end
-				"
-			}
-			CsmButton
-			{
-				text "Wait for GPS signal"
-				onclick "CsmLocation.WaitForGPS()"
-			}
-		}
 	}
 	CsmItem
 	{

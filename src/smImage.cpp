@@ -140,6 +140,13 @@ uint32 CsmImage::GetElementNameHash()
 	static uint32 name = IwHashString("IMAGE");
 	return name;
 }
+//Animate item and all child items
+void CsmImage::Animate(iwfixed timespan)
+{
+	if (source)
+		source->Animate(timespan);
+}
+
 #ifdef IW_BUILD_RESOURCES
 
 //Parses from text file: parses attribute/value pair.

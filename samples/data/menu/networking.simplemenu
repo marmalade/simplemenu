@@ -15,9 +15,29 @@ CsmMenu
 		}
 		CsmButton
 		{
+			text "HTTP GET www.google.ru"
+			onclick "CsmUtils.Alert('Downloaded Text', CsmCurlRequest.GetString('Getting text','Please wait','http://www.google.ru'))"
+		}
+		CsmButton
+		{
 			text "HTTP GET some.strange-address.com"
 			onclick "CsmUtils.Alert('Downloaded Text', CsmCurlRequest.GetString('Getting text','Please wait','http://some.strange-address.com'))"
 		}
+		CsmImage
+		{
+			CsmCurlImageSource
+			{
+				url "http://a248.e.akamai.net/assets.github.com/images/icons/public.png"
+			}
+		}
+		#CsmImage
+		#{
+		#	CsmCurlImageSource
+		#	{
+		#		url "http://github.com/marmalade/simplemenu/raw/master/docs/img/style/sample.jpg"
+		#	}
+		#}
+
 	}
 	CsmItem
 	{

@@ -32,5 +32,6 @@ UseRGBLighting=1
 DataCacheSize=65536
 #VertCacheSize=16384
 VertCacheSize=262144
-NumTPages=32
+PolyBufferSize=262144
+NumTPages=64
 NumTPagesNoMipMap=8

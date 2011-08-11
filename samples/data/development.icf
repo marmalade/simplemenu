@@ -51,7 +51,7 @@ LicenseUsesRemaining           = Type=int, Min=0.000000, Max=10000000.000000, De
 LocationAltitude               = Type=float, Min=-2000.000000, Max=100000.000000, Default="60.0", Value = "60.0"
 LocationAvailable              = Type=bool, Default="true", Value = "true"
 LocationHorizontalAccuracy     = Type=float, Min=0.000000, Max=100000.000000, Default="20.0", Value = "20.0"
-LocationLatitude               = Type=float, Min=-90.000000, Max=90.000000, Default="51.511791", Value = "51.511791"
+LocationLatitude               = Type=float, Min=-90.000000, Max=90.000000, Default="51.511791", Value = "51.5120000000000000"
 LocationLongitude              = Type=float, Min=-180.000000, Max=180.000000, Default="-0.191084", Value = "-0.191084"
 LocationVerticalAccuracy       = Type=float, Min=0.000000, Max=100000.000000, Default="100.0", Value = "100.0"
 MemoryPoison                   = Type=bool, Default="true", Value = "true"

@@ -1,5 +1,6 @@
 #include "smCurlRequest.h"
 #include "smWindowHistory.h"
+#include "curl_ldap.h"
 
 using namespace SimpleMenu;
 
@@ -13,7 +14,7 @@ CsmScriptableClassDeclaration* CsmCurlRequest::GetClassDescription()
 {
 	static  TsmScriptableClassDeclaration<CsmCurlRequest> d ("CsmCurlRequest",
 			ScriptTraits::Method("Create", &CsmCurlRequest::Create),
-			//ScriptTraits::Method("Destroy", &CsmCurlRequest::Destroy),
+			ScriptTraits::Method("Destroy", &CsmCurlRequest::Destroy),
 			ScriptTraits::Method("SetUrl", &CsmCurlRequest::SetUrl),
 			ScriptTraits::Method("Perform", &CsmCurlRequest::Perform),
 			ScriptTraits::Method("GetString", &CsmCurlRequest::GetString),
@@ -52,8 +53,14 @@ CURL* CsmCurlRequest::GetCurl()
 		curl_easy_setopt(curl, CURLOPT_WRITEDATA, this);
 		curl_easy_setopt(curl, CURLOPT_READFUNCTION, ReadFunction);
 		curl_easy_setopt(curl, CURLOPT_READDATA, this);
+
 		curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT, 15);
 		curl_easy_setopt(curl, CURLOPT_TIMEOUT, 30);
+
+		//SSL
+		curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 0);
+		//curl_easy_setopt(curl, CURLOPT_CAINFO, "/path/to/CA.crt");
+		//curl_easy_setopt(curl, CURLOPT_SSLCERT, "/path/to/client.pem");
 	}
 	return curl;
 }
@@ -68,18 +75,40 @@ CURLM* CsmCurlRequest::GetCurlM()
 }
 bool CsmCurlRequest::PerformCallback(CsmMenu*m, CsmCurlRequest* r)
 {
+	return r->PerformStep();
+}
+const char* CsmCurlRequest::GetContentType() const
+{
+	const char* p;
+	curl_easy_getinfo(curl, CURLINFO_CONTENT_TYPE, &p);
+	return p;
+}
+int CsmCurlRequest::GetContentLength() const
+{
+	long p;
+	curl_easy_getinfo(curl, CURLINFO_CONTENT_LENGTH_DOWNLOAD, &p);
+	return p;
+}
+int CsmCurlRequest::GetResponseCode() const
+{
+	long p;
+	curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &p);
+	return p;
+}
+bool CsmCurlRequest::PerformStep()
+{
 	int running_handles;
 	CURLMcode res = CURLM_CALL_MULTI_PERFORM;
 	while (res == CURLM_CALL_MULTI_PERFORM)
 	{
-		res = curl_multi_perform(r->GetCurlM(), &running_handles);
+		res = curl_multi_perform(GetCurlM(), &running_handles);
 	}
 	
 	if (!running_handles)
 	{
 		CURLMsg *msg;
 		int msgs_left;
-		while ((msg = curl_multi_info_read(r->GetCurlM(), &msgs_left))) {
+		while ((msg = curl_multi_info_read(GetCurlM(), &msgs_left))) {
 			if (msg->msg == CURLMSG_DONE) {
 				if( msg->data.result != CURLE_OK ) {
 					smAlert("Network error!", curl_easy_strerror(msg->data.result));

@@ -1,0 +1,77 @@
+CsmMenu
+{
+	name "osm"
+
+	styleSheet "purplestyle"
+
+	CsmItem
+	{
+		styleClass "Content"
+
+		CsmItem
+		{
+			styleClass "AREA"
+			CsmTextBlock
+			{
+				styleClass "H2"
+				text "GPS"
+			}
+			CsmTextBlock
+			{
+				onupdate "
+					if CsmLocation.IsAvailable() then
+						self:SetText( 'GPS is available!\n' .. CsmLocation.GetLongitude() .. 'x' .. CsmLocation.GetLatitude() .. ' received at ' .. CsmLocation.GetDataTimestamp() )
+					else
+						self:SetText( 'GPS is not available!')
+					end
+				"
+			}
+		}
+		CsmImage
+		{
+			CsmCurlImageSource
+			{
+				url "http://c.tile.openstreetmap.org/0/0/0.png"
+			}
+		}
+		CsmItem
+		{
+			styleClass "AREA"
+			CsmRow
+			{
+				CsmTextBlock
+				{
+					styleClass "H2"
+					text "OSM POIs:"
+				}
+				CsmButton
+				{
+					text "Update"
+					onclick "CsmLocation.WaitForGPS()"
+				}
+			}
+			CsmItem
+			{
+			}
+		}
+	}
+	CsmItem
+	{
+		styleClass "Header"
+		text "Open Street Map"
+	}
+	CsmRow
+	{
+		styleClass "Footer"
+		CsmButton
+		{
+			text "Back"
+			onclick "CsmUtils.CloseMenu()"
+		}
+		CsmButton
+		{
+			text "Close"
+			onclick "CsmUtils.CloseAllMenus()"
+		}
+	}
+}

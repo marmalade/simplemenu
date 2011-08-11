@@ -11,6 +11,7 @@
 #include <smConfig.h>
 #include <sm3DModel.h>
 #include <smCurl.h>
+#include <smOsm.h>
 #include <smLuaState.h>
 #include <smWindowHistory.h>
 
@@ -30,6 +31,7 @@ int main(int argc, char* argv[])
 	SimpleMenu::smFeaturesInit();
 	SimpleMenu::sm3DInit();
 	SimpleMenu::smCurlInit();
+	SimpleMenu::smOsmInit();
 	SimpleMenu::smSetLuaAsDefaultScript();
 	IwGxSetColClear(0x1f, 0x1f, 0xc0, 0x7f);
 
@@ -44,6 +46,7 @@ int main(int argc, char* argv[])
 
 	IwGetResManager()->DestroyGroup(sampleGroup);
 
+	SimpleMenu::smOsmTerminate();
 	SimpleMenu::smCurlTerminate();
 	SimpleMenu::sm3DTerminate();
 	SimpleMenu::smFeaturesTerminate();

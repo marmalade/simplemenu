@@ -32,10 +32,19 @@ CsmMenu
 			text "Camera"
 			onclick "CsmUtils.OpenMenuAtGroup('menu/camera.group')"
 		}
-		CsmButton
+		CsmItem
 		{
-			text "Networking"
-			onclick "CsmUtils.OpenMenuAtGroup('menu/networking.group')"
+			styleclass "AREA"
+			CsmButton
+			{
+				text "Networking"
+				onclick "CsmUtils.OpenMenuAtGroup('menu/networking.group')"
+			}
+			CsmButton
+			{
+				text "Open Street Map"
+				onclick "CsmUtils.OpenMenuAtGroup('menu/osm.group')"
+			}
 		}
 
 	}

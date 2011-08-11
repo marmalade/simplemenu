@@ -30,5 +30,25 @@ namespace SimpleMenu
 
 	class CsmCameraImage: public CsmImageSource
 	{
+	public:
+		//Declare managed class
+		IW_MANAGED_DECLARE(CsmCameraImage);
+		//Constructor
+		CsmCameraImage();
+		//Desctructor
+		virtual ~CsmCameraImage();
+		//Reads/writes a binary file using @a IwSerialise interface.
+		void Serialise ();
+
+		// Check if imge is available (loaded, downloaded etc)
+		virtual bool IsAvailable() const;
+		// Get recommended size of the image
+		virtual CIwSVec2 GetRecommendedSize(const CIwSVec2& area) const;
+		// Prepare image source to render the image
+		virtual void Prepare(const CIwSVec2& recommendedSize);
+		// Get image material to draw quad
+		virtual CIwMaterial* GetMaterial();
+		//Animate item and all child items
+		virtual void Animate(iwfixed timespan);
 	};
 }

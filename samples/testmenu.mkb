@@ -20,6 +20,7 @@ assets
 	./menu/style.group.bin
 	./menu/networking.group.bin
 	./menu/camera.group.bin
+	./menu/osm.group.bin
 
 	(./data-ram/)
 	./3d.group.bin

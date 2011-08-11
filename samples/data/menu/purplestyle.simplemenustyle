@@ -83,6 +83,7 @@ CsmStyleSheet
 		border 2 px
 	}
 
+	bindto "CHECKBOX" "*" "*"
 	bindto "BUTTON" "*" "*"
 	bindto "SLIDERKNOB" "*" "*"
 	bindto "OPTION" "*" "*"
@@ -116,6 +117,7 @@ CsmStyleSheet
 	bindto "BUTTON" "*" "FOCUS"
 	bindto "SLIDERKNOB" "*" "FOCUS"
 	bindto "OPTION" "*" "FOCUS"
+	bindto "CHECKBOX" "*" "FOCUS"
 	bindto "SLIDER" "*" "*"
 	bindto "SWITCH" "*" "*"
 	bindto "SELECT" "*" "*"

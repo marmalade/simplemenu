@@ -133,3 +133,9 @@ void SimpleMenu::smAlert(const char* title, const char* text)
 	smShowMenu(menu, 0, 0);
 	delete menu;
 }
+
+void SimpleMenu::smAssertMessage(const char* title,const char* message,bool v)
+{
+	if (!v)
+		smAlert(title, message);
+}

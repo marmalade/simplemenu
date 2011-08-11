@@ -7,6 +7,7 @@
 namespace SimpleMenu
 {
 	class CsmMenu;
+
 	class CsmCurlRequest
 	{
 	private:
@@ -22,6 +23,10 @@ namespace SimpleMenu
 		//Set "USER:PASSWORD" string
 		void SetUserPassword(const char* userPass);
 
+		const char* GetContentType() const;
+		int GetContentLength() const;
+		int GetResponseCode() const;
+
 		//Get scriptable class declaration
 		static CsmScriptableClassDeclaration* GetClassDescription();
 		//Get scriptable class declaration
@@ -31,6 +36,7 @@ namespace SimpleMenu
 		virtual size_t OnRead(void *buffer, size_t size, size_t nmemb);
 
 		void Perform(const char* title, const char* message);
+		bool PerformStep();
 
 		static CsmCurlRequest* Create();
 		static void Destroy(CsmCurlRequest*);

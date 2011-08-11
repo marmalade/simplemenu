@@ -2,6 +2,7 @@
 #include <curl/curl.h>
 #include "smCurl.h"
 #include "smCurlRequest.h"
+#include "smCurlImageSource.h"
 
 using namespace SimpleMenu;
 
@@ -18,7 +19,7 @@ void SimpleMenu::smCurlInit()
 
 	smInit();
 
-	//IW_CLASS_REGISTER(CsmCurlRequest);
+	IW_CLASS_REGISTER(CsmCurlImageSource);
 	smRegisterClass(CsmCurlRequest::GetClassDescription());
 
 	curl_global_init(0);

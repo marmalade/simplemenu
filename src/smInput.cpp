@@ -1,5 +1,6 @@
 #include <IwDebug.h>
 #include "smInput.h"
+#include "simplemenu.h"
 
 using namespace SimpleMenu;
 
@@ -80,7 +81,8 @@ void CsmInputFilter::Register()
 	++g_regCounter;
 	g_regFilter = this;
 
-	s3eKeyboardRegister(S3E_KEYBOARD_KEY_EVENT, (s3eCallback)KeyboardKeyEventHandler, this);
+	smAssertMessage("Error","s3eKeyboardRegister", (S3E_RESULT_SUCCESS == s3eKeyboardRegister(S3E_KEYBOARD_KEY_EVENT, (s3eCallback)KeyboardKeyEventHandler, this)));
+
 	if (s3ePointerGetInt(S3E_POINTER_MULTI_TOUCH_AVAILABLE))
 	{
 		s3ePointerRegister(S3E_POINTER_TOUCH_EVENT, (s3eCallback)PointerTouchEventHandler, this);

@@ -17,6 +17,8 @@ namespace SimpleMenu
 		virtual void Prepare(const CIwSVec2& recommendedSize) = 0;
 		// Get image material to draw quad
 		virtual CIwMaterial* GetMaterial() = 0;
+		//Animate item and all child items
+		virtual void Animate(iwfixed timespan) {};
 	};
 	class CsmImageTexture : public CsmImageSource
 	{
@@ -40,7 +42,6 @@ namespace SimpleMenu
 		virtual CIwSVec2 GetRecommendedSize(const CIwSVec2& area) const;
 		virtual void Prepare(const CIwSVec2& recommendedSize);
 		virtual CIwMaterial* GetMaterial();
-
 #ifdef IW_BUILD_RESOURCES
 		//Parses from text file: parses attribute/value pair.
 		virtual	bool	ParseAttribute(CIwTextParserITX* pParser, const char* pAttrName);

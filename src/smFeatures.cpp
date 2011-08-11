@@ -34,6 +34,8 @@ void SimpleMenu::smFeaturesInit()
 	smRegisterClass(CsmAccelerometer::GetClassDescription());
 	smRegisterClass(CsmAudio::GetClassDescription());
 	smRegisterClass(CsmVideo::GetClassDescription());
+
+	IW_CLASS_REGISTER(CsmCameraImage);
 }
 
 void SimpleMenu::smFeaturesTerminate()
