@@ -20,7 +20,7 @@ CsmMenu
 			{
 				onupdate "
 					if CsmLocation.IsAvailable() then
-						self:SetText( 'GPS is available!\n' .. CsmLocation.GetLongitude() .. 'x' .. CsmLocation.GetLatitude() .. ' received at ' .. CsmLocation.GetDataTimestamp() )
+						self:SetText( 'GPS is available!\nNum Satellites In View = ' .. CsmLocation.GetNumSatellitesInView() .. '\nNum Satellites Used = ' .. CsmLocation.GetNumSatellitesUsed() .. '\nCoordinates:' .. CsmLocation.GetLongitude() .. 'x' .. CsmLocation.GetLatitude() .. ' received at ' .. CsmLocation.GetDataTimestamp() )
 					else
 						self:SetText( 'GPS is not available!')
 					end
@@ -29,10 +29,10 @@ CsmMenu
 		}
 		CsmImage
 		{
-			CsmCurlImageSource
-			{
-				url "http://c.tile.openstreetmap.org/0/0/0.png"
-			}
+#			CsmCurlImageSource
+#			{
+#				url "http://c.tile.openstreetmap.org/0/0/0.png"
+#			}
 		}
 		CsmItem
 		{

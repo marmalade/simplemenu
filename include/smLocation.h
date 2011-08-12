@@ -26,6 +26,8 @@ namespace SimpleMenu
 		static float GetVerticalAccuracy();
 		static long GetDataTimestamp();
 		static bool WaitForGPS();
+		static int GetNumSatellitesInView();
+		static int GetNumSatellitesUsed();
 	protected:
 		static CsmLocation* RequestFeature();
 		static int32 Callback (void* systemData, void* userData);

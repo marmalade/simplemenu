@@ -30,6 +30,8 @@ CsmScriptableClassDeclaration* CsmLocation::GetClassDescription()
 		ScriptTraits::Method("GetVerticalAccuracy", &CsmLocation::GetVerticalAccuracy),
 		ScriptTraits::Method("GetDataTimestamp", &CsmLocation::GetDataTimestamp),
 		ScriptTraits::Method("WaitForGPS", &CsmLocation::WaitForGPS),
+		ScriptTraits::Method("GetNumSatellitesInView", &CsmLocation::GetNumSatellitesInView),
+		ScriptTraits::Method("GetNumSatellitesUsed", &CsmLocation::GetNumSatellitesUsed),
 			0);
 	return &d;
 }
@@ -55,6 +57,7 @@ void CsmLocation::SaveToConfig()
 	CsmConfig::SetFloat("sm-location-latitude", (float)l.m_Latitude);
 	CsmConfig::SetFloat("sm-location-longitude", (float)l.m_Longitude);
 	CsmConfig::SetInteger("sm-location-m_received-at", (int)m_receivedAt);
+	
 }
 void CsmLocation::LoadFromConfig()
 {
@@ -139,3 +142,28 @@ long CsmLocation::GetDataTimestamp()
 {
 	return (long)RequestFeature()->m_receivedAt;
 }
+
+int CsmLocation::GetNumSatellitesInView()
+{
+	RequestFeature();
+	s3eLocationGPSData data;
+	if (S3E_RESULT_SUCCESS == s3eLocationGetGPSData (&data))
+	{
+		return data.m_NumSatellitesInView;
+	}
+	const char* err = s3eLocationGetErrorString();
+	return -1;
+}
+
+int CsmLocation::GetNumSatellitesUsed()
+{
+	RequestFeature();
+	s3eLocationGPSData data;
+	if (S3E_RESULT_SUCCESS == s3eLocationGetGPSData (&data))
+	{
+		return data.m_NumSatellitesUsed;
+	}
+	const char* err = s3eLocationGetErrorString();
+	return -1;
+}
+

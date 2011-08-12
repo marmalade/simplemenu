@@ -8,8 +8,22 @@ namespace SimpleMenu
 	class CsmCamera: public CsmFeature
 	{
 	protected:
-		bool feedUpdated;
+		volatile bool feedUpdated;
 		bool started;
+
+		CIwImage* image;
+		int16* activeBuffer;
+		int16* completeBuffer;
+		CIwTexture* texture;
+		int32 feedWidth;
+		int32 feedHeight;
+
+		s3eCameraStreamingSizeHint sizeHint;
+		int quality;
+		int type;
+		int contrast;
+		int brightness;
+		int focus;
 	public: 
 		CsmCamera();
 		virtual ~CsmCamera();
@@ -17,19 +31,34 @@ namespace SimpleMenu
 		static bool IsAvailable();
 		//Get scriptable class declaration
 		static CsmScriptableClassDeclaration* GetClassDescription();
-	protected:
+
 		static CsmCamera* RequestFeature();
+		CIwTexture* GetTexture();
+		static void SetQualityLow();
+		static void SetQualityMedium();
+		static void SetQualityHigh();
+		static void SetSizeSmallest();
+		static void SetSizeMedium();
+		static void SetSizeLargest();
+		void SetQuality(int q);
+		void SetSize(s3eCameraStreamingSizeHint s);
+	protected:
 		//static int32 Callback (void* systemData, void* userData);
 		virtual void StartFeature();
 		virtual void StopFeature();
 
 		static int32 CameraUpdate(void* systemData, void* userData);
+
+		void RequireImage(int16 reqw, int16 reqh);
+		bool FlipCoordinates() const {return true;};
+
 		void CloseFeed();
 		void OpenFeed();
 	};
 
 	class CsmCameraImage: public CsmImageSource
 	{
+		CIwMaterial*material;
 	public:
 		//Declare managed class
 		IW_MANAGED_DECLARE(CsmCameraImage);

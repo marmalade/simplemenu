@@ -8,12 +8,33 @@ CsmMenu
 	{
 		styleClass "Content"
 
+		style
+		{
+			horizontal-alignment 0.5
+		}
+
 		CsmImage
 		{
 			CsmCameraImage
 			{
 			}
 		}
+		CsmItem { styleClass "AREA"
+		text "Quality"
+		CsmRow
+		{
+			CsmButton { text "Low" onclick "CsmCamera.SetQualityLow()" }
+			CsmButton { text "Med" onclick "CsmCamera.SetQualityMedium()" }
+			CsmButton { text "High" onclick "CsmCamera.SetQualityHigh()" }
+		} }
+		CsmItem { styleClass "AREA"
+		text "Size"
+		CsmRow
+		{
+			CsmButton { text "Low" onclick "CsmCamera.SetSizeSmallest()" }
+			CsmButton { text "Med" onclick "CsmCamera.SetSizeMedium()" }
+			CsmButton { text "High" onclick "CsmCamera.SetSizeLargest()" }
+		} }
 	}
 	CsmItem
 	{
