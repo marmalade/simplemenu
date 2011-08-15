@@ -23,6 +23,8 @@ namespace SimpleMenu
 		//Set "USER:PASSWORD" string
 		void SetUserPassword(const char* userPass);
 
+		void SetTimeout(int t);
+
 		const char* GetContentType() const;
 		int GetContentLength() const;
 		int GetResponseCode() const;
@@ -34,7 +36,6 @@ namespace SimpleMenu
 
 		virtual size_t OnWrite(void *buffer, size_t size, size_t nmemb);
 		virtual size_t OnRead(void *buffer, size_t size, size_t nmemb);
-
 		void Perform(const char* title, const char* message);
 		bool PerformStep();
 
@@ -43,6 +44,9 @@ namespace SimpleMenu
 
 		static std::string GetString(const char* title,const char* message,const char* url);
 	protected:
+		virtual void BeforeRequest();
+		virtual void AfterRequest();
+
 		CURL* GetCurl();
 		CURLM* GetCurlM();
 
@@ -65,5 +69,8 @@ namespace SimpleMenu
 		size_t GetInputBufferSize() const {return inputBuffer.size();}
 		virtual size_t OnWrite(void *buffer, size_t size, size_t nmemb);
 		virtual size_t OnRead(void *buffer, size_t size, size_t nmemb);
+	protected:
+		virtual void BeforeRequest();
+		virtual void AfterRequest();
 	};
 }

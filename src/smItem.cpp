@@ -43,6 +43,8 @@ CsmScriptableClassDeclaration* CsmItem::GetClassDescription()
 {
 	static  TsmScriptableClassDeclaration<CsmItem> d ("CsmItem",
 			ScriptTraits::Method("GetRoot", &CsmItem::GetRoot),
+			ScriptTraits::Method("GetParent", &CsmItem::GetParent),
+			ScriptTraits::Method("AddTextBlock", &CsmItem::AddTextBlock),
 			ScriptTraits::Method("GetChildAt", &CsmItem::GetChildAt),
 			ScriptTraits::Method("GetChildItemsCount", &CsmItem::GetChildItemsCount),
 			
@@ -507,6 +509,7 @@ CsmTextBlock* CsmItem::AddTextBlock(const char* text)
 	CsmTextBlock* tb = new CsmTextBlock();
 	tb->SetText(text);
 	AddItem(tb);
+	tb->InitTree(GetRoot(), this);
 	return tb;
 }
 

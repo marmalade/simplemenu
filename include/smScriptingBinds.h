@@ -93,6 +93,23 @@ namespace SimpleMenu
 				return m(a1, a2, FetchArgument<A3>(system));
 			}
 		};
+		template <typename R, typename A1, typename A2, typename A3, typename A4> class FourArgFunction: public CsmScriptableMethodDeclaration
+		{
+		public:
+			typedef R(* METHOD)(A1,A2,A3,A4);
+		protected:
+			METHOD m;
+		public:
+			virtual bool IsStatic() const {return true;}
+			FourArgFunction(const char* name, METHOD mm):CsmScriptableMethodDeclaration(name),m(mm) {}
+			R MakeCall(IsmScriptProvider* system, CsmScriptableClassDeclaration* cls, void* instance)
+			{
+				A1 a1 = FetchArgument<A1>(system);
+				A2 a2 = FetchArgument<A1>(system);
+				A3 a3 = FetchArgument<A1>(system);
+				return m(a1, a2, a3, FetchArgument<A4>(system));
+			}
+		};
 		template <class T, class R, typename mmm> class NoArgsMethod: public CsmScriptableMethodDeclaration
 		{
 		public:
@@ -137,6 +154,39 @@ namespace SimpleMenu
 				return (i->*m)(a1, FetchArgument<A2>(system));
 			}
 		};
+		template <class T, class R, typename A1, typename A2, typename A3, typename mmm> class ThreeArgsMethod: public CsmScriptableMethodDeclaration
+		{
+		public:
+			typedef mmm METHOD;
+		protected:
+			METHOD m;
+		public:
+			ThreeArgsMethod(const char* name, METHOD mm):CsmScriptableMethodDeclaration(name),m(mm) {}
+			R MakeCall(IsmScriptProvider* system, CsmScriptableClassDeclaration* cls, void* instance)
+			{
+				T* i = ((T*)instance);
+				A1 a1 = FetchArgument<A1>(system);
+				A2 a2 = FetchArgument<A1>(system);
+				return (i->*m)(a1, a2, FetchArgument<A3>(system));
+			}
+		};
+		template <class T, class R, typename A1, typename A2, typename A3, typename A4, typename mmm> class FourArgsMethod: public CsmScriptableMethodDeclaration
+		{
+		public:
+			typedef mmm METHOD;
+		protected:
+			METHOD m;
+		public:
+			FourArgsMethod(const char* name, METHOD mm):CsmScriptableMethodDeclaration(name),m(mm) {}
+			R MakeCall(IsmScriptProvider* system, CsmScriptableClassDeclaration* cls, void* instance)
+			{
+				T* i = ((T*)instance);
+				A1 a1 = FetchArgument<A1>(system);
+				A2 a2 = FetchArgument<A1>(system);
+				A3 a3 = FetchArgument<A1>(system);
+				return (i->*m)(a1, a2, a3, FetchArgument<A4>(system));
+			}
+		};
 		template <class R, class Caller> class MethodBase: public Caller
 		{
 		public:
@@ -172,6 +222,10 @@ namespace SimpleMenu
 		{
 			return new MethodBase<R,ThreeArgFunction<R,A1,A2,A3> >(name,fn);
 		};
+		template <typename R,typename A1,typename A2,typename A3,typename A4> inline CsmScriptableMethodDeclaration* Method(const char* name, R (*fn) (A1,A2,A3,A4))
+		{
+			return new MethodBase<R,FourArgFunction<R,A1,A2,A3,A4> >(name,fn);
+		};
 		template <class T, typename R> inline CsmScriptableMethodDeclaration* Method(const char* name, R (T::*fn) ())
 		{
 			return new MethodBase<R,NoArgsMethod<T,R,R (T::*) ()> >(name,fn);
@@ -195,6 +249,22 @@ namespace SimpleMenu
 		template <class T, typename R,typename A1,typename A2> inline CsmScriptableMethodDeclaration* Method(const char* name, R (T::*fn)  (A1,A2) const)
 		{
 			return new MethodBase<R,TwoArgsMethod<T,R,A1,A2,R (T::*)  (A1,A2) const> >(name,fn);
+		};
+		template <class T, typename R,typename A1,typename A2,typename A3> inline CsmScriptableMethodDeclaration* Method(const char* name, R (T::*fn)  (A1,A2,A3) const)
+		{
+			return new MethodBase<R,ThreeArgsMethod<T,R,A1,A2,A3,R (T::*)  (A1,A2,A3) const> >(name,fn);
+		};
+		template <class T, typename R,typename A1,typename A2,typename A3> inline CsmScriptableMethodDeclaration* Method(const char* name, R (T::*fn)  (A1,A2,A3))
+		{
+			return new MethodBase<R,ThreeArgsMethod<T,R,A1,A2,A3,R (T::*)  (A1,A2,A3)> >(name,fn);
+		};
+		template <class T, typename R,typename A1,typename A2,typename A3,typename A4> inline CsmScriptableMethodDeclaration* Method(const char* name, R (T::*fn)  (A1,A2,A3,A4) const)
+		{
+			return new MethodBase<R,FourArgsMethod<T,R,A1,A2,A3,A4,R (T::*)  (A1,A2,A3,A4) const> >(name,fn);
+		};
+		template <class T, typename R,typename A1,typename A2,typename A3,typename A4> inline CsmScriptableMethodDeclaration* Method(const char* name, R (T::*fn)  (A1,A2,A3,A4))
+		{
+			return new MethodBase<R,FourArgsMethod<T,R,A1,A2,A3,A4,R (T::*)  (A1,A2,A3,A4)> >(name,fn);
 		};
 	}
 	template <class T> class TsmScriptableMethodDeclaration: public CsmScriptableMethodDeclaration

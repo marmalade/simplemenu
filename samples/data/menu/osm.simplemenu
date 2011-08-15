@@ -20,7 +20,7 @@ CsmMenu
 			{
 				onupdate "
 					if CsmLocation.IsAvailable() then
-						self:SetText( 'GPS is available!\nNum Satellites In View = ' .. CsmLocation.GetNumSatellitesInView() .. '\nNum Satellites Used = ' .. CsmLocation.GetNumSatellitesUsed() .. '\nCoordinates:' .. CsmLocation.GetLongitude() .. 'x' .. CsmLocation.GetLatitude() .. ' received at ' .. CsmLocation.GetDataTimestamp() )
+						self:SetText( 'GPS is available by ' .. CsmLocation.GetSourceName() .. '!\nNum Satellites In View = ' .. CsmLocation.GetNumSatellitesInView() .. '\nNum Satellites Used = ' .. CsmLocation.GetNumSatellitesUsed() .. '\nCoordinates:' .. CsmLocation.GetLongitude() .. 'x' .. CsmLocation.GetLatitude() .. ' received at ' .. CsmLocation.GetDataTimestamp() )
 					else
 						self:SetText( 'GPS is not available!')
 					end
@@ -47,7 +47,16 @@ CsmMenu
 				CsmButton
 				{
 					text "Update"
-					onclick "CsmLocation.WaitForGPS()"
+					onclick "
+					CsmLocation.WaitForGPS()
+					local r = CsmOsmXApiRequest.Create()
+					local lon = CsmLocation.GetLongitude()
+					local lat = CsmLocation.GetLatitude()
+					r:RequestArea(lon-0.00025,lat-0.00025,lon+0.00025,lat+0.00025)
+					r:Perform()
+					self:AddTextBlock('GetNumNodes=' .. r:GetNumNodes())
+					CsmOsmXApiRequest.Destroy(r)
+					"
 				}
 			}
 			CsmItem

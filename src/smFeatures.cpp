@@ -15,7 +15,21 @@ namespace SimpleMenu
 			sm_featuresList = new TsmIntrusiveList<CsmFeature>();
 		return sm_featuresList;
 	}
-
+	int32 smUpdateFeatures(void*, void*)
+	{
+		if (sm_featuresList)
+		{
+			CsmFeature* f = sm_featuresList->GetFirstChild();
+			while (f)
+			{
+				f->Update();
+				f = f->GetNext();
+			}
+		}
+		if (initFeaturesCounter)
+			s3eTimerSetTimer(100, smUpdateFeatures, 0);
+		return 0;
+	}
 }
 
 using namespace SimpleMenu;
@@ -36,6 +50,8 @@ void SimpleMenu::smFeaturesInit()
 	smRegisterClass(CsmVideo::GetClassDescription());
 
 	IW_CLASS_REGISTER(CsmCameraImage);
+
+	s3eTimerSetTimer(100, smUpdateFeatures, 0);
 }
 
 void SimpleMenu::smFeaturesTerminate()
@@ -45,6 +61,8 @@ void SimpleMenu::smFeaturesTerminate()
 		IwAssertMsg(SIMPLEMENU,false,("smFeaturesTerminate doesn't match smFeaturesInit"));
 	if (initFeaturesCounter != 0)
 		return;
+
+	s3eTimerCancelTimer (smUpdateFeatures, 0);
 
 	if (sm_featuresList)
 	{
@@ -65,7 +83,9 @@ CsmFeature::~CsmFeature()
 {
 	Stop();
 }
-
+void CsmFeature::Update()
+{
+}
 void CsmFeature::Start()
 {
 	m_lasttime = time(0);

@@ -2,6 +2,7 @@
 #include <IwResManager.h>
 #include <IwGx.h>
 #include "smButton.h"
+#include "smTextBlock.h"
 #include "smMenu.h"
 
 using namespace SimpleMenu;
@@ -35,6 +36,8 @@ CsmScriptableClassDeclaration* CsmButton::GetClassDescription()
 {
 	static  TsmScriptableClassDeclaration<CsmButton> d ("CsmButton",
 			ScriptTraits::Method("GetRoot", &CsmButton::GetRoot),
+			ScriptTraits::Method("GetParent", &CsmButton::GetParent),
+			ScriptTraits::Method("AddTextBlock", &CsmButton::AddTextBlock),
 			ScriptTraits::Method("GetChildAt", &CsmButton::GetChildAt),
 			ScriptTraits::Method("GetChildItemsCount", &CsmButton::GetChildItemsCount),
 			0);

@@ -21,6 +21,8 @@ namespace SimpleMenu
 		virtual ~CsmFeature();
 		void Start();
 		void Stop();
+
+		virtual void Update();
 	protected:
 		virtual void StartFeature() {};
 		virtual void StopFeature() {};

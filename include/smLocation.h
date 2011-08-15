@@ -28,6 +28,9 @@ namespace SimpleMenu
 		static bool WaitForGPS();
 		static int GetNumSatellitesInView();
 		static int GetNumSatellitesUsed();
+		static const char* GetSourceName();
+
+		virtual void Update();
 	protected:
 		static CsmLocation* RequestFeature();
 		static int32 Callback (void* systemData, void* userData);
@@ -35,6 +38,6 @@ namespace SimpleMenu
 		virtual void StopFeature();
 		void SaveToConfig();
 		void LoadFromConfig();
-
+		static bool GetGPSData(s3eLocationGPSData*d);
 	};
 }

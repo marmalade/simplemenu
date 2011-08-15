@@ -45,6 +45,12 @@ files
 	longtext.group
 	longtext.simplemenu
 
+	networking.group
+	networking.simplemenu
+
+	osm.group
+	osm.simplemenu
+
 	menu.simplemenustyle
 	purplestyle.simplemenustyle
 }

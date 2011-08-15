@@ -4,6 +4,12 @@
 
 namespace SimpleMenu
 {
+	enum smConfigStorageType
+	{
+		SM_CONFIG_FILE,
+		SM_CONFIG_SECURITY_STORAGE,
+	};
+
 	class CsmConfig
 	{
 	public:
@@ -25,8 +31,16 @@ namespace SimpleMenu
 		static void Load();
 		static void Save();
 		static void Close();
+
+	protected:
+		static void LoadFile();
+		static void SaveFile();
+		static void LoadSS();
+		static void SaveSS();
+		static void LoadDefault();
 	};
 
 	void smConfigInit();
+	void smConfigInit(smConfigStorageType);
 	void smConfigTerminate();
 }

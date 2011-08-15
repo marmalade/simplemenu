@@ -1,13 +1,15 @@
-#include "smConfig.h"
-#include "simplemenu.h"
+#include <s3eSecureStorage.h>
 #include <pugixml.hpp>
 #include <sstream>
+#include "smConfig.h"
+#include "simplemenu.h"
 
 using namespace SimpleMenu;
 
 namespace SimpleMenu
 {
 	const char* smConfigFilePath = "ram://app.config";
+	smConfigStorageType smConfigType = SM_CONFIG_FILE;//SM_CONFIG_SECURITY_STORAGE;
 	pugi::xml_document* smConfigDocument=0;
 	pugi::xml_node smGetConfigNodeText(const char* name)
 	{
@@ -25,14 +27,31 @@ namespace SimpleMenu
 		return text;
 	}
 	int initConfigCounter = 0;
-}
 
+	class CsmXmlWriter: public pugi::xml_writer
+	{
+	public:
+		CIwArray<char> buffer;
+		virtual void write(const void* data, size_t size)
+		{
+			size_t pos = buffer.size();
+			buffer.resize(pos+size);
+			memcpy(&buffer[pos], data, size);
+		}
+	};
+}
 void SimpleMenu::smConfigInit()
 {
+	smConfigInit(smConfigType);
+}
+void SimpleMenu::smConfigInit(smConfigStorageType t)
+{
+	if (initConfigCounter && smConfigType != t)
+		IwAssertMsg(SM,false,("Can't change config type after initialization"));
 	++initConfigCounter;
 	if (initConfigCounter != 1)
 		return;
-
+	smConfigType = t;
 	smInit();
 	smRegisterClass(CsmConfig::GetClassDescription());
 	CsmConfig::Load();
@@ -147,11 +166,54 @@ const char* CsmConfig::GetString(const char* name)
 	const char* v = text.value();
 	return v;
 }
-void CsmConfig::Load()
+void CsmConfig::LoadSS()
+{
+	uint16 size = 1024;
+	CIwArray<char> buf;
+	retry:
+	buf.resize(size);
+	s3eResult err = s3eSecureStorageGet(&buf[0], size);
+	if (err == S3E_RESULT_ERROR)
+	{
+		switch (s3eSecureStorageGetError())
+		{
+			case S3E_SECURESTORAGE_ERR_INSUFF:
+				size*=2;
+				goto retry;
+			case S3E_SECURESTORAGE_ERR_NOT_FOUND:
+				break;
+			default:
+				IwAssertMsg(SM, false, (s3eSecureStorageGetErrorString()));
+				break;
+		}
+		LoadDefault();
+		return;
+	}
+	smConfigDocument->load_buffer(&buf[0], strlen(&buf[0]));
+
+}
+void CsmConfig::SaveSS()
 {
 	if (!smConfigDocument)
-		smConfigDocument = new pugi::xml_document();
-
+		return;
+	CsmXmlWriter w;
+	smConfigDocument->save(w);
+	w.write("\0", 1);
+	size_t s = w.buffer.size()-1;
+	if (s > 0x0FFFF)
+	{
+		IwAssertMsg(SM, false, ("Security storage isn't big enough to store the file"));
+	}
+	s3eResult err = s3eSecureStoragePut(&w.buffer[0], (uint16)s);
+	if (err == S3E_RESULT_ERROR)
+		IwAssertMsg(SM, false, (s3eSecureStorageGetErrorString()));
+}
+void CsmConfig::LoadDefault()
+{
+	smConfigDocument->load("<?xml version=\"1.0\" encoding=\"utf-8\" ?><configuration><appSettings></appSettings></configuration>");
+}
+void CsmConfig::LoadFile()
+{
 	if (s3eFileCheckExists(smConfigFilePath))
 	{
 		pugi::xml_parse_result r = smConfigDocument->load_file(smConfigFilePath);
@@ -159,13 +221,43 @@ void CsmConfig::Load()
 			return;
 		IwAssertMsg(sm, false, (r.description()));
 	}
-	smConfigDocument->load("<?xml version=\"1.0\" encoding=\"utf-8\" ?><configuration><appSettings></appSettings></configuration>");
+	LoadDefault();
 }
-void CsmConfig::Save()
+void CsmConfig::SaveFile()
 {
 	if (smConfigDocument)
 		smConfigDocument->save_file(smConfigFilePath);
 }
+void CsmConfig::Load()
+{
+	if (!smConfigDocument)
+		smConfigDocument = new pugi::xml_document();
+
+	switch (smConfigType)
+	{
+	case SM_CONFIG_FILE:
+	default:
+		LoadFile();
+		break;
+	case SM_CONFIG_SECURITY_STORAGE:
+		LoadSS();
+		break;
+	}
+}
+void CsmConfig::Save()
+{
+	switch (smConfigType)
+	{
+	case SM_CONFIG_FILE:
+	default:
+		SaveFile();
+		break;
+	case SM_CONFIG_SECURITY_STORAGE:
+		SaveSS();
+		break;
+	}
+}
+
 void CsmConfig::Close()
 {
 	if (smConfigDocument)

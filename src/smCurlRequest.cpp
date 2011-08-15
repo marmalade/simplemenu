@@ -83,17 +83,21 @@ const char* CsmCurlRequest::GetContentType() const
 	curl_easy_getinfo(curl, CURLINFO_CONTENT_TYPE, &p);
 	return p;
 }
+void CsmCurlRequest::SetTimeout(int t)
+{
+	curl_easy_setopt(curl, CURLOPT_TIMEOUT, t);
+}
 int CsmCurlRequest::GetContentLength() const
 {
 	long p;
 	curl_easy_getinfo(curl, CURLINFO_CONTENT_LENGTH_DOWNLOAD, &p);
-	return p;
+	return (int)p;
 }
 int CsmCurlRequest::GetResponseCode() const
 {
 	long p;
 	curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &p);
-	return p;
+	return (int)p;
 }
 bool CsmCurlRequest::PerformStep()
 {
@@ -121,9 +125,16 @@ bool CsmCurlRequest::PerformStep()
 }
 void CsmCurlRequest::Perform(const char* title, const char* message)
 {
+	BeforeRequest();
 	smOpenWaitDialog(title, message, (smUpdateCallback)PerformCallback, this);
+	AfterRequest();
 }
-
+void CsmCurlRequest::BeforeRequest()
+{
+}
+void CsmCurlRequest::AfterRequest()
+{
+}
 
 void CsmCurlRequest::SetUrl(const char* url)
 {
@@ -186,4 +197,12 @@ size_t CsmCurlMemoryRequest::OnWrite(void *buffer, size_t size, size_t nmemb)
 size_t CsmCurlMemoryRequest::OnRead(void *buffer, size_t size, size_t nmemb)
 {
 	return 0;
+}
+void CsmCurlMemoryRequest::BeforeRequest()
+{
+	inputBuffer.clear();
+}
+void CsmCurlMemoryRequest::AfterRequest()
+{
+	outputBuffer.clear();
 }
