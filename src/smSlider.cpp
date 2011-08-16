@@ -31,7 +31,7 @@ CsmSlider::~CsmSlider()
 //Get scriptable class declaration
 CsmScriptableClassDeclaration* CsmSlider::GetClassDescription()
 {
-	static  TsmScriptableClassDeclaration<CsmSlider> d ("CsmSlider",
+	static  TsmScriptableClassDeclaration<CsmSlider> d (CsmItem::GetClassDescription(), "CsmSlider",
 			ScriptTraits::Method("GetRoot", &CsmSlider::GetRoot),
 			ScriptTraits::Method("GetChildAt", &CsmSlider::GetChildAt),
 			ScriptTraits::Method("GetChildItemsCount", &CsmSlider::GetChildItemsCount),
@@ -53,7 +53,7 @@ void CsmSlider::PrepareChildItems(smItemContext* context, const CIwSVec2& recomm
 	int16 sliderContentWidth = contentWidth*sliderWidth/IW_GEOM_ONE;
 	CIwSVec2 chRecSize (sliderContentWidth,recommendedSize.y);
 
-	for (CIwManaged** i = childItems.GetBegin(); i!=childItems.GetEnd(); ++i)
+	for (CsmItem** i = childItems.begin(); i!=childItems.end(); ++i)
 	{
 		CsmItem* item = static_cast<CsmItem*>(*i);
 		item->Prepare(context,chRecSize);
@@ -72,7 +72,7 @@ void CsmSlider::RearrangeChildItems()
 	int16 sliderContentWidth = contentWidth*sliderWidth/IW_GEOM_ONE;
 	int16 sliderOffset = (contentWidth-sliderContentWidth)*sliderValue/IW_GEOM_ONE;
 	topLeft.x += sliderOffset;
-	for (CIwManaged** i = childItems.GetBegin(); i!=childItems.GetEnd(); ++i)
+	for (CsmItem** i = childItems.begin(); i!=childItems.end(); ++i)
 	{
 		CsmItem* item = static_cast<CsmItem*>(*i);
 		item->SetOrigin(topLeft);

@@ -11,7 +11,7 @@ namespace SimpleMenu
 //Get scriptable class declaration
 CsmScriptableClassDeclaration* CsmAudio::GetClassDescription()
 {
-	static  TsmScriptableClassDeclaration<CsmAudio> d ("CsmAudio",
+	static  TsmScriptableClassDeclaration<CsmAudio> d (0, "CsmAudio",
 		ScriptTraits::Method("IsAvailable", &CsmAudio::IsAvailable),
 		ScriptTraits::Method("PlayFile", &CsmAudio::PlayFile),
 			0);

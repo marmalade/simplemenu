@@ -191,6 +191,7 @@ namespace SimpleMenu
 		{
 		public:
 			MethodBase(const char* name, typename Caller::METHOD m):Caller(name,m) {}
+			virtual CsmScriptableMethodDeclaration* Clone() { return new MethodBase<R,Caller>(Caller::m_name, Caller::m); }
 			virtual void Call(IsmScriptProvider* system, CsmScriptableClassDeclaration* cls, void* instance)
 			{
 				PushResult(system, Caller::MakeCall(system,cls,instance));
@@ -200,6 +201,7 @@ namespace SimpleMenu
 		{
 		public:
 			MethodBase(const char* name, typename Caller::METHOD m):Caller(name,m) {}
+			virtual CsmScriptableMethodDeclaration* Clone() { return new MethodBase<void,Caller>(Caller::m_name, Caller::m); }
 			virtual void Call(IsmScriptProvider* system, CsmScriptableClassDeclaration* cls, void* instance)
 			{
 				Caller::MakeCall(system,cls,instance);
@@ -287,7 +289,7 @@ namespace SimpleMenu
 	{
 		const char* m_name;
 	public:
-		TsmScriptableClassDeclaration(const char* name, ...);
+		TsmScriptableClassDeclaration(CsmScriptableClassDeclaration* p, const char* name, ...);
 		virtual ~TsmScriptableClassDeclaration() {}
 		virtual const char* GetClassName() {return m_name;}
 
@@ -300,9 +302,11 @@ namespace SimpleMenu
 		//static CsmScriptableMethodDeclaration* M( void (T::*ptr)() ) { return 0;}
 	};
 
-	template <class T> TsmScriptableClassDeclaration<T>::TsmScriptableClassDeclaration(const char* name, ...)
+	template <class T> TsmScriptableClassDeclaration<T>::TsmScriptableClassDeclaration(CsmScriptableClassDeclaration* p, const char* name, ...)
 	{
 		m_name = name;
+		if (p)
+			Inherit(p);
 		va_list vl;
 		va_start( vl, name );
 		for (;;)
@@ -314,4 +318,6 @@ namespace SimpleMenu
 		}
 		va_end( vl );
 	}
+
+	
 }

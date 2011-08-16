@@ -56,6 +56,7 @@ files
 	smMenu.h 
 	smScriptProvider.h 
 	smStyle.h 
+	smManagedList.h 
 	smStyleSheet.h 
 	smSlider.h
 	smTextBlock.h 

@@ -67,13 +67,12 @@ void CsmSelect::RearrangeChildItems()
 	}
 	else
 	{
-		if (selectedItemIndex >= 0 && selectedItemIndex < (int32)childItems.GetSize())
+		if (selectedItemIndex >= 0 && selectedItemIndex < (int32)childItems.size())
 		{
 			CIwSVec2 topLeft = GetOrigin();
 			topLeft.x += GetContentOffsetLeft();
 			topLeft.y += GetContentOffsetTop();
-			CIwManaged** i = childItems.GetBegin()+selectedItemIndex;
-			CsmItem* item = static_cast<CsmItem*>(*i);
+			CsmItem* item = childItems[selectedItemIndex];
 			item->SetOrigin(topLeft);
 		}
 	}
@@ -84,7 +83,7 @@ void CsmSelect::Touch(smTouchContext* smTouchContext)
 	if (isOpened)
 	{
 		int index = 0;
-		for (CIwManaged** i = childItems.GetBegin(); i!=childItems.GetEnd(); ++i)
+		for (CsmItem** i = childItems.begin(); i!=childItems.end(); ++i)
 		{
 			CsmItem* item = static_cast<CsmItem*>(*i);
 			const CIwVec2& pos = smTouchContext->currentPoistion;
@@ -105,7 +104,7 @@ void CsmSelect::TouchReleased(smTouchContext* smTouchContext)
 	/*if (isOpened)
 	{
 		int index = 0;
-		for (CIwManaged** i = childItems.GetBegin(); i!=childItems.GetEnd(); ++i)
+		for (CsmItem** i = childItems.begin(); i!=childItems.end(); ++i)
 		{
 			CsmItem* item = static_cast<CsmItem*>(*i);
 			const CIwVec2& pos = smTouchContext->currentPoistion;
@@ -136,7 +135,7 @@ bool CsmSelect::KeyReleasedEvent(smKeyContext* keyContext)
 				--selectedItemIndex;
 			return true;
 		case s3eKeyDown:
-			if (selectedItemIndex < (int32)childItems.GetSize()-1)
+			if (selectedItemIndex < (int32)childItems.size()-1)
 				++selectedItemIndex;
 			return true;
 		default:
@@ -172,10 +171,9 @@ void CsmSelect::PrepareChildItems(smItemContext* renderContext, const CIwSVec2& 
 		int16 contentWidth = recommendedSize.x - GetContentOffsetLeft()-GetContentOffsetRight();
 		size.x = recommendedSize.x;
 		size.y = 0;
-		if (selectedItemIndex >= 0 && selectedItemIndex < (int32)childItems.GetSize())
+		if (selectedItemIndex >= 0 && selectedItemIndex < (int32)childItems.size())
 		{
-			CIwManaged** i = childItems.GetBegin()+selectedItemIndex;
-			CsmItem* item = static_cast<CsmItem*>(*i);
+			CsmItem* item = childItems[selectedItemIndex];
 			item->Prepare(renderContext,CIwSVec2(contentWidth, recommendedSize.y));
 			size.y += item->GetSize().y;
 		}
@@ -190,10 +188,9 @@ void CsmSelect::RenderChildren(smItemContext* renderContext)
 	}
 	else
 	{
-		if (selectedItemIndex >= 0 && selectedItemIndex < (int32)childItems.GetSize())
+		if (selectedItemIndex >= 0 && selectedItemIndex < (int32)childItems.size())
 		{
-			CIwManaged** i = childItems.GetBegin()+selectedItemIndex;
-			CsmItem* item = static_cast<CsmItem*>(*i);
+			CsmItem* item = childItems[selectedItemIndex];
 			item->Render(renderContext);
 		}
 	}

@@ -13,18 +13,56 @@ CsmOsmXApiRequest::CsmOsmXApiRequest()
 }
 CsmOsmXApiRequest::~CsmOsmXApiRequest()
 {
+	Clear();
+}
+void CsmOsmXApiRequest::Clear()
+{
+	nodes.Delete();
+	ways.Delete();
+}
+//Get scriptable class declaration
+CsmScriptableClassDeclaration* CsmOsmNode::GetClassDescription()
+{
+	static  TsmScriptableClassDeclaration<CsmOsmNode> d (0, "CsmOsmNode",
+		ScriptTraits::Method("GetLongitude", &CsmOsmNode::GetLongitude),
+		ScriptTraits::Method("GetLatitude", &CsmOsmNode::GetLatitude),
+		ScriptTraits::Method("GetTag", &CsmOsmNode::GetTag),
+			0);
+	return &d;
+}
+//Get scriptable class declaration
+CsmScriptableClassDeclaration* CsmOsmWay::GetClassDescription()
+{
+	static  TsmScriptableClassDeclaration<CsmOsmWay> d (0, "CsmOsmWay",
+		ScriptTraits::Method("GetTag", &CsmOsmWay::GetTag),
+			0);
+	return &d;
+}
+
+//Get scriptable class declaration
+CsmScriptableClassDeclaration* CsmOsmTag::GetClassDescription()
+{
+	static  TsmScriptableClassDeclaration<CsmOsmTag> d (0, "CsmOsmTag",
+		ScriptTraits::Method("Is", &CsmOsmTag::Is),
+			0);
+	return &d;
 }
 
 //Get scriptable class declaration
 CsmScriptableClassDeclaration* CsmOsmXApiRequest::GetClassDescription()
 {
-	static  TsmScriptableClassDeclaration<CsmOsmXApiRequest> d ("CsmOsmXApiRequest",
+	static  TsmScriptableClassDeclaration<CsmOsmXApiRequest> d (0, "CsmOsmXApiRequest",
 			ScriptTraits::Method("RequestArea", &CsmOsmXApiRequest::RequestArea),
+			ScriptTraits::Method("RequestBuildingsInArea", &CsmOsmXApiRequest::RequestBuildingsInArea),
+			ScriptTraits::Method("RequestNodesInArea", &CsmOsmXApiRequest::RequestNodesInArea),
 			ScriptTraits::Method("Create", &CsmOsmXApiRequest::Create),
 			ScriptTraits::Method("Destroy", &CsmOsmXApiRequest::Destroy),
 			ScriptTraits::Method("Perform", &CsmOsmXApiRequest::Perform),
 			ScriptTraits::Method("GetNumNodes", &CsmOsmXApiRequest::GetNumNodes),
+			ScriptTraits::Method("GetNodeAt", &CsmOsmXApiRequest::GetNodeAt),
 			ScriptTraits::Method("GetNumWays", &CsmOsmXApiRequest::GetNumWays),
+			ScriptTraits::Method("GetWayAt", &CsmOsmXApiRequest::GetWayAt),
+			
 			0);
 	return &d;
 }
@@ -32,10 +70,16 @@ CsmOsmXApiRequest* CsmOsmXApiRequest::Create(){return new CsmOsmXApiRequest(); }
 void CsmOsmXApiRequest::Destroy(CsmOsmXApiRequest*r){delete r; };
 
 
+void CsmOsmXApiRequest::Request(const char* query)
+{
+	std::stringstream s; s << GetBaseUrl();
+	s << query;
+	request.SetUrl(s.str().c_str());
+}
 void CsmOsmXApiRequest::RequestArea(float leftLon, float bottomLat, float rightLon, float topLat)
 {
 	std::stringstream s; s << GetBaseUrl();
-	s << "map?bbox=";
+	s << "*[bbox=";
 	s << leftLon;
 	s << ",";
 	s << bottomLat;
@@ -43,10 +87,75 @@ void CsmOsmXApiRequest::RequestArea(float leftLon, float bottomLat, float rightL
 	s << rightLon;
 	s << ",";
 	s << topLat;
+	s << "]";
+	request.SetUrl(s.str().c_str());
+}
+void CsmOsmXApiRequest::RequestAmenitiesInArea(const char* a, float leftLon, float bottomLat, float rightLon, float topLat)
+{
+	std::stringstream s; s << GetBaseUrl();
+	s << "node[amenity=";
+	if (a)
+		while (*a)
+		{
+			switch (*a)
+			{
+			case '|': s << "\\|"; break;
+			case '[': s << "\\["; break;
+			case ']': s << "\\]"; break;
+			case '*': s << "\\*"; break;
+			case '/': s << "\\/"; break;
+			case '=': s << "\\="; break;
+			case '(': s << "\\("; break;
+			case ')': s << "\\)"; break;
+			case '\\': s << "\\\\"; break;
+			default: s << *a; break;
+			}
+			++a;
+		}
+	else
+		s << "*";
+	s << "][bbox=";
+	s << leftLon;
+	s << ",";
+	s << bottomLat;
+	s << ",";
+	s << rightLon;
+	s << ",";
+	s << topLat;
+	s << "]";
+	request.SetUrl(s.str().c_str());
+}
+void CsmOsmXApiRequest::RequestNodesInArea(float leftLon, float bottomLat, float rightLon, float topLat)
+{
+	std::stringstream s; s << GetBaseUrl();
+	s << "node[bbox=";
+	s << leftLon;
+	s << ",";
+	s << bottomLat;
+	s << ",";
+	s << rightLon;
+	s << ",";
+	s << topLat;
+	s << "]";
+	request.SetUrl(s.str().c_str());
+}
+void CsmOsmXApiRequest::RequestBuildingsInArea(float leftLon, float bottomLat, float rightLon, float topLat)
+{
+	std::stringstream s; s << GetBaseUrl();
+	s << "way[building=*][bbox=";
+	s << leftLon;
+	s << ",";
+	s << bottomLat;
+	s << ",";
+	s << rightLon;
+	s << ",";
+	s << topLat;
+	s << "]";
 	request.SetUrl(s.str().c_str());
 }
 void CsmOsmXApiRequest::Perform()
 {
+	Clear();
 	request.SetTimeout(120);
 	request.Perform("Open Street Map", "Please wait...");
 
@@ -54,6 +163,7 @@ void CsmOsmXApiRequest::Perform()
 	{
 		return;
 	}
+
 	pugi::xml_document doc;
 	doc.load_buffer(request.GetInputBuffer(), request.GetInputBufferSize());
 	pugi::xml_node osm = doc.child("osm");
@@ -61,17 +171,34 @@ void CsmOsmXApiRequest::Perform()
 	{
 		if (!stricmp("node",osm_child.name()))
 		{
-			nodes.push_back();
-			CsmOsmNode & n = nodes.back();
+			nodes.push_back(new CsmOsmNode());
+			CsmOsmNode & n = *nodes.back();
 			n.id = osm_child.attribute("id").as_int();
 			n.version = osm_child.attribute("version").as_int();
 			n.uid = osm_child.attribute("uid").as_int();
-			n.lat = osm_child.attribute("lat").as_float();
-			n.lon = osm_child.attribute("lon").as_float();
+			n.SetLatitude(osm_child.attribute("lat").as_float());
+			n.SetLongitude(osm_child.attribute("lon").as_float());
+
+			for (pugi::xml_node tag = osm_child.first_child(); tag; tag = tag.next_sibling())
+			{
+				if (!stricmp("tag",tag.name()))
+				{
+					n.AddTag(tag.attribute("k").value(),tag.attribute("v").value());
+				}
+			}
 		}
 		else if (!stricmp("way",osm_child.name()))
 		{
-			CsmOsmWay w;
+			ways.push_back(new CsmOsmWay());
+			CsmOsmWay & w = *ways.back();
+
+			for (pugi::xml_node tag = osm_child.first_child(); tag; tag = tag.next_sibling())
+			{
+				if (!stricmp("tag",tag.name()))
+				{
+					w.AddTag(tag.attribute("k").value(),tag.attribute("v").value());
+				}
+			}
 		}
 		else
 		{

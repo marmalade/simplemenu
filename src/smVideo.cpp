@@ -12,7 +12,7 @@ namespace SimpleMenu
 //Get scriptable class declaration
 CsmScriptableClassDeclaration* CsmVideo::GetClassDescription()
 {
-	static  TsmScriptableClassDeclaration<CsmVideo> d ("CsmVideo",
+	static  TsmScriptableClassDeclaration<CsmVideo> d (0, "CsmVideo",
 		ScriptTraits::Method("IsAvailable", &CsmVideo::IsAvailable),
 		ScriptTraits::Method("PlayFile", &CsmVideo::PlayFile),
 			0);

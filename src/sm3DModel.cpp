@@ -20,7 +20,7 @@ IW_MANAGED_IMPLEMENT(Csm3DModel);
 //Get scriptable class declaration
 CsmScriptableClassDeclaration* Csm3DModel::GetClassDescription()
 {
-	static  TsmScriptableClassDeclaration<Csm3DModel> d ("Csm3DModel",
+	static  TsmScriptableClassDeclaration<Csm3DModel> d (CsmItem::GetClassDescription(), "Csm3DModel",
 			//ScriptTraits::Method("GetRoot", &Csm3DModel::GetRoot),
 			0);
 	return &d;

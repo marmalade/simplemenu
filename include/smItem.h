@@ -3,6 +3,7 @@
 #include <IwResManager.h>
 #include <IwManagedList.h>
 
+#include <smManagedList.h>
 #include <smInput.h>
 #include <fthFont.h>
 #include <smStyle.h>
@@ -39,11 +40,18 @@ namespace SimpleMenu
 		virtual void Send(){}
 	};
 
+	class CsmItemList: public TsmManagedList<CsmItem>
+	{
+		
+	public:
+		
+	};
+
 
 	class CsmItem : public CIwManaged
 	{
 	protected:
-		CIwManagedList childItems;
+		CsmItemList childItems;
 		CIwSVec2 origin;
 		CIwSVec2 size;
 		uint32 styleClass;
@@ -129,7 +137,7 @@ namespace SimpleMenu
 		inline CsmMenu*GetRoot()const{return root;}
 		inline CsmItem*GetParent()const{return parent;}
 		inline CsmItem*GetChildAt(int i)const{return static_cast<CsmItem*>(childItems[i]);}
-		inline int GetChildItemsCount()const{return (int)childItems.GetSize();}
+		inline int GetChildItemsCount()const{return (int)childItems.size();}
 
 		//Finds an active item in children
 		virtual CsmItem* FindActiveItemAt(const CIwVec2 & item);
@@ -146,7 +154,7 @@ namespace SimpleMenu
 		virtual bool VisitForward(IsmVisitor* visitor);
 		virtual bool VisitBackward(IsmVisitor* visitor);
 
-		void InitTree(CsmMenu*,CsmItem*);
+		virtual void OnAttachToMenu(CsmMenu*,CsmItem*);
 		void AddItem(CsmItem* item);
 		CsmTextBlock* AddTextBlock(const char* text);
 		void EvalUpdate();

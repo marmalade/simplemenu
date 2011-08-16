@@ -8,10 +8,20 @@ files
 	["src"]
 	(src)
 	smConfig.cpp
+	smConfigCheckbox.cpp
+	smConfigSelect.cpp
+	smConfigSlider.cpp
+	smConfigSwitch.cpp
+	smConfigTextBox.cpp
 
 	["include"]
 	(include)
 	smConfig.h
+	smConfigCheckbox.h
+	smConfigSelect.h
+	smConfigSlider.h
+	smConfigSwitch.h
+	smConfigTextBox.h 
 }
 
 packages

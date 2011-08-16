@@ -31,7 +31,7 @@ CsmCurlImageSource::~CsmCurlImageSource()
 //Get scriptable class declaration
 CsmScriptableClassDeclaration* CsmCurlImageSource::GetClassDescription()
 {
-	static  TsmScriptableClassDeclaration<CsmCurlImageSource> d ("CsmCurlImageSource",
+	static  TsmScriptableClassDeclaration<CsmCurlImageSource> d (0, "CsmCurlImageSource",
 			//ScriptTraits::Method("GetRoot", &CsmCurlImageSource::GetRoot),
 			0);
 	return &d;

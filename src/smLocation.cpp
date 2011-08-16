@@ -21,7 +21,7 @@ namespace SimpleMenu
 //Get scriptable class declaration
 CsmScriptableClassDeclaration* CsmLocation::GetClassDescription()
 {
-	static  TsmScriptableClassDeclaration<CsmLocation> d ("CsmLocation",
+	static  TsmScriptableClassDeclaration<CsmLocation> d (0, "CsmLocation",
 		ScriptTraits::Method("IsAvailable", &CsmLocation::IsAvailable),
 		ScriptTraits::Method("GetLatitude", &CsmLocation::GetLatitude),
 		ScriptTraits::Method("GetLongitude", &CsmLocation::GetLongitude),

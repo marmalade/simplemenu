@@ -90,7 +90,7 @@ namespace SimpleMenu
 
 	CsmScriptableClassDeclaration* smGetClassDescription()
 	{
-		static  TsmScriptableClassDeclaration<CsmUtils> d ("CsmUtils",
+		static  TsmScriptableClassDeclaration<CsmUtils> d (0, "CsmUtils",
 			ScriptTraits::Method("CloseMenu", &CsmUtils::CloseMenu),
 			ScriptTraits::Method("CloseAllMenus", &CsmUtils::CloseAllMenus),
 			ScriptTraits::Method("GetDPI", &CsmUtils::GetDPI),
@@ -125,34 +125,54 @@ void SimpleMenu::smInit()
 	IwGetResManager()->AddHandler(new CsmStyleSheetResHandler);
 	#endif
 
-	IW_CLASS_REGISTER(CsmMenu);
-	IW_CLASS_REGISTER(CsmBackground);
-	IW_CLASS_REGISTER(CsmButton);
-	IW_CLASS_REGISTER(CsmClickable);
-	IW_CLASS_REGISTER(CsmImage);
-	IW_CLASS_REGISTER(CsmImageTexture);
-	IW_CLASS_REGISTER(CsmSlider);
-	IW_CLASS_REGISTER(CsmCanvas);
-	IW_CLASS_REGISTER(CsmGallery);
-	IW_CLASS_REGISTER(CsmItem);
-	IW_CLASS_REGISTER(CsmTextBlock);
-	IW_CLASS_REGISTER(CsmTextBox);
-	IW_CLASS_REGISTER(CsmStyleSheet);
-	IW_CLASS_REGISTER(CsmSelect);
-	IW_CLASS_REGISTER(CsmCheckbox);
-	IW_CLASS_REGISTER(CsmSwitch);
-	IW_CLASS_REGISTER(CsmRow);
-	IW_CLASS_REGISTER(CsmGrid);
-	IW_CLASS_REGISTER(CsmFloatingPanel);
+	 IW_CLASS_REGISTER(CsmMenu);
+	 IW_CLASS_REGISTER(CsmBackground);
+	 IW_CLASS_REGISTER(CsmButton);
+	 IW_CLASS_REGISTER(CsmCanvas);
+	 IW_CLASS_REGISTER(CsmCheckbox);
+	 IW_CLASS_REGISTER(CsmClickable);
+	 IW_CLASS_REGISTER(CsmFloatingPanel);
+	 IW_CLASS_REGISTER(CsmGallery);
+	 IW_CLASS_REGISTER(CsmGrid);
+	 IW_CLASS_REGISTER(CsmImage);
+	 IW_CLASS_REGISTER(CsmImageTexture);
+	 IW_CLASS_REGISTER(CsmItem);
+	 IW_CLASS_REGISTER(CsmRow);
+	 IW_CLASS_REGISTER(CsmSelect);
+	 IW_CLASS_REGISTER(CsmSlider);
+	 IW_CLASS_REGISTER(CsmStyleSheet);
+	 IW_CLASS_REGISTER(CsmSwitch);
+	 IW_CLASS_REGISTER(CsmTextBlock);
+	 IW_CLASS_REGISTER(CsmTextBox);
+
 
 	toe_scriptClassDeclarations = new CIwArray<CsmScriptableClassDeclaration*>;
+
 	smRegisterClass(CsmMenu::GetClassDescription());
 	smRegisterClass(CsmButton::GetClassDescription());
+	smRegisterClass(CsmCanvas::GetClassDescription());
+	smRegisterClass(CsmCheckbox::GetClassDescription());
 	smRegisterClass(CsmClickable::GetClassDescription());
+	smRegisterClass(CsmFloatingPanel::GetClassDescription());
+	smRegisterClass(CsmGallery::GetClassDescription());
+	smRegisterClass(CsmGrid::GetClassDescription());
 	smRegisterClass(CsmImage::GetClassDescription());
 	smRegisterClass(CsmItem::GetClassDescription());
+	smRegisterClass(CsmRow::GetClassDescription());
+	smRegisterClass(CsmSelect::GetClassDescription());
+	smRegisterClass(CsmSlider::GetClassDescription());
+	smRegisterClass(CsmSwitch::GetClassDescription());
+	smRegisterClass(CsmTerminalItem::GetClassDescription());
 	smRegisterClass(CsmTextBlock::GetClassDescription());
+	smRegisterClass(CsmTextBox::GetClassDescription());
 	smRegisterClass(smGetClassDescription());
+
+
+
+
+
+
+
 
 	
 }

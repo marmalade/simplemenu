@@ -12,7 +12,7 @@ using namespace SimpleMenu;
 
 namespace SimpleMenu
 {
-	
+	CsmItem* CsmItemCreate() {return new CsmItem();}
 }
 
 //Instantiate the default factory function for a named class 
@@ -41,13 +41,15 @@ CsmItem::~CsmItem()
 //Get scriptable class declaration
 CsmScriptableClassDeclaration* CsmItem::GetClassDescription()
 {
-	static  TsmScriptableClassDeclaration<CsmItem> d ("CsmItem",
+	static  TsmScriptableClassDeclaration<CsmItem> d (0, "CsmItem",
 			ScriptTraits::Method("GetRoot", &CsmItem::GetRoot),
 			ScriptTraits::Method("GetParent", &CsmItem::GetParent),
 			ScriptTraits::Method("AddTextBlock", &CsmItem::AddTextBlock),
 			ScriptTraits::Method("GetChildAt", &CsmItem::GetChildAt),
 			ScriptTraits::Method("GetChildItemsCount", &CsmItem::GetChildItemsCount),
-			
+			ScriptTraits::Method("Create", CsmItemCreate),
+			ScriptTraits::Method("SetStyleClass", &CsmItem::SetStyleClass),
+			ScriptTraits::Method("AddItem", &CsmItem::AddItem),
 			0);
 	return &d;
 }
@@ -74,7 +76,7 @@ void CsmItem::EvalUpdate()
 //Animate item
 void CsmItem::Animate(iwfixed timespan)
 {
-	for (CIwManaged** i = childItems.GetBegin(); i!=childItems.GetEnd(); ++i)
+	for (CsmItem** i = childItems.begin(); i!=childItems.end(); ++i)
 	{
 		CsmItem* item = static_cast<CsmItem*>(*i);
 		item->Animate(timespan);
@@ -88,7 +90,7 @@ void CsmItem::Prepare(smItemContext* renderContext, const CIwSVec2& recommendedS
 	CombineStyle(renderContext);
 	smItemContext context = *renderContext;
 	context.parentStyle = &combinedStyle;
-	if (childItems.GetSize() > 0)
+	if (childItems.size() > 0)
 	{
 		PrepareChildItems(&context, recommendedSize);
 		RearrangeChildItems();
@@ -100,7 +102,7 @@ void CsmItem::PrepareChildItems(smItemContext* context, const CIwSVec2& recommen
 	size.x = recommendedSize.x;
 	size.y = 0;
 	CIwSVec2 chRecSize (contentWidth, recommendedSize.y);
-	for (CIwManaged** i = childItems.GetBegin(); i!=childItems.GetEnd(); ++i)
+	for (CsmItem** i = childItems.begin(); i!=childItems.end(); ++i)
 	{
 		CsmItem* item = static_cast<CsmItem*>(*i);
 		item->Prepare(context,chRecSize);
@@ -113,21 +115,21 @@ void CsmItem::RearrangeChildItems()
 	CIwSVec2 topLeft = GetOrigin();
 	topLeft.x += GetContentOffsetLeft();
 	topLeft.y += GetContentOffsetTop();
-	for (CIwManaged** i = childItems.GetBegin(); i!=childItems.GetEnd(); ++i)
+	for (CsmItem** i = childItems.begin(); i!=childItems.end(); ++i)
 	{
 		CsmItem* item = static_cast<CsmItem*>(*i);
 		item->SetOrigin(topLeft);
 		topLeft.y += item->GetSize().y;
 	}
 }
-void CsmItem::InitTree(CsmMenu*r,CsmItem*p)
+void CsmItem::OnAttachToMenu(CsmMenu*r,CsmItem*p)
 {
 	root = r;
 	parent = p;
-	for (CIwManaged** i = childItems.GetBegin(); i!=childItems.GetEnd(); ++i)
+	for (CsmItem** i = childItems.begin(); i!=childItems.end(); ++i)
 	{
 		CsmItem* item = static_cast<CsmItem*>(*i);
-		item->InitTree(r,this);
+		item->OnAttachToMenu(r,this);
 	}
 }
 bool CsmItem::IsVisible(smItemContext* renderContext)
@@ -390,7 +392,7 @@ void CsmItem::Render(smItemContext* renderContext)
 }
 void CsmItem::RenderChildren(smItemContext* renderContext)
 {
-	for (CIwManaged** i = childItems.GetBegin(); i!=childItems.GetEnd(); ++i)
+	for (CsmItem** i = childItems.begin(); i!=childItems.end(); ++i)
 	{
 		CsmItem* item = static_cast<CsmItem*>(*i);
 		item->Render(renderContext);
@@ -426,7 +428,7 @@ bool CsmItem::VisitForward(IsmVisitor* visitor)
 {
 	if (!visitor->Visited(this))
 		return false;
-	for (CIwManaged** i = childItems.GetBegin(); i!=childItems.GetEnd(); ++i)
+	for (CsmItem** i = childItems.begin(); i!=childItems.end(); ++i)
 	{
 		CsmItem* item = static_cast<CsmItem*>(*i);
 		if (!item->VisitForward(visitor))
@@ -436,8 +438,8 @@ bool CsmItem::VisitForward(IsmVisitor* visitor)
 }
 bool CsmItem::VisitBackward(IsmVisitor* visitor)
 {
-	CIwManaged** i = childItems.GetEnd();
-	for (; i!=childItems.GetBegin();)
+	CsmItem** i = childItems.end();
+	for (; i!=childItems.begin();)
 	{
 		--i;
 		CsmItem* item = static_cast<CsmItem*>(*i);
@@ -455,7 +457,7 @@ CsmItem* CsmItem::FindActiveItemAt(const CIwVec2 & pos)
 		if (pos.x >= origin.x && pos.y >= origin.y && pos.x < origin.x+size.x && pos.y < origin.y+size.y)
 			return this;
 	}
-	for (CIwManaged** i = childItems.GetBegin(); i!=childItems.GetEnd(); ++i)
+	for (CsmItem** i = childItems.begin(); i!=childItems.end(); ++i)
 	{
 		CsmItem* item = static_cast<CsmItem*>(*i);
 		CsmItem* foundItem = item->FindActiveItemAt(pos);
@@ -502,14 +504,14 @@ void CsmItem::SendLazyEvent(CsmLazyEvent*e)
 }
 void CsmItem::AddItem(CsmItem* item)
 {
-	childItems.Push(item);
+	childItems.push_back(item);
+	item->OnAttachToMenu(GetRoot(), this);
 }
 CsmTextBlock* CsmItem::AddTextBlock(const char* text)
 {
 	CsmTextBlock* tb = new CsmTextBlock();
 	tb->SetText(text);
 	AddItem(tb);
-	tb->InitTree(GetRoot(), this);
 	return tb;
 }
 
@@ -556,7 +558,7 @@ bool	CsmItem::ParseAttribute(CIwTextParserITX* pParser, const char* pAttrName)
 		uint32 t;
 		pParser->ReadStringHash(&t);
 		CsmImage* ti = new CsmImage(t);
-		childItems.Add(ti);
+		childItems.push_back(ti);
 		return true;
 	}
 	if (!stricmp(pAttrName, "onupdate"))

@@ -9,6 +9,7 @@ namespace SimpleMenu
 
 	class CsmScriptableMethodDeclaration
 	{
+	protected:
 		const char* m_name;
 	public:
 		CsmScriptableMethodDeclaration(const char* name):m_name(name) {}
@@ -16,6 +17,7 @@ namespace SimpleMenu
 		inline const char* GetMethodName() {return m_name;};
 		virtual void Call(IsmScriptProvider*,CsmScriptableClassDeclaration*,void*)=0;
 		virtual bool IsStatic() const {return false;}
+		virtual CsmScriptableMethodDeclaration* Clone()=0;
 	};
 
 	class CsmScriptableClassDeclaration
@@ -23,6 +25,8 @@ namespace SimpleMenu
 	protected:
 		CIwArray<CsmScriptableMethodDeclaration*> m_methods;
 	public:
+		void Inherit(CsmScriptableClassDeclaration*);
+		void AddMethod(CsmScriptableMethodDeclaration*m) { m_methods.push_back(m);}
 		virtual void Close() { for (CIwArray<CsmScriptableMethodDeclaration*>::iterator i=m_methods.begin(); i!=m_methods.end(); ++i) delete *i; m_methods.clear_optimised(); };
 		virtual ~CsmScriptableClassDeclaration() {Close();}
 		virtual const char* GetClassName() =0;

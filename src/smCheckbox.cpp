@@ -44,13 +44,12 @@ void CsmCheckbox::ApplyChildStyle(smItemContext* renderContext, CsmItem*child)
 
 void CsmCheckbox::RearrangeChildItems()
 {
-	if (selectedItemIndex >= 0 && selectedItemIndex < (int32)childItems.GetSize())
+	if (selectedItemIndex >= 0 && selectedItemIndex < (int32)childItems.size())
 	{
 		CIwSVec2 topLeft = GetOrigin();
 		topLeft.x += GetContentOffsetLeft();
 		topLeft.y += GetContentOffsetTop();
-		CIwManaged** i = childItems.GetBegin()+selectedItemIndex;
-		CsmItem* item = static_cast<CsmItem*>(*i);
+		CsmItem* item = *(childItems.begin()+selectedItemIndex);
 		item->SetOrigin(topLeft);
 	}
 }
@@ -62,7 +61,7 @@ void CsmCheckbox::TouchReleased(smTouchContext* smTouchContext)
 {
 	CsmItem::TouchReleased(smTouchContext);
 	++selectedItemIndex;
-	if (selectedItemIndex >= (int32)childItems.GetSize())
+	if (selectedItemIndex >= (int32)childItems.size())
 		selectedItemIndex = 0;
 }
 void CsmCheckbox::TouchCanceled(smTouchContext* smTouchContext)
@@ -83,10 +82,9 @@ void CsmCheckbox::PrepareChildItems(smItemContext* renderContext, const CIwSVec2
 	int16 contentWidth = recommendedSize.x - GetContentOffsetLeft()-GetContentOffsetRight();
 	size.x = recommendedSize.x;
 	size.y = 0;
-	if (selectedItemIndex >= 0 && selectedItemIndex < (int32)childItems.GetSize())
+	if (selectedItemIndex >= 0 && selectedItemIndex < (int32)childItems.size())
 	{
-		CIwManaged** i = childItems.GetBegin()+selectedItemIndex;
-		CsmItem* item = static_cast<CsmItem*>(*i);
+		CsmItem* item = childItems[selectedItemIndex];
 		item->Prepare(renderContext,CIwSVec2(contentWidth, recommendedSize.y));
 		size.y += item->GetSize().y;
 	}
@@ -94,10 +92,8 @@ void CsmCheckbox::PrepareChildItems(smItemContext* renderContext, const CIwSVec2
 }
 void CsmCheckbox::RenderChildren(smItemContext* renderContext)
 {
-	if (selectedItemIndex >= 0 && selectedItemIndex < (int32)childItems.GetSize())
+	if (selectedItemIndex >= 0 && selectedItemIndex < (int32)childItems.size())
 	{
-		CIwManaged** i = childItems.GetBegin()+selectedItemIndex;
-		CsmItem* item = static_cast<CsmItem*>(*i);
-		item->Render(renderContext);
+		childItems[selectedItemIndex]->Render(renderContext);
 	}
 }

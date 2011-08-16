@@ -18,7 +18,7 @@ namespace SimpleMenu
 		std::string onLoad;
 		std::string onUpdate;
 	protected:
-		CIwManagedList childItems;
+		CsmItemList childItems;
 		uint32 styleSheetHash;
 		CsmStyleSettings styleSettings;
 		CsmStyle style;
@@ -65,9 +65,9 @@ namespace SimpleMenu
 
 		void AlignBlocks();
 
-		CsmItem* GetContent() const { return (childItems.GetSize() > 0)?static_cast<CsmItem*>(childItems[0]):(CsmItem*)0;}
-		CsmItem* GetHeader() const { return (childItems.GetSize() > 1)?static_cast<CsmItem*>(childItems[1]):(CsmItem*)0;}
-		CsmItem* GetFooter() const { return (childItems.GetSize() > 2)?static_cast<CsmItem*>(childItems[2]):(CsmItem*)0;}
+		CsmItem* GetContent() const { return (childItems.size() > 0)?static_cast<CsmItem*>(childItems[0]):(CsmItem*)0;}
+		CsmItem* GetHeader() const { return (childItems.size() > 1)?static_cast<CsmItem*>(childItems[1]):(CsmItem*)0;}
+		CsmItem* GetFooter() const { return (childItems.size() > 2)?static_cast<CsmItem*>(childItems[2]):(CsmItem*)0;}
 		CsmItem* GetItemById(const char*) const;
 		CsmItem* GetItemByHash(uint32 h) const;
 		CsmItem* FindActiveItemAt(const CIwVec2 & coord);

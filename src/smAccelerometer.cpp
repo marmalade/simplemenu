@@ -11,7 +11,7 @@ namespace SimpleMenu
 //Get scriptable class declaration
 CsmScriptableClassDeclaration* CsmAccelerometer::GetClassDescription()
 {
-	static  TsmScriptableClassDeclaration<CsmAccelerometer> d ("CsmAccelerometer",
+	static  TsmScriptableClassDeclaration<CsmAccelerometer> d (0, "CsmAccelerometer",
 		ScriptTraits::Method("IsAvailable", &CsmAccelerometer::IsAvailable),
 		ScriptTraits::Method("GetX", &CsmAccelerometer::GetX),
 		ScriptTraits::Method("GetY", &CsmAccelerometer::GetY),

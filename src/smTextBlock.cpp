@@ -75,8 +75,7 @@ uint32 CsmTextBlock::GetElementNameHash()
 //Get scriptable class declaration
 CsmScriptableClassDeclaration* CsmTextBlock::GetClassDescription()
 {
-	static  TsmScriptableClassDeclaration<CsmTextBlock> d ("CsmTextBlock",
-			ScriptTraits::Method("GetRoot", &CsmTextBlock::GetRoot),
+	static  TsmScriptableClassDeclaration<CsmTextBlock> d (CsmTerminalItem::GetClassDescription(), "CsmTextBlock",
 			ScriptTraits::Method("GetText", &CsmTextBlock::GetText),
 			ScriptTraits::Method("SetText", &CsmTextBlock::SetText),
 			0);

@@ -4,6 +4,12 @@
 #include "smConfig.h"
 #include "simplemenu.h"
 
+#include "smConfigSelect.h"
+#include "smConfigSlider.h"
+#include "smConfigSwitch.h"
+#include "smConfigCheckbox.h"
+#include "smConfigTextBox.h"
+
 using namespace SimpleMenu;
 
 namespace SimpleMenu
@@ -54,6 +60,13 @@ void SimpleMenu::smConfigInit(smConfigStorageType t)
 	smConfigType = t;
 	smInit();
 	smRegisterClass(CsmConfig::GetClassDescription());
+
+	IW_CLASS_REGISTER(CsmConfigSelect);
+	IW_CLASS_REGISTER(CsmConfigSwitch);
+	IW_CLASS_REGISTER(CsmConfigSlider);
+	IW_CLASS_REGISTER(CsmConfigCheckbox);
+	IW_CLASS_REGISTER(CsmConfigTextBox);
+
 	CsmConfig::Load();
 }
 
@@ -78,7 +91,7 @@ void SimpleMenu::smConfigTerminate()
 //Get scriptable class declaration
 CsmScriptableClassDeclaration* CsmConfig::GetClassDescription()
 {
-	static  TsmScriptableClassDeclaration<CsmConfig> d ("CsmConfig",
+	static  TsmScriptableClassDeclaration<CsmConfig> d (0, "CsmConfig",
 			ScriptTraits::Method("GetInteger", &CsmConfig::GetInteger),
 			ScriptTraits::Method("GetFloat", &CsmConfig::GetFloat),
 			ScriptTraits::Method("GetString", &CsmConfig::GetString),

@@ -21,10 +21,7 @@ IW_MANAGED_IMPLEMENT(CsmImage);
 //Get scriptable class declaration
 CsmScriptableClassDeclaration* CsmImage::GetClassDescription()
 {
-	static  TsmScriptableClassDeclaration<CsmImage> d ("CsmImage",
-			ScriptTraits::Method("GetRoot", &CsmImage::GetRoot),
-			ScriptTraits::Method("GetChildAt", &CsmImage::GetChildAt),
-			ScriptTraits::Method("GetChildItemsCount", &CsmImage::GetChildItemsCount),
+	static  TsmScriptableClassDeclaration<CsmImage> d (CsmTerminalItem::GetClassDescription(), "CsmImage",
 			0);
 	return &d;
 }

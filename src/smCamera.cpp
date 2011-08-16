@@ -11,7 +11,7 @@ namespace SimpleMenu
 //Get scriptable class declaration
 CsmScriptableClassDeclaration* CsmCamera::GetClassDescription()
 {
-	static  TsmScriptableClassDeclaration<CsmCamera> d ("CsmCamera",
+	static  TsmScriptableClassDeclaration<CsmCamera> d (0, "CsmCamera",
 		ScriptTraits::Method("IsAvailable", &CsmCamera::IsAvailable),
 		ScriptTraits::Method("SetQualityLow", &CsmCamera::SetQualityLow),
 		ScriptTraits::Method("SetQualityMedium", &CsmCamera::SetQualityMedium),

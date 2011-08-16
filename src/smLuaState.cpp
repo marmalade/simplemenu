@@ -1,6 +1,7 @@
 #include <IwTextParserITX.h>
 #include <IwResManager.h>
 #include <SimpleMenu.h>
+#include <sstream>
 #include "smLuaState.h"
 #include "smLuaScript.h"
 #include "smLua.h"
@@ -369,6 +370,39 @@ void CsmLuaState::RegisterClass(CsmScriptableClassDeclaration* c)
 }
 void CsmLuaState::Eval(const char*s,void* instance, CsmScriptableClassDeclaration*c)
 {
+	/*/
+	static int tmpVarCount = 0;
+
+	++tmpVarCount;
+
+	std::stringstream tmpName; tmpName << "sm_tmp_" << tmpVarCount;
+	std::string tmpNameStr = tmpName.str();
+
+	smLuaStackDump(L);
+	Return(instance, c); --numRes;
+	smLuaStackDump(L);
+	lua_setfield(L,LUA_GLOBALSINDEX, tmpNameStr.c_str());
+	smLuaStackDump(L);
+
+	std::string str = std::string("local self=")+tmpNameStr+"\n"+s;
+	if (!smLuaAssert(L, luaL_loadstring(L, str.c_str())))
+	{
+		if (!smLuaAssert(L, lua_pcall(L, 0, LUA_MULTRET, 0)))
+		{
+			Return(instance,c);
+			--numRes;
+			smLuaAssert(L, lua_pcall(L, 1, LUA_MULTRET, 0));
+		}
+	}
+	else
+	{
+	}
+	ReturnNil(); --numRes;
+	lua_setfield(L,LUA_GLOBALSINDEX, tmpNameStr.c_str());
+
+	--tmpVarCount;
+
+	/*/
 	std::string str = std::string("return function (self)\n")+s+"\nend";
 	if (!smLuaAssert(L, luaL_loadstring(L, str.c_str())))
 	{
@@ -382,7 +416,8 @@ void CsmLuaState::Eval(const char*s,void* instance, CsmScriptableClassDeclaratio
 	else
 	{
 	}
-	//int res = luaL_dostring(L,s);
+	/**/
+	
 }
 #ifdef IW_BUILD_RESOURCES
 

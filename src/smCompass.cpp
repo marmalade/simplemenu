@@ -11,7 +11,7 @@ namespace SimpleMenu
 //Get scriptable class declaration
 CsmScriptableClassDeclaration* CsmCompass::GetClassDescription()
 {
-	static  TsmScriptableClassDeclaration<CsmCompass> d ("CsmCompass",
+	static  TsmScriptableClassDeclaration<CsmCompass> d (0, "CsmCompass",
 		ScriptTraits::Method("IsAvailable", &CsmCompass::IsAvailable),
 		ScriptTraits::Method("GetX", &CsmCompass::GetX),
 		ScriptTraits::Method("GetY", &CsmCompass::GetY),

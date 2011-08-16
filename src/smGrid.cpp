@@ -30,10 +30,7 @@ CsmGrid::~CsmGrid()
 //Get scriptable class declaration
 CsmScriptableClassDeclaration* CsmGrid::GetClassDescription()
 {
-	static  TsmScriptableClassDeclaration<CsmGrid> d ("CsmGrid",
-			ScriptTraits::Method("GetRoot", &CsmGrid::GetRoot),
-			ScriptTraits::Method("GetChildAt", &CsmGrid::GetChildAt),
-			ScriptTraits::Method("GetChildItemsCount", &CsmGrid::GetChildItemsCount),
+	static  TsmScriptableClassDeclaration<CsmGrid> d (CsmItem::GetClassDescription(), "CsmGrid",
 			0);
 	return &d;
 }
@@ -49,7 +46,7 @@ void CsmGrid::PrepareChildItems(smItemContext* context, const CIwSVec2& recommen
 	size.x = recommendedSize.x;
 	size.y = 0;
 	CIwSVec2 chRecSize (contentWidth,recommendedSize.y);
-	for (CIwManaged** i = childItems.GetBegin(); i!=childItems.GetEnd(); ++i)
+	for (CsmItem** i = childItems.begin(); i!=childItems.end(); ++i)
 	{
 		CsmItem* item = static_cast<CsmItem*>(*i);
 		item->Prepare(context,chRecSize);
@@ -64,7 +61,7 @@ void CsmGrid::RearrangeChildItems()
 	CIwSVec2 topLeft = GetOrigin();
 	topLeft.x += GetContentOffsetLeft();
 	topLeft.y += GetContentOffsetTop();
-	for (CIwManaged** i = childItems.GetBegin(); i!=childItems.GetEnd(); ++i)
+	for (CsmItem** i = childItems.begin(); i!=childItems.end(); ++i)
 	{
 		CsmItem* item = static_cast<CsmItem*>(*i);
 		item->SetOrigin(topLeft);

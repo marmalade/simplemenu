@@ -30,7 +30,7 @@ CsmClickable::~CsmClickable()
 //Get scriptable class declaration
 CsmScriptableClassDeclaration* CsmClickable::GetClassDescription()
 {
-	static  TsmScriptableClassDeclaration<CsmClickable> d ("CsmClickable",
+	static  TsmScriptableClassDeclaration<CsmClickable> d (CsmItem::GetClassDescription(), "CsmClickable",
 			ScriptTraits::Method("GetRoot", &CsmClickable::GetRoot),
 			ScriptTraits::Method("GetChildAt", &CsmClickable::GetChildAt),
 			ScriptTraits::Method("GetChildItemsCount", &CsmClickable::GetChildItemsCount),

@@ -70,9 +70,13 @@ void SimpleMenu::smShowMenu(CsmMenu* m, CsmInputFilter* input, IsmScriptProvider
 			break;
 
 
+		m->Update(IW_GEOM_ONE/30);
+
+		if (SimpleMenu::smGetCloseState() == SimpleMenu::SM_CLOSE_ALL)
+			break;
+
 		IwGxClear(IW_GX_DEPTH_BUFFER_F);
 		//IwGxClear(IW_GX_COLOUR_BUFFER_F | IW_GX_DEPTH_BUFFER_F);
-		m->Update(IW_GEOM_ONE/30);
 		m->Render();
 
 		IwGxFlush();

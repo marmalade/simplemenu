@@ -33,10 +33,7 @@ CsmFloatingPanel::~CsmFloatingPanel()
 //Get scriptable class declaration
 CsmScriptableClassDeclaration* CsmFloatingPanel::GetClassDescription()
 {
-	static  TsmScriptableClassDeclaration<CsmFloatingPanel> d ("CsmFloatingPanel",
-			ScriptTraits::Method("GetRoot", &CsmFloatingPanel::GetRoot),
-			ScriptTraits::Method("GetChildAt", &CsmFloatingPanel::GetChildAt),
-			ScriptTraits::Method("GetChildItemsCount", &CsmFloatingPanel::GetChildItemsCount),
+	static  TsmScriptableClassDeclaration<CsmFloatingPanel> d (CsmItem::GetClassDescription(), "CsmFloatingPanel",
 			0);
 	return &d;
 }
@@ -57,7 +54,7 @@ void CsmFloatingPanel::PrepareChildItems(smItemContext* context, const CIwSVec2&
 	size.x = recommendedSize.x;
 	size.y = 0;
 	CIwSVec2 chRecSize (contentWidth,recommendedSize.y);
-	for (CIwManaged** i = childItems.GetBegin(); i!=childItems.GetEnd(); ++i)
+	for (CsmItem** i = childItems.begin(); i!=childItems.end(); ++i)
 	{
 		CsmItem* item = static_cast<CsmItem*>(*i);
 		item->Prepare(context,chRecSize);
@@ -72,7 +69,7 @@ void CsmFloatingPanel::RearrangeChildItems()
 	CIwSVec2 topLeft = GetOrigin();
 	topLeft.x += GetContentOffsetLeft();
 	topLeft.y += GetContentOffsetTop();
-	for (CIwManaged** i = childItems.GetBegin(); i!=childItems.GetEnd(); ++i)
+	for (CsmItem** i = childItems.begin(); i!=childItems.end(); ++i)
 	{
 		CsmItem* item = static_cast<CsmItem*>(*i);
 		item->SetOrigin(topLeft);

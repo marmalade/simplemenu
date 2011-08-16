@@ -30,7 +30,7 @@ CsmCanvas::~CsmCanvas()
 //Get scriptable class declaration
 CsmScriptableClassDeclaration* CsmCanvas::GetClassDescription()
 {
-	static  TsmScriptableClassDeclaration<CsmCanvas> d ("CsmCanvas",
+	static  TsmScriptableClassDeclaration<CsmCanvas> d (CsmItem::GetClassDescription(), "CsmCanvas",
 			ScriptTraits::Method("GetRoot", &CsmCanvas::GetRoot),
 			ScriptTraits::Method("GetChildAt", &CsmCanvas::GetChildAt),
 			ScriptTraits::Method("GetChildItemsCount", &CsmCanvas::GetChildItemsCount),
@@ -54,7 +54,7 @@ void CsmCanvas::PrepareChildItems(smItemContext* context, const CIwSVec2& recomm
 	size.x = recommendedSize.x;
 	size.y = 0;
 	CIwSVec2 chRecSize (contentWidth, recommendedSize.y);
-	for (CIwManaged** i = childItems.GetBegin(); i!=childItems.GetEnd(); ++i)
+	for (CsmItem** i = childItems.begin(); i!=childItems.end(); ++i)
 	{
 		CsmItem* item = static_cast<CsmItem*>(*i);
 		item->Prepare(context,chRecSize);
@@ -69,7 +69,7 @@ void CsmCanvas::RearrangeChildItems()
 	CIwSVec2 topLeft = GetOrigin();
 	topLeft.x += GetContentOffsetLeft();
 	topLeft.y += GetContentOffsetTop();
-	for (CIwManaged** i = childItems.GetBegin(); i!=childItems.GetEnd(); ++i)
+	for (CsmItem** i = childItems.begin(); i!=childItems.end(); ++i)
 	{
 		CsmItem* item = static_cast<CsmItem*>(*i);
 		item->SetOrigin(topLeft);

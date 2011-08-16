@@ -16,10 +16,11 @@
 # Some conditional operations are also permitted, see the
 # S3E documentation for details.
 [s3e]
-MemSize=16777216
+MemSize=33554432
 
 [Util]
-#MemoryBreakpoint=1432
+#MemoryBreakpoint=243
+MemMgrMaxAllocWarning=0
 
 [Trace]
 

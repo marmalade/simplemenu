@@ -74,8 +74,7 @@ void CsmTextBox::Serialise ()
 //Get scriptable class declaration
 CsmScriptableClassDeclaration* CsmTextBox::GetClassDescription()
 {
-	static  TsmScriptableClassDeclaration<CsmTextBox> d ("CsmTextBox",
-			ScriptTraits::Method("GetRoot", &CsmTextBox::GetRoot),
+	static  TsmScriptableClassDeclaration<CsmTextBox> d (CsmTerminalItem::GetClassDescription(), "CsmTextBox",
 			ScriptTraits::Method("GetText", &CsmTextBox::GetText),
 			ScriptTraits::Method("SetText", &CsmTextBox::SetText),
 			0);

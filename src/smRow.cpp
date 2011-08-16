@@ -30,11 +30,11 @@ CsmRow::~CsmRow()
 //Get scriptable class declaration
 CsmScriptableClassDeclaration* CsmRow::GetClassDescription()
 {
-	static  TsmScriptableClassDeclaration<CsmRow> d ("CsmRow",
-			ScriptTraits::Method("GetRoot", &CsmRow::GetRoot),
-			ScriptTraits::Method("GetChildAt", &CsmRow::GetChildAt),
-			ScriptTraits::Method("GetChildItemsCount", &CsmRow::GetChildItemsCount),
-			0);
+	static  TsmScriptableClassDeclaration<CsmRow> d (CsmItem::GetClassDescription(), "CsmRow",
+		//ScriptTraits::Method("GetRoot", &CsmRow::GetRoot));
+		//ScriptTraits::Method("GetChildAt", &CsmRow::GetChildAt));
+		//ScriptTraits::Method("GetChildItemsCount", &CsmRow::GetChildItemsCount));
+		0);
 	return &d;
 }
 
@@ -50,14 +50,14 @@ uint32 CsmRow::GetElementNameHash()
 }
 void CsmRow::PrepareChildItems(smItemContext* context, const CIwSVec2& recommendedSize)
 {
-	if (childItems.GetSize() == 0)
+	if (childItems.size() == 0)
 		return;
 	int16 contentWidth = recommendedSize.x - GetContentOffsetLeft()-GetContentOffsetRight();
 	size.x = recommendedSize.x;
 	size.y = 0;
-	int16 cellWidth = contentWidth/childItems.GetSize();
+	int16 cellWidth = contentWidth/childItems.size();
 	CIwSVec2 chRecSize (cellWidth, recommendedSize.y);
-	for (CIwManaged** i = childItems.GetBegin(); i!=childItems.GetEnd(); ++i)
+	for (CsmItem** i = childItems.begin(); i!=childItems.end(); ++i)
 	{
 		CsmItem* item = static_cast<CsmItem*>(*i);
 		item->Prepare(context,chRecSize);
@@ -69,15 +69,15 @@ void CsmRow::PrepareChildItems(smItemContext* context, const CIwSVec2& recommend
 }
 void CsmRow::RearrangeChildItems()
 {
-	if (childItems.GetSize() == 0)
+	if (childItems.size() == 0)
 		return;
 	CIwSVec2 topLeft = GetOrigin();
 	topLeft.x += GetContentOffsetLeft();
 	topLeft.y += GetContentOffsetTop();
 	int16 contentWidth = size.x - GetContentOffsetLeft()-GetContentOffsetRight();
 	int16 contentHeiht = size.y -GetContentOffsetTop()-GetContentOffsetBottom();
-	int16 cellWidth = contentWidth/childItems.GetSize();
-	for (CIwManaged** i = childItems.GetBegin(); i!=childItems.GetEnd(); ++i)
+	int16 cellWidth = contentWidth/childItems.size();
+	for (CsmItem** i = childItems.begin(); i!=childItems.end(); ++i)
 	{
 		CsmItem* item = static_cast<CsmItem*>(*i);
 		CIwSVec2 alignedPos = topLeft;

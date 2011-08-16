@@ -67,6 +67,39 @@ CsmMenu
 				text "Line 2!"
 			}
 		}
+		CsmItem
+		{
+			styleClass "AREA"
+
+			text "State of the following controls will be saved in configuration file"
+
+			CsmConfigTextBox
+			{
+				config-value "sm-config-textbox"
+			}
+			CsmConfigSelect
+			{
+				config-value "sm-config-select"
+				text "0"
+				text "1"
+				text "2"
+				text "3"
+			}
+			CsmConfigCheckbox
+			{
+				text "off"
+				text "on"
+			}
+			CsmConfigSlider
+			{
+				text "slider"
+			}
+			CsmConfigSwitch
+			{
+				text "switch"
+			}
+
+		}
 	}
 	CsmItem
 	{

@@ -31,10 +31,7 @@ CsmGallery::~CsmGallery()
 //Get scriptable class declaration
 CsmScriptableClassDeclaration* CsmGallery::GetClassDescription()
 {
-	static  TsmScriptableClassDeclaration<CsmGallery> d ("CsmGallery",
-			ScriptTraits::Method("GetRoot", &CsmGallery::GetRoot),
-			ScriptTraits::Method("GetChildAt", &CsmGallery::GetChildAt),
-			ScriptTraits::Method("GetChildItemsCount", &CsmGallery::GetChildItemsCount),
+	static  TsmScriptableClassDeclaration<CsmGallery> d (CsmItem::GetClassDescription(), "CsmGallery",
 			0);
 	return &d;
 }
@@ -64,7 +61,7 @@ void CsmGallery::PrepareChildItems(smItemContext* context, const CIwSVec2& recom
 	
 		carouselPosition = carouselPosition+(desiredPosition-carouselPosition)/2;
 	}
-	for (CIwManaged** i = childItems.GetBegin(); i!=childItems.GetEnd(); ++i)
+	for (CsmItem** i = childItems.begin(); i!=childItems.end(); ++i)
 	{
 		CsmItem* item = static_cast<CsmItem*>(*i);
 		item->Prepare(context,chRecSize);
@@ -81,7 +78,7 @@ void CsmGallery::RearrangeChildItems()
 	topLeft.y += GetContentOffsetTop();
 	int16 contentWidth = size.x - GetContentOffsetLeft()-GetContentOffsetRight();
 	topLeft.x -= carouselPosition*size.x/IW_GEOM_ONE;
-	for (CIwManaged** i = childItems.GetBegin(); i!=childItems.GetEnd(); ++i)
+	for (CsmItem** i = childItems.begin(); i!=childItems.end(); ++i)
 	{
 		CsmItem* item = static_cast<CsmItem*>(*i);
 		item->SetOrigin(topLeft);
@@ -119,8 +116,8 @@ bool CsmGallery::KeyReleasedEvent(smKeyContext* keyContext)
 		return true;
 	case s3eKeyRight:
 		carouselPosition += IW_GEOM_ONE;
-		if (carouselPosition > IW_GEOM_ONE*((int32)childItems.GetSize()-1)) 
-			carouselPosition = IW_GEOM_ONE*(childItems.GetSize()-1);
+		if (carouselPosition > IW_GEOM_ONE*((int32)childItems.size()-1)) 
+			carouselPosition = IW_GEOM_ONE*(childItems.size()-1);
 		return true;
 	default:
 		break;

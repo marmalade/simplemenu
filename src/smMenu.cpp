@@ -101,7 +101,7 @@ CIwMaterial* CsmMenu::GetBlendedMaterial()
 //Get scriptable class declaration
 CsmScriptableClassDeclaration* CsmMenu::GetClassDescription()
 {
-	static  TsmScriptableClassDeclaration<CsmMenu> d ("CsmMenu",
+	static  TsmScriptableClassDeclaration<CsmMenu> d (0, "CsmMenu",
 			ScriptTraits::Method("GetContent", &CsmMenu::GetContent),
 			ScriptTraits::Method("GetHeader", &CsmMenu::GetHeader),
 			ScriptTraits::Method("GetFooter", &CsmMenu::GetFooter),
@@ -121,6 +121,9 @@ void CsmMenu::Serialise ()
 	if (IwSerialiseIsReading())
 	{
 		SetStyleSheetHash(styleSheetHash);
+
+		for (CsmItem** i = childItems.begin(); i!=childItems.end(); ++i)
+			(*i)->OnAttachToMenu(this,0);
 	}
 }
 void CsmMenu::SetStyleSheetHash(uint32 v) 
@@ -267,9 +270,9 @@ void CsmMenu::Update(iwfixed dt)
 		delete e;
 	}
 
-	for (CIwManaged** i = childItems.GetBegin(); i!=childItems.GetEnd(); ++i)
+	for (CsmItem** i = childItems.begin(); i!=childItems.end(); ++i)
 	{
-		CsmItem* item = static_cast<CsmItem*>(*i);
+		CsmItem* item = *i;
 		item->Animate(dt);
 	}
 
@@ -328,7 +331,7 @@ CsmItem* CsmMenu::GetItemByHash(uint32 h) const
 
 bool CsmMenu::VisitForward(IsmVisitor* visitor) const
 {
-	for (CIwManaged** i = childItems.GetBegin(); i!=childItems.GetEnd(); ++i)
+	for (CsmItem** i = childItems.begin(); i!=childItems.end(); ++i)
 	{
 		CsmItem* item = static_cast<CsmItem*>(*i);
 		if (!item->VisitForward(visitor))
@@ -338,8 +341,8 @@ bool CsmMenu::VisitForward(IsmVisitor* visitor) const
 }
 bool CsmMenu::VisitBackward(IsmVisitor* visitor) const
 {
-	CIwManaged** i = childItems.GetEnd();
-	for (; i!=childItems.GetBegin(); )
+	CsmItem** i = childItems.end();
+	for (; i!=childItems.begin(); )
 	{
 		--i;
 		CsmItem* item = static_cast<CsmItem*>(*i);
@@ -351,9 +354,9 @@ bool CsmMenu::VisitBackward(IsmVisitor* visitor) const
 
 CsmItem* CsmMenu::FindActiveItemAt(const CIwVec2 & coord)
 {
-	if (childItems.GetSize() == 0)
+	if (childItems.size() == 0)
 		return 0;
-	CIwManaged** i = childItems.GetEnd();
+	CsmItem** i = childItems.end();
 	do
 	{
 		--i;
@@ -361,7 +364,7 @@ CsmItem* CsmMenu::FindActiveItemAt(const CIwVec2 & coord)
 		CsmItem* foundItem = item->FindActiveItemAt(coord);
 		if (foundItem)
 			return foundItem;
-	} while (i!=childItems.GetBegin());
+	} while (i!=childItems.begin());
 	return 0;
 }
 bool CsmMenu::KeyReleasedEvent(smKeyContext* keyContext)
@@ -465,12 +468,6 @@ void CsmMenu::Initialize(IsmScriptProvider* sp)
 	scriptProvider = sp;
 	if ((onLoad.size() > 0) && scriptProvider)
 		scriptProvider->Eval(onLoad.c_str(), this, this->GetInstanceClassDescription());
-
-	for (CIwManaged** i = childItems.GetBegin(); i!=childItems.GetEnd(); ++i)
-	{
-		CsmItem* item = static_cast<CsmItem*>(*i);
-		item->InitTree(this,0);
-	}
 }
 void CsmMenu::Eval(CsmItem*item, const char*s)
 {
@@ -556,7 +553,8 @@ bool CsmMenu::TouchMotionEvent(smTouchContext* touchContext)
 
 void CsmMenu::AddItem(CsmItem* item)
 {
-	childItems.Push(item);
+	childItems.push_back(item);
+	item->OnAttachToMenu(this,0);
 }
 
 #ifdef IW_BUILD_RESOURCES

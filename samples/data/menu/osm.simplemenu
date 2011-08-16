@@ -42,7 +42,7 @@ CsmMenu
 				CsmTextBlock
 				{
 					styleClass "H2"
-					text "OSM POIs:"
+					text "Buildings around:"
 				}
 				CsmButton
 				{
@@ -52,9 +52,27 @@ CsmMenu
 					local r = CsmOsmXApiRequest.Create()
 					local lon = CsmLocation.GetLongitude()
 					local lat = CsmLocation.GetLatitude()
-					r:RequestArea(lon-0.00025,lat-0.00025,lon+0.00025,lat+0.00025)
+					r:RequestBuildingsInArea(lon-0.0005,lat-0.0005,lon+0.0005,lat+0.0005)
 					r:Perform()
-					self:AddTextBlock('GetNumNodes=' .. r:GetNumNodes())
+					local size = r:GetNumWays()
+
+					local i = 0
+					local c = self:GetParent():GetParent()
+					while (i < size) do
+						local node = r:GetWayAt(i)
+						local area = CsmItem.Create()
+						area:SetStyleClass('AREA')
+						c:AddItem(area)
+
+						local s
+						s = node:GetTag('name')
+						if (s ~= '') then area:AddTextBlock(s) end
+						s = node:GetTag('addr:street')
+						if (s ~= '') then area:AddTextBlock(s) end
+						s = node:GetTag('addr:housenumber')
+						if (s ~= '') then area:AddTextBlock(s) end
+						i=i+1
+					end
 					CsmOsmXApiRequest.Destroy(r)
 					"
 				}
