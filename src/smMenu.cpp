@@ -65,6 +65,7 @@ CsmMenu::CsmMenu()
 	material = 0;
 	blendMaterial = 0;
 	isHeaderScrollable = false;
+	isPreparedToRender = false;
 }
 //Desctructor
 CsmMenu::~CsmMenu()
@@ -135,23 +136,22 @@ void CsmMenu::SetStyleSheetHash(uint32 v)
 	}
 }
 //Render image on the screen surface
-void CsmMenu::Render()
+void CsmMenu::Prepare()
 {
-	smItemContext renderContext;
+	isPreparedToRender = true;
+	renderContext = smItemContext();
+
 	if (styleSheet)
 		styleSheet->Apply(&styleSettings, IwHashString("SIMPLEMENU"), SM_ANYSTYLE, SM_ANYSTYLE);
 	style.Apply(&styleSettings);
 	renderContext.parentStyle = &styleSettings;
 	renderContext.styleSheet = styleSheet;
 	renderContext.viewportPos = CIwSVec2::g_Zero;
-	//renderContext.font = (CtoeFreeTypeFont*)IwGetResManager()->GetResNamed("Steinerlight","CtoeFreeTypeFont");
-	//renderContext.font = (CtoeFreeTypeFont*)IwGetResManager()->GetResNamed("font","CtoeFreeTypeFont");
 	int16 w = IwGxGetScreenWidth();
 	int16 h = IwGxGetScreenHeight();
 	CIwSVec2 recommendedSize = renderContext.viewportSize = CIwSVec2(w,h);
-	//renderContext.transformation.SetRotY(IW_GEOM_ONE/16);
 	styleSettings.Background.Render(CIwSVec2::g_Zero,CIwSVec2(w,h), renderContext.viewportSize, renderContext.transformation);
-	
+
 	int16 contentAreaLeftover = h;
 	CsmItem* item;
 	item = GetHeader();
@@ -159,17 +159,25 @@ void CsmMenu::Render()
 	item = GetFooter();
 	if (item) { item->Prepare(&renderContext,recommendedSize); contentAreaLeftover -= item->GetSize().y; }
 	isHeaderScrollable = contentAreaLeftover < h/3;
-	//isHeaderScrollable = true;
 	item = GetContent();
 	if (item) 
 	{
 		recommendedSize.y = (isHeaderScrollable)?h:contentAreaLeftover;
 		item->Prepare(&renderContext,recommendedSize);
 	}
-	
+
 	AlignBlocks();
+}
+//Render image on the screen surface
+void CsmMenu::Render()
+{
+	if (!isPreparedToRender)
+		Prepare();
+
+	CsmItem* item;
 
 	// Render Content
+	item = GetContent();
 	if (item) { item->Render(&renderContext);}
 	// Render Header
 	item = GetHeader();
@@ -205,6 +213,8 @@ void CsmMenu::Render()
 			}
 		}
 	}
+
+	isPreparedToRender = false;
 }
 void CsmMenu::Update(iwfixed dt)
 {

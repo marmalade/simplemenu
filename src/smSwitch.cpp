@@ -29,7 +29,7 @@ CsmSwitch::~CsmSwitch()
 //Get scriptable class declaration
 CsmScriptableClassDeclaration* CsmSwitch::GetClassDescription()
 {
-	static  TsmScriptableClassDeclaration<CsmSwitch> d (CsmItem::GetClassDescription(), "CsmSwitch",
+	static  TsmScriptableClassDeclaration<CsmSwitch> d (CsmSlider::GetClassDescription(), "CsmSwitch",
 			0);
 	return &d;
 }

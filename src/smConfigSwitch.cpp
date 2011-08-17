@@ -16,6 +16,12 @@ IW_CLASS_FACTORY(CsmConfigSwitch);
 //This macro is required within some source file for every class derived from CIwManaged. It implements essential functionality
 IW_MANAGED_IMPLEMENT(CsmConfigSwitch);
 
+void CsmConfigSwitch::OnAttachToMenu(CsmMenu* m,CsmItem* p)
+{
+	CsmSwitch::OnAttachToMenu(m,p);
+}
+
+
 #ifdef IW_BUILD_RESOURCES
 
 //Parses from text file: parses attribute/value pair.

@@ -36,9 +36,10 @@ namespace SimpleMenu
 		TsmIntrusiveList<CsmLazyEvent> lazyEvents;
 		CIwMaterial* material;
 		CIwMaterial* blendMaterial;
-
+		bool isPreparedToRender;
 		// Flag to indicate if there is enough space for content. If it's true than there isn't enough space and we should scroll the header too.
 		bool isHeaderScrollable;
+		smItemContext renderContext;
 	public:
 		//Declare managed class
 		IW_MANAGED_DECLARE(CsmMenu);
@@ -56,6 +57,9 @@ namespace SimpleMenu
 
 		//Reads/writes a binary file using @a IwSerialise interface.
 		virtual void Serialise ();
+		//Prepare to render
+		void Prepare();
+
 		//Render image on the screen surface
 		void Render();
 		CIwMaterial* GetFlatMaterial();

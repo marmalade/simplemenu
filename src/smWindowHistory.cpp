@@ -60,6 +60,9 @@ void SimpleMenu::smShowMenu(CsmMenu* m, CsmInputFilter* input, IsmScriptProvider
 			if (!((*callback)(m, context)))
 				result = false;
 
+		if (result)
+			m->Update(IW_GEOM_ONE/30);
+
 		if	(
 			(result == false) ||
 			(s3eKeyboardGetState(s3eKeyEsc) & S3E_KEY_STATE_DOWN) ||
@@ -69,14 +72,10 @@ void SimpleMenu::smShowMenu(CsmMenu* m, CsmInputFilter* input, IsmScriptProvider
 			)
 			break;
 
-
-		m->Update(IW_GEOM_ONE/30);
-
-		if (SimpleMenu::smGetCloseState() == SimpleMenu::SM_CLOSE_ALL)
-			break;
-
+		m->Prepare();
 		IwGxClear(IW_GX_DEPTH_BUFFER_F);
 		//IwGxClear(IW_GX_COLOUR_BUFFER_F | IW_GX_DEPTH_BUFFER_F);
+
 		m->Render();
 
 		IwGxFlush();

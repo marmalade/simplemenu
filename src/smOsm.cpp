@@ -34,7 +34,7 @@ float CsmOsm::GetDistance(float lon1, float lat1, float lon2, float lat2)
        cosf(phi_1) *
        cosf(phi_2)
      );
-     float output = 1609.344*d;
+     float output = 1609.344f*d;
      return output;
 }
 

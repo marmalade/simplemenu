@@ -13,6 +13,7 @@ namespace SimpleMenu
 	protected:
 		iwfixed sliderWidth;
 		iwfixed sliderValue;
+		iwfixed temporalValue;
 	public:
 		//Declare managed class
 		IW_MANAGED_DECLARE(CsmSlider);
