@@ -32,6 +32,9 @@ namespace SimpleMenu
 		virtual void TouchCanceled(smTouchContext* smTouchContext);
 		virtual bool KeyReleasedEvent(smKeyContext* keyContext);
 		virtual bool KeyPressedEvent(smKeyContext* keyContext);
+
+		virtual void OnValueChanged();
+		void SetSelectedItemIndex(int i);
 		//Check if element can interact with user
 		virtual bool IsActive() const {return true;}
 	};

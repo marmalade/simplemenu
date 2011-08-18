@@ -40,7 +40,13 @@ namespace SimpleMenu
 		//Check if element can interact with user
 		virtual bool IsActive() const {return true;}
 
+		virtual void Touch(smTouchContext* smTouchContext);
 		virtual void TouchMotion(smTouchContext* smTouchContext);
+		virtual void TouchReleased(smTouchContext* smTouchContext);
+		virtual void TouchCanceled(smTouchContext* smTouchContext);
+		void EvalTemporalValue(smTouchContext* smTouchContext);
+		virtual void OnValueChanged();
+		virtual void OnTemporalValueChanged();
 		virtual bool KeyReleasedEvent(smKeyContext* keyContext);
 		virtual bool KeyPressedEvent(smKeyContext* keyContext);
 	protected:

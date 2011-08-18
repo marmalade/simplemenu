@@ -1,6 +1,7 @@
 #include <IwTextParserITX.h>
 #include <IwResManager.h>
 #include "SimpleMenu.h"
+#include "smConfig.h"
 #include "smConfigSwitch.h"
 #include "smMenu.h"
 
@@ -19,6 +20,28 @@ IW_MANAGED_IMPLEMENT(CsmConfigSwitch);
 void CsmConfigSwitch::OnAttachToMenu(CsmMenu* m,CsmItem* p)
 {
 	CsmSwitch::OnAttachToMenu(m,p);
+
+	if (!configValueKey.empty())
+	{
+		sliderValue = temporalValue = CsmConfig::GetInteger(configValueKey.c_str());
+	}
+}
+
+//Reads/writes a binary file using @a IwSerialise interface.
+void CsmConfigSwitch::Serialise ()
+{
+	CsmSwitch::Serialise();
+	smSerialiseString(configValueKey);
+}
+
+void CsmConfigSwitch::OnValueChanged()
+{
+	CsmSwitch::OnValueChanged();
+
+	if (!configValueKey.empty())
+	{
+		CsmConfig::SetInteger(configValueKey.c_str(), sliderValue);
+	}
 }
 
 

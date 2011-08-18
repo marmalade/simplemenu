@@ -91,7 +91,7 @@ void CsmSelect::Touch(smTouchContext* smTouchContext)
 			CIwSVec2 s = item->GetSize();
 			if (pos.x >= o.x && pos.y >= o.y && pos.x < o.x+s.x && pos.y < o.y+s.y)
 			{
-				selectedItemIndex = index;
+				SetSelectedItemIndex(index);
 				break;
 			}
 			++index;
@@ -131,12 +131,10 @@ bool CsmSelect::KeyReleasedEvent(smKeyContext* keyContext)
 		switch (keyContext->key)
 		{
 		case s3eKeyUp:
-			if (selectedItemIndex > 0)
-				--selectedItemIndex;
+			SetSelectedItemIndex(selectedItemIndex-1);
 			return true;
 		case s3eKeyDown:
-			if (selectedItemIndex < (int32)childItems.size()-1)
-				++selectedItemIndex;
+			SetSelectedItemIndex(1+selectedItemIndex);
 			return true;
 		default:
 			break;
@@ -158,6 +156,21 @@ bool CsmSelect::KeyPressedEvent(smKeyContext* keyContext)
 		}
 	}
 	return false;
+}
+void CsmSelect::OnValueChanged()
+{
+}
+void CsmSelect::SetSelectedItemIndex(int i)
+{
+	if (i < 0)
+		i = (int32)childItems.size() - 1;
+	if (i >= (int32)childItems.size())
+		i = 0;
+	if (selectedItemIndex != i)
+	{
+		selectedItemIndex = i;
+		OnValueChanged();
+	}
 }
 
 void CsmSelect::PrepareChildItems(smItemContext* renderContext, const CIwSVec2& recommendedSize)

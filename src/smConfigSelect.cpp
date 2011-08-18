@@ -1,6 +1,7 @@
 #include <IwTextParserITX.h>
 #include <IwResManager.h>
 #include "SimpleMenu.h"
+#include "smConfig.h"
 #include "smConfigSelect.h"
 #include "smMenu.h"
 
@@ -15,6 +16,33 @@ namespace SimpleMenu
 IW_CLASS_FACTORY(CsmConfigSelect);
 //This macro is required within some source file for every class derived from CIwManaged. It implements essential functionality
 IW_MANAGED_IMPLEMENT(CsmConfigSelect);
+
+//Reads/writes a binary file using @a IwSerialise interface.
+void CsmConfigSelect::Serialise ()
+{
+	CsmSelect::Serialise();
+	smSerialiseString(configValueKey);
+}
+
+void CsmConfigSelect::OnAttachToMenu(CsmMenu* m,CsmItem* p)
+{
+	CsmSelect::OnAttachToMenu(m,p);
+
+	if (!configValueKey.empty())
+	{
+		selectedItemIndex = CsmConfig::GetInteger(configValueKey.c_str());
+	}
+}
+
+void CsmConfigSelect::OnValueChanged()
+{
+	CsmSelect::OnValueChanged();
+
+	if (!configValueKey.empty())
+	{
+		CsmConfig::SetInteger(configValueKey.c_str(), selectedItemIndex);
+	}
+}
 
 #ifdef IW_BUILD_RESOURCES
 

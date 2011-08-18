@@ -19,13 +19,16 @@ namespace SimpleMenu
 		//Get scriptable class declaration
 		virtual CsmScriptableClassDeclaration* GetInstanceClassDescription() {return GetClassDescription(); };
 
+		//Gets the element name hash to select an apropriate style
+		virtual uint32 GetElementNameHash();
+		virtual void ApplyStyleSheet(CsmStyleSheet* styleSheet);
+
 		//Animate item and all child items
 		virtual void Animate(iwfixed timespan);
 
-		virtual void Touch(smTouchContext* smTouchContext);
-		virtual void TouchReleased(smTouchContext* smTouchContext);
-		virtual void TouchCanceled(smTouchContext* smTouchContext);
-		virtual void TouchMotion(smTouchContext* smTouchContext);
+		virtual void OnValueChanged();
+		virtual void OnTemporalValueChanged();
+
 		virtual bool KeyReleasedEvent(smKeyContext* keyContext);
 		virtual bool KeyPressedEvent(smKeyContext* keyContext);
 	};

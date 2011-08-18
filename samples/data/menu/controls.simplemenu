@@ -89,14 +89,17 @@ CsmMenu
 			{
 				text "off"
 				text "on"
+				config-value "sm-config-checkbox"
 			}
 			CsmConfigSlider
 			{
 				text "slider"
+				config-value "sm-config-slider"
 			}
 			CsmConfigSwitch
 			{
 				text "switch"
+				config-value "sm-config-switch"
 			}
 
 		}

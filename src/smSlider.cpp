@@ -22,6 +22,7 @@ CsmSlider::CsmSlider()
 {
 	sliderWidth = IW_GEOM_ONE/2;
 	sliderValue = 0;
+	temporalValue = -1;
 }
 //Desctructor
 CsmSlider::~CsmSlider()
@@ -70,7 +71,8 @@ void CsmSlider::RearrangeChildItems()
 	topLeft.y += GetContentOffsetTop();
 	int16 contentWidth = size.x - GetContentOffsetLeft()-GetContentOffsetRight();
 	int16 sliderContentWidth = contentWidth*sliderWidth/IW_GEOM_ONE;
-	int16 sliderOffset = (contentWidth-sliderContentWidth)*sliderValue/IW_GEOM_ONE;
+	iwfixed v = (temporalValue>=0)?temporalValue:sliderValue;
+	int16 sliderOffset = (contentWidth-sliderContentWidth)*v/IW_GEOM_ONE;
 	topLeft.x += sliderOffset;
 	for (CsmItem** i = childItems.begin(); i!=childItems.end(); ++i)
 	{
@@ -78,17 +80,59 @@ void CsmSlider::RearrangeChildItems()
 		item->SetOrigin(topLeft);
 	}
 }
+void CsmSlider::Touch(smTouchContext* smTouchContext)
+{
+	EvalTemporalValue(smTouchContext);
+}
+void CsmSlider::TouchReleased(smTouchContext* smTouchContext)
+{
+	EvalTemporalValue(smTouchContext);
+	if (temporalValue != sliderValue)
+	{
+		sliderValue = temporalValue;
+		OnValueChanged();
+	}
+	temporalValue = -1;
+}
+void CsmSlider::TouchCanceled(smTouchContext* smTouchContext)
+{
+	temporalValue = -1;
+}
+void CsmSlider::OnValueChanged()
+{
+}
+void CsmSlider::OnTemporalValueChanged()
+{
+}void CsmSlider::EvalTemporalValue(smTouchContext* smTouchContext)
+{
+	int16 contentWidth = size.x - GetContentOffsetLeft()-GetContentOffsetRight();
+	int32 absSliderWidth = contentWidth*sliderWidth/IW_GEOM_ONE;
+	if (contentWidth-absSliderWidth <= 0)
+		return;
+	int32 v = (smTouchContext->currentPoistion.x - origin.x - GetContentOffsetLeft() - absSliderWidth/2) * IW_GEOM_ONE / (contentWidth-absSliderWidth);
+	if (v < 0) 
+		v = 0;
+	if (v > IW_GEOM_ONE) 
+		v = IW_GEOM_ONE;
+	if (v != temporalValue)
+	{
+		temporalValue = v;
+		OnTemporalValueChanged();
+	}
+}
+
 void CsmSlider::TouchMotion(smTouchContext* smTouchContext)
 {
-	int32 shift = smTouchContext->currentPoistion.x - smTouchContext->lastKnownPoistion.x;
-	int16 contentWidth = size.x - GetContentOffsetLeft()-GetContentOffsetRight();
-	int16 sliderContentWidth = contentWidth*sliderWidth/IW_GEOM_ONE;
-	iwfixed v = shift*IW_GEOM_ONE/(contentWidth-sliderContentWidth);
-	sliderValue += v;
-	if (sliderValue < 0 )
-		sliderValue = 0;
-	if (sliderValue > IW_GEOM_ONE )
-		sliderValue = IW_GEOM_ONE;
+	EvalTemporalValue(smTouchContext);
+	//int32 shift = smTouchContext->currentPoistion.x - smTouchContext->lastKnownPoistion.x;
+	//int16 contentWidth = size.x - GetContentOffsetLeft()-GetContentOffsetRight();
+	//int16 sliderContentWidth = contentWidth*sliderWidth/IW_GEOM_ONE;
+	//iwfixed v = shift*IW_GEOM_ONE/(contentWidth-sliderContentWidth);
+	//sliderValue += v;
+	//if (sliderValue < 0 )
+	//	sliderValue = 0;
+	//if (sliderValue > IW_GEOM_ONE )
+	//	sliderValue = IW_GEOM_ONE;
 }
 //Render image on the screen surface
 void CsmSlider::Render(smItemContext* renderContext)
@@ -114,11 +158,13 @@ bool CsmSlider::KeyReleasedEvent(smKeyContext* keyContext)
 		sliderValue -= IW_GEOM_ONE/10;
 		if (sliderValue < 0)
 			sliderValue = 0;
+		OnValueChanged();
 		return true;
 	case s3eKeyRight:
 		sliderValue += IW_GEOM_ONE/10;
 		if (sliderValue > IW_GEOM_ONE)
 			sliderValue = IW_GEOM_ONE;
+		OnValueChanged();
 		return true;
 	default:
 		break;

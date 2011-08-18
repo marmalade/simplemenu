@@ -90,8 +90,13 @@ void CsmTextBox::SetText(const char* t)
 		return;
 	bool changed = false;
 	if (t && utf8string)
-		if (!strcmp(t,utf8string))
-			changed = true;
+	{
+		changed = strcmp(t,utf8string);
+	} else if (!t || !utf8string)
+		changed = true;
+
+	if (!changed)
+		return;
 	cachedWithCombinedStyle = CsmStyleSettings();
 	if (utf8string)
 	{

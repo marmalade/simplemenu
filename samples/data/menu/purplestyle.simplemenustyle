@@ -137,6 +137,15 @@ CsmStyleSheet
 		shadow-size -2 pt
 		shadow-offset 1 pt 1 pt
 	}
+	bindto "SWITCH" "*" "OFF"
+	style
+	{
+		background
+		{
+			point { 71 34 49 } 0 px
+			point { 97 56 78 } 100 %
+		}
+	}
 	bindto "SLIDER" "*" "*"
 	bindto "SWITCH" "*" "*"
 	bindto "SELECT" "*" "*"

@@ -39,40 +39,47 @@ void CsmSwitch::Animate(iwfixed timespan)
 {
 	CsmSlider::Animate(timespan);
 }
+void CsmSwitch::OnValueChanged()
+{
+	if (sliderValue < IW_GEOM_ONE/2)
+	{
+		sliderValue = 0;
+	}
+	else
+	{
+		sliderValue = IW_GEOM_ONE;
+	}
+	CsmSlider::OnValueChanged();
+}
+uint32 CsmSwitch::GetElementNameHash()
+{
+	static uint32 name = IwHashString("Switch");
+	return name;
+}
+void CsmSwitch::ApplyStyleSheet(CsmStyleSheet* styleSheet)
+{
+	static uint32 onHash = IwHashString("on");
+	static uint32 offHash = IwHashString("off");
+	iwfixed v = (temporalValue>=0)?temporalValue:sliderValue;
+	if (styleSheet)
+		styleSheet->Apply(&combinedStyle,GetElementNameHash(),GetElementClassHash(),(v<IW_GEOM_ONE/2)?offHash:onHash);
+}
 
-void CsmSwitch::Touch(smTouchContext* smTouchContext)
+void CsmSwitch::OnTemporalValueChanged()
 {
-	CsmSlider::Touch(smTouchContext);
 }
-void CsmSwitch::TouchReleased(smTouchContext* smTouchContext)
-{
-	CsmSlider::TouchReleased(smTouchContext);
-	if (sliderValue < IW_GEOM_ONE/2)
-		sliderValue = 0;
-	else
-		sliderValue = IW_GEOM_ONE;
-}
-void CsmSwitch::TouchCanceled(smTouchContext* smTouchContext)
-{
-	CsmSlider::TouchCanceled(smTouchContext);
-	if (sliderValue < IW_GEOM_ONE/2)
-		sliderValue = 0;
-	else
-		sliderValue = IW_GEOM_ONE;
-}
-void CsmSwitch::TouchMotion(smTouchContext* smTouchContext)
-{
-	CsmSlider::TouchMotion(smTouchContext);
-}
+
 bool CsmSwitch::KeyReleasedEvent(smKeyContext* keyContext)
 {
 	switch (keyContext->key)
 	{
 	case s3eKeyLeft:
 		sliderValue = 0;
+		OnValueChanged();
 		return true;
 	case s3eKeyRight:
 		sliderValue = IW_GEOM_ONE;
+		OnValueChanged();
 		return true;
 	default:
 		break;

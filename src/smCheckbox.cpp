@@ -60,10 +60,24 @@ void CsmCheckbox::Touch(smTouchContext* smTouchContext)
 void CsmCheckbox::TouchReleased(smTouchContext* smTouchContext)
 {
 	CsmItem::TouchReleased(smTouchContext);
-	++selectedItemIndex;
-	if (selectedItemIndex >= (int32)childItems.size())
-		selectedItemIndex = 0;
+	SetSelectedItemIndex(selectedItemIndex+1);
 }
+void CsmCheckbox::OnValueChanged()
+{
+}
+void CsmCheckbox::SetSelectedItemIndex(int i)
+{
+	if (i < 0)
+		i = 0;
+	if (i >= (int32)childItems.size())
+		i = 0;
+	if (selectedItemIndex != i)
+	{
+		selectedItemIndex = i;
+		OnValueChanged();
+	}
+}
+
 void CsmCheckbox::TouchCanceled(smTouchContext* smTouchContext)
 {
 	CsmItem::TouchCanceled(smTouchContext);

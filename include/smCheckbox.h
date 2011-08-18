@@ -26,6 +26,8 @@ namespace SimpleMenu
 		virtual void PrepareChildItems(smItemContext* renderContext, const CIwSVec2& recommendedSize);
 		virtual void RenderChildren(smItemContext* renderContext);
 
+		virtual void OnValueChanged();
+		void SetSelectedItemIndex(int i);
 		virtual void Touch(smTouchContext* smTouchContext);
 		virtual void TouchReleased(smTouchContext* smTouchContext);
 		virtual void TouchCanceled(smTouchContext* smTouchContext);

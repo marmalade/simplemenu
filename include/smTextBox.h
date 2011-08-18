@@ -45,7 +45,7 @@ namespace SimpleMenu
 		const char* GetText() const;
 		void SetText(const char*);
 
-		void OnTextChanged();
+		virtual void OnTextChanged();
 #ifdef IW_BUILD_RESOURCES
 		//Parses from text file: parses attribute/value pair.
 		virtual	bool	ParseAttribute(CIwTextParserITX* pParser, const char* pAttrName);
