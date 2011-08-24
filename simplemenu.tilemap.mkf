@@ -1,0 +1,26 @@
+includepaths
+{
+	"./include"
+}
+
+files
+{
+	["src"]
+	(src)
+	smTileMap.cpp
+	smTileMapSource.cpp
+	smTileMapImageSource.cpp
+	smTileMapView.cpp
+
+	["include"]
+	(include)
+	smTileMap.h
+	smTileMapSource.h
+	smTileMapImageSource.h
+	smTileMapView.h
+}
+
+subprojects
+{
+	./simplemenu.mkf
+}

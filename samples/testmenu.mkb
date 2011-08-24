@@ -78,6 +78,7 @@ subprojects
 	../simplemenu.curl.facebook.mkf
 	../simplemenu.curl.osm.mkf
 	../simplemenu.sqlite.mkf
+	../simplemenu.tilemap.mkf
 	freetype
 	freetypehelper
 }

@@ -1,13 +1,23 @@
 Package: simplemenu
 Version: 1.0.0
-Revision: 1
+Revision: 2
 Maintainer: Game Master <gamemaster@101gr.com>
 Description: |
  Very simple menu
 Homepage: https://github.com/marmalade/simplemenu
 Type: platform-independant
 Contents:
+ - simplemenu.3d.mkf
+ - simplemenu.config.mkf
+ - simplemenu.curl.facebook.mkf
+ - simplemenu.curl.mkf
+ - simplemenu.curl.osm.mkf
+ - simplemenu.features.mkf
+ - simplemenu.lua.mkf
  - simplemenu.mkf
+ - simplemenu.sqlite.mkf
+ - simplemenu.svg.mkf
+ - simplemenu.tilemap.mkf
  - src
  - include
- - README.txt
+ - README

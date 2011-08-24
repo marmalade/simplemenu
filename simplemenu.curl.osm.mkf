@@ -9,11 +9,13 @@ files
 	(src)
 	smOsm.cpp
 	smOsmXApiRequest.cpp
+	smOSMTileMapSource.cpp
 
 	["include"]
 	(include)
 	smOsm.h
 	smOsmXApiRequest.h
+	smOSMTileMapSource.h
 }
 
 packages
@@ -24,5 +26,6 @@ packages
 subprojects
 {
 	./simplemenu.curl.mkf
+	./simplemenu.tilemap.mkf
 }
 
