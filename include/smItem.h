@@ -1,5 +1,8 @@
 #pragma once
 
+#include <string>
+#include <sstream>
+
 #include <IwResManager.h>
 #include <IwManagedList.h>
 
@@ -157,6 +160,8 @@ namespace SimpleMenu
 		virtual void OnAttachToMenu(CsmMenu*,CsmItem*);
 		void AddItem(CsmItem* item);
 		CsmTextBlock* AddTextBlock(const char* text);
+		std::string GetInnerText() const;
+		virtual void CollectInnerTextTo(std::stringstream & s) const;
 		void EvalUpdate();
 	protected:
 		void RenderBackgroud(smItemContext* renderContext);

@@ -32,6 +32,11 @@ CsmMenu
 			text "Camera"
 			onclick "CsmUtils.OpenMenuAtGroup('menu/camera.group')"
 		}
+		CsmButton
+		{
+			text "GetInnerText"
+			onclick "CsmUtils.Alert('InnerText', self:GetRoot():GetInnerText())"
+		}
 		CsmItem
 		{
 			styleclass "AREA"

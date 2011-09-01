@@ -2,6 +2,8 @@
 #include <smCurl.h>
 #include "smOsm.h"
 #include "smOsmXApiRequest.h"
+#include "smOSMTileMapSource.h"
+#include "smTileMap.h"
 
 using namespace SimpleMenu;
 
@@ -45,12 +47,16 @@ void SimpleMenu::smOsmInit()
 		return;
 
 	smCurlInit();
+	smTileMapInit();
 
 	smRegisterClass(CsmOsmXApiRequest::GetClassDescription());
 	smRegisterClass(CsmOsm::GetClassDescription());
 	smRegisterClass(CsmOsmNode::GetClassDescription());
 	smRegisterClass(CsmOsmWay::GetClassDescription());
 	smRegisterClass(CsmOsmTag::GetClassDescription());
+	smRegisterClass(CsmOSMTileMapSource::GetClassDescription());
+
+	IW_CLASS_REGISTER(CsmOSMTileMapSource);
 }
 
 void SimpleMenu::smOsmTerminate()
@@ -61,6 +67,7 @@ void SimpleMenu::smOsmTerminate()
 	if (initOsmCounter != 0)
 		return;
 
+	smTileMapTerminate();
 	smCurlTerminate();
 }
 

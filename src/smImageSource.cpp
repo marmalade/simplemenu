@@ -16,6 +16,16 @@ IW_CLASS_FACTORY(CsmImageTexture);
 //This macro is required within some source file for every class derived from CIwManaged. It implements essential functionality
 IW_MANAGED_IMPLEMENT(CsmImageTexture);
 
+//Get scriptable class declaration
+CsmScriptableClassDeclaration* CsmImageSource::GetClassDescription()
+{
+	static  TsmScriptableAbstractClassDeclaration<CsmImageSource> d (0, "CsmImageSource",
+		ScriptTraits::Method("IsAvailable", &CsmImageSource::IsAvailable),
+		0);
+	return &d;
+}
+
+
 //Constructor
 CsmImageTexture::CsmImageTexture()
 {

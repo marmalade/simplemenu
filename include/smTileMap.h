@@ -2,7 +2,7 @@
 
 namespace SimpleMenu
 {
-	class CsmTileMapSource
+	class CsmTileMap
 	{
 	};
 

@@ -29,6 +29,12 @@ CsmMenu
 		}
 		CsmImage
 		{
+			CsmTileMapImageSource
+			{
+				CsmOSMTileMapSource
+				{
+				}
+			}
 #			CsmCurlImageSource
 #			{
 #				url "http://c.tile.openstreetmap.org/0/0/0.png"

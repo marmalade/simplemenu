@@ -157,6 +157,7 @@ void SimpleMenu::smInit()
 	smRegisterClass(CsmGallery::GetClassDescription());
 	smRegisterClass(CsmGrid::GetClassDescription());
 	smRegisterClass(CsmImage::GetClassDescription());
+	smRegisterClass(CsmImageSource::GetClassDescription());
 	smRegisterClass(CsmItem::GetClassDescription());
 	smRegisterClass(CsmRow::GetClassDescription());
 	smRegisterClass(CsmSelect::GetClassDescription());

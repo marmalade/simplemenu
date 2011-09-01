@@ -91,6 +91,8 @@ namespace SimpleMenu
 		bool ScrollToItem(CsmItem*);
 		void Eval(CsmItem*, const char*s);
 		void AddItem(CsmItem* item);
+		std::string GetInnerText() const;
+		void CollectInnerTextTo(std::stringstream & s) const;
 #ifdef IW_BUILD_RESOURCES
 		//Parses from text file: start block.
 		virtual	void	ParseOpen(CIwTextParserITX* pParser);

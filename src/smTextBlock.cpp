@@ -99,7 +99,11 @@ void CsmTextBlock::SetText(const char* t)
 		strcpy(utf8string,t);
 	}
 }
-
+void CsmTextBlock::CollectInnerTextTo(std::stringstream & s) const
+{
+	if (utf8string)
+		s << utf8string;
+}
 void CsmTextBlock::Prepare(smItemContext* renderContext, const CIwSVec2& recommendedSize)
 {
 	EvalUpdate();

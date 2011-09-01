@@ -39,6 +39,7 @@ namespace SimpleMenu
 
 		const char* GetText() const;
 		void SetText(const char*);
+		virtual void CollectInnerTextTo(std::stringstream & s) const;
 #ifdef IW_BUILD_RESOURCES
 		//Parses from text file: parses attribute/value pair.
 		virtual	bool	ParseAttribute(CIwTextParserITX* pParser, const char* pAttrName);

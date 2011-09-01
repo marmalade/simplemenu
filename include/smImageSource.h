@@ -19,6 +19,11 @@ namespace SimpleMenu
 		virtual CIwMaterial* GetMaterial() = 0;
 		//Animate item and all child items
 		virtual void Animate(iwfixed timespan) {};
+
+		//Get scriptable class declaration
+		static CsmScriptableClassDeclaration* GetClassDescription();
+		//Get scriptable class declaration
+		virtual CsmScriptableClassDeclaration* GetInstanceClassDescription() {return GetClassDescription(); };
 	};
 	class CsmImageTexture : public CsmImageSource
 	{

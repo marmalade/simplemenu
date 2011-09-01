@@ -31,5 +31,7 @@ namespace SimpleMenu
 
 		virtual bool KeyReleasedEvent(smKeyContext* keyContext);
 		virtual bool KeyPressedEvent(smKeyContext* keyContext);
+
+		virtual void CollectInnerTextTo(std::stringstream & s) const;
 	};
 }

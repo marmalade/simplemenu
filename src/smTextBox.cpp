@@ -91,7 +91,7 @@ void CsmTextBox::SetText(const char* t)
 	bool changed = false;
 	if (t && utf8string)
 	{
-		changed = strcmp(t,utf8string);
+		changed = 0!=strcmp(t,utf8string);
 	} else if (!t || !utf8string)
 		changed = true;
 

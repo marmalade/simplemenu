@@ -107,6 +107,8 @@ CsmScriptableClassDeclaration* CsmMenu::GetClassDescription()
 			ScriptTraits::Method("GetHeader", &CsmMenu::GetHeader),
 			ScriptTraits::Method("GetFooter", &CsmMenu::GetFooter),
 			ScriptTraits::Method("GetItemById", &CsmMenu::GetItemById),
+			ScriptTraits::Method("GetInnerText", &CsmMenu::GetInnerText),
+			
 			0);
 	return &d;
 }
@@ -565,6 +567,20 @@ void CsmMenu::AddItem(CsmItem* item)
 {
 	childItems.push_back(item);
 	item->OnAttachToMenu(this,0);
+}
+
+std::string CsmMenu::GetInnerText() const
+{
+	std::stringstream s;
+	CollectInnerTextTo(s);
+	return s.str();
+}
+void CsmMenu::CollectInnerTextTo(std::stringstream & s) const
+{
+	for (CsmItem** i = childItems.begin(); i!=childItems.end(); ++i)
+	{
+		(*i)->CollectInnerTextTo(s);
+	}
 }
 
 #ifdef IW_BUILD_RESOURCES

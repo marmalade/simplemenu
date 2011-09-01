@@ -37,6 +37,7 @@ namespace SimpleMenu
 		void SetSelectedItemIndex(int i);
 		//Check if element can interact with user
 		virtual bool IsActive() const {return true;}
+		virtual void CollectInnerTextTo(std::stringstream & s) const;
 	};
 
 }

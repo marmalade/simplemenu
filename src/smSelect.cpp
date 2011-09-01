@@ -208,3 +208,11 @@ void CsmSelect::RenderChildren(smItemContext* renderContext)
 		}
 	}
 }
+void CsmSelect::CollectInnerTextTo(std::stringstream & s) const
+{
+	if (selectedItemIndex >= 0 && selectedItemIndex < (int32)childItems.size())
+	{
+		CsmItem* item = childItems[selectedItemIndex];
+		item->CollectInnerTextTo(s);
+	}
+}

@@ -285,30 +285,55 @@ namespace SimpleMenu
 		virtual void Call(IsmScriptProvider* s,CsmScriptableClassDeclaration*c,void* o) { s->Return( (((T*)o)->*m_fn)() ); }
 	};
 
-		template <class T> class TsmScriptableClassDeclaration: public CsmScriptableClassDeclaration
+	template <class T> class TsmScriptableAbstractClassDeclaration: public CsmScriptableClassDeclaration
 	{
+	protected:
 		const char* m_name;
+		TsmScriptableAbstractClassDeclaration() {};
+	public:
+		TsmScriptableAbstractClassDeclaration(CsmScriptableClassDeclaration* p, const char* name, ...);
+		virtual const char* GetClassName() {return m_name;}
+		virtual void* CreateInstance() {return 0;}
+		virtual void DestroyInstance(void* t) { }
+		virtual const char* ToString(void* t) { return GetClassName(); }
+	protected:
+		void Init(CsmScriptableClassDeclaration* p, const char* name, va_list args);
+	};
+
+	template <class T> class TsmScriptableClassDeclaration: public TsmScriptableAbstractClassDeclaration<T>
+	{
 	public:
 		TsmScriptableClassDeclaration(CsmScriptableClassDeclaration* p, const char* name, ...);
 		virtual ~TsmScriptableClassDeclaration() {}
-		virtual const char* GetClassName() {return m_name;}
 
 		virtual void* CreateInstance() {return new T();}
 		virtual void DestroyInstance(void* t) { delete (T*)t;}
-		virtual const char* ToString(void* t) { return GetClassName(); }
 
 		//virtual int GetMethodsCount() { return 0; }
 		//virtual CsmScriptableMethodDeclaration* GetMethod(int i) { return 0; }
 		//static CsmScriptableMethodDeclaration* M( void (T::*ptr)() ) { return 0;}
 	};
+	template <class T> TsmScriptableAbstractClassDeclaration<T>::TsmScriptableAbstractClassDeclaration(CsmScriptableClassDeclaration* p, const char* name, ...)
+	{
+		va_list vl;
+		va_start( vl, name );
+		Init(p,name,vl);
+		va_end( vl );
+	}
 
 	template <class T> TsmScriptableClassDeclaration<T>::TsmScriptableClassDeclaration(CsmScriptableClassDeclaration* p, const char* name, ...)
+	{
+		va_list vl;
+		va_start( vl, name );
+		TsmScriptableAbstractClassDeclaration<T>::Init(p,name,vl);
+		va_end( vl );
+	}
+
+	template <class T> void  TsmScriptableAbstractClassDeclaration<T>::Init(CsmScriptableClassDeclaration* p, const char* name, va_list vl)
 	{
 		m_name = name;
 		if (p)
 			Inherit(p);
-		va_list vl;
-		va_start( vl, name );
 		for (;;)
 		{
 			CsmScriptableMethodDeclaration* arg = va_arg( vl, CsmScriptableMethodDeclaration*);
@@ -316,7 +341,6 @@ namespace SimpleMenu
 				break;
 			m_methods.push_back(arg);
 		}
-		va_end( vl );
 	}
 
 	

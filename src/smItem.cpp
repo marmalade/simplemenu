@@ -50,6 +50,7 @@ CsmScriptableClassDeclaration* CsmItem::GetClassDescription()
 			ScriptTraits::Method("Create", CsmItemCreate),
 			ScriptTraits::Method("SetStyleClass", &CsmItem::SetStyleClass),
 			ScriptTraits::Method("AddItem", &CsmItem::AddItem),
+			ScriptTraits::Method("GetInnerText", &CsmItem::GetInnerText),
 			0);
 	return &d;
 }
@@ -514,7 +515,19 @@ CsmTextBlock* CsmItem::AddTextBlock(const char* text)
 	AddItem(tb);
 	return tb;
 }
-
+std::string CsmItem::GetInnerText() const
+{
+	std::stringstream s;
+	CollectInnerTextTo(s);
+	return s.str();
+}
+void CsmItem::CollectInnerTextTo(std::stringstream & s) const
+{
+	for (CsmItem** i = childItems.begin(); i!=childItems.end(); ++i)
+	{
+		(*i)->CollectInnerTextTo(s);
+	}
+}
 #ifdef IW_BUILD_RESOURCES
 //Parses from text file: start block.
 void	CsmItem::ParseOpen(CIwTextParserITX* pParser)

@@ -13,6 +13,18 @@ namespace SimpleMenu
 
 	void smSerialiseString(std::string & s);	
 
+	template <class T> void smSerialiseManaged(T* & var)
+	{
+		if (IwSerialiseIsReading ())
+		{
+			CIwManaged* m; IwSerialiseManagedObject(m); if (m) { var = static_cast<T*>(m); } else { var = 0; }
+		}
+		else
+		{
+			CIwManaged* m = static_cast<CIwManaged*>(var); IwSerialiseManagedObject(m);
+		}
+	}
+
 	void smReadString(CIwTextParserITX* pParser, std::string* s);
 
 	void smDrawSimpleMenuScrollbar(const CIwSVec2 & pos,const CIwSVec2 & size,const CIwSVec2 & spos,const CIwSVec2 & ssize);

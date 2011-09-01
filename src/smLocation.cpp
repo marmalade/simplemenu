@@ -131,7 +131,14 @@ bool CsmLocation::WaitForGPS()
 
 	time_t r = feature->m_receivedAt;
 
-	smOpenWaitDialog("GPS","Waiting for GPS satellite signal...", smWaitForGPSCallback, &r);
+	int t = s3eLocationGetInt(S3E_LOCATION_TYPE);
+	if ((t == -1) ||
+		(t == S3E_LOCATION_GPS) ||
+		(t == S3E_LOCATION_HYBRID) ||
+		(t == S3E_LOCATION_UNKNOWN))
+	{
+		smOpenWaitDialog("GPS","Waiting for GPS satellite signal...", smWaitForGPSCallback, &r);
+	}
 
 	return (feature->m_receivedAt != r);
 }

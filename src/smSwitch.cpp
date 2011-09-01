@@ -98,3 +98,7 @@ bool CsmSwitch::KeyPressedEvent(smKeyContext* keyContext)
 	}
 	return false;
 }
+void CsmSwitch::CollectInnerTextTo(std::stringstream & s) const
+{
+	CsmSlider::CollectInnerTextTo(s);
+}

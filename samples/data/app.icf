@@ -19,7 +19,7 @@
 MemSize=33554432
 
 [Util]
-#MemoryBreakpoint=243
+#MemoryBreakpoint=534
 MemMgrMaxAllocWarning=0
 
 [Trace]
