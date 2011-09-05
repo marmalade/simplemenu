@@ -31,8 +31,8 @@ namespace SimpleMenu
 		CsmStyleSheet* styleSheet;
 		CIwSVec2 viewportPos;
 		CIwSVec2 viewportSize;
-		CIwMat transformation;
-		smItemContext():parentStyle(0),styleSheet(0),transformation(CIwMat::g_Identity){};
+		CIwMat2D transformation;
+		smItemContext():parentStyle(0),styleSheet(0),transformation(CIwMat2D::g_Identity){};
 	};
 	class CsmMenu;
 
@@ -45,11 +45,72 @@ namespace SimpleMenu
 
 	class CsmItemList: public TsmManagedList<CsmItem>
 	{
-		
 	public:
-		
 	};
 
+
+	class CsmItemMargins
+	{
+	protected:
+		int16 marginLeft;
+		int16 marginTop;
+		int16 marginRight;
+		int16 marginBottom;
+
+		int16 paddingLeft;
+		int16 paddingTop;
+		int16 paddingRight;
+		int16 paddingBottom;
+
+		int16 borderLeft;
+		int16 borderTop;
+		int16 borderRight;
+		int16 borderBottom;
+
+		CIwSVec2 area;
+	public:
+		void Set(const CsmStyleSettings& combinedStyle, const CIwSVec2 & area)
+		{
+			marginLeft = combinedStyle.GetMarginLeft(area.x);
+			marginTop = combinedStyle.GetMarginTop(area.y);
+			marginRight = combinedStyle.GetMarginRight(area.x);
+			marginBottom = combinedStyle.GetMarginBottom(area.y);
+
+			paddingLeft = combinedStyle.GetPaddingLeft(area.x);
+			paddingTop = combinedStyle.GetPaddingTop(area.y);
+			paddingRight = combinedStyle.GetPaddingRight(area.x);
+			paddingBottom = combinedStyle.GetPaddingBottom(area.y);
+
+			borderLeft = combinedStyle.GetBorderLeft(area.x);
+			borderTop = combinedStyle.GetBorderTop(area.y);
+			borderRight = combinedStyle.GetBorderRight(area.x);
+			borderBottom = combinedStyle.GetBorderBottom(area.y);
+			this->area = area;
+		}
+
+		inline int16 GetMarginLeft()const {return marginLeft;}
+		inline int16 GetMarginTop()const {return marginTop;}
+		inline int16 GetMarginRight()const {return marginRight;}
+		inline int16 GetMarginBottom()const {return marginBottom;}
+
+		inline int16 GetPaddingLeft()const {return paddingLeft;}
+		inline int16 GetPaddingTop()const {return paddingTop;}
+		inline int16 GetPaddingRight()const {return paddingRight;}
+		inline int16 GetPaddingBottom()const {return paddingBottom;}
+
+		inline int16 GetBorderLeft()const {return borderLeft;}
+		inline int16 GetBorderTop()const {return borderTop;}
+		inline int16 GetBorderRight()const {return borderRight;}
+		inline int16 GetBorderBottom()const {return borderBottom;}
+
+		inline int16 GetContentOffsetLeft()const {return GetMarginLeft()+GetPaddingLeft()+GetBorderLeft();}
+		inline int16 GetContentOffsetRight()const {return GetMarginRight()+GetPaddingRight()+GetBorderRight();}
+		inline int16 GetContentOffsetTop()const {return GetMarginTop()+GetPaddingTop()+GetBorderTop();}
+		inline int16 GetContentOffsetBottom()const {return GetMarginBottom()+GetPaddingBottom()+GetBorderBottom();} 
+
+		inline int16 GetContentWidth()const {return area.x-GetContentOffsetLeft()-GetContentOffsetRight();}
+		inline int16 GetContentHeight()const {return area.y-GetContentOffsetTop()-GetContentOffsetBottom();}
+	};
 
 	class CsmItem : public CIwManaged
 	{

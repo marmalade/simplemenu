@@ -42,7 +42,7 @@ void CsmBackground::Serialise()
 	}
 }
 
-void CsmBackground::Render(const CIwSVec2& origin, const CIwSVec2& size,const CIwSVec2 & viewport, const CIwMat & transformation)
+void CsmBackground::Render(const CIwSVec2& origin, const CIwSVec2& size,const CIwSVec2 & viewport, const CIwMat2D & transformation)
 {
 	if (points.size() == 0)
 		return;
@@ -103,6 +103,7 @@ void CsmBackground::Render(const CIwSVec2& origin, const CIwSVec2& size,const CI
 		m->SetAlphaMode(CIwMaterial::ALPHA_BLEND);
 	IwGxSetMaterial(m);
 
+	if (transformation != CIwMat2D::g_Identity) for (CIwSVec2*i=v;i!=v+numP;++i) *i = transformation.TransformVec(*i);
 	//toeTransformScreenSpace3D(v,v+numP,transformation, viewport);
 	IwGxSetVertStreamScreenSpace(v,vertices);
 	IwGxSetUVStream(uv);

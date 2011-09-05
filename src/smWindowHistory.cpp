@@ -44,14 +44,18 @@ void SimpleMenu::smShowMenu(CsmMenu* m, CsmInputFilter* input, IsmScriptProvider
 	clock_t cur,prev;
 	cur = prev = clock();
 
+	m->SetTransition(-IW_GEOM_ONE);
+
 	for (;;)
 	{
 		cur = clock();
 		clock_t ms = (1000/30)-(cur-prev);
 		if (ms < 0) ms = 0;
-		prev = cur;
 		s3eDeviceYield(ms);
-
+		cur = clock();
+		ms = (cur-prev); if (ms > 1000) ms = 1000; //Limit to 1 FPS
+		prev = cur;
+		
 		s3eKeyboardUpdate();
 
 		bool result = true;
@@ -61,16 +65,35 @@ void SimpleMenu::smShowMenu(CsmMenu* m, CsmInputFilter* input, IsmScriptProvider
 				result = false;
 
 		if (result)
-			m->Update(IW_GEOM_ONE/30);
+			m->Update(IW_GEOM_ONE*ms/1000);
 
-		if	(
-			(result == false) ||
-			(s3eKeyboardGetState(s3eKeyEsc) & S3E_KEY_STATE_DOWN) ||
-			(s3eKeyboardGetState(s3eKeyAbsBSK) & S3E_KEY_STATE_DOWN) ||
-			(s3eDeviceCheckQuitRequest()) ||
-			(SimpleMenu::smGetCloseState() != SimpleMenu::SM_KEEP_OPEN)
-			)
-			break;
+		if (s3eDeviceCheckQuitRequest())
+			sm_menuCloseState = SM_CLOSE_ALL;
+		if	(SimpleMenu::smGetCloseState() != SimpleMenu::SM_KEEP_OPEN)
+			result = false;
+		if ((s3eKeyboardGetState(s3eKeyEsc) & S3E_KEY_STATE_DOWN) ||
+			(s3eKeyboardGetState(s3eKeyAbsBSK) & S3E_KEY_STATE_DOWN))
+			result = false;
+
+		if (!result && SimpleMenu::smGetCloseState() == SimpleMenu::SM_KEEP_OPEN)
+		{
+			sm_menuCloseState = SM_CLOSE_CURRENT;
+		}
+
+		iwfixed prevT = m->GetTransition();
+		if (prevT < 0)
+		{
+			prevT += IW_GEOM_ONE*ms/300;
+			if (prevT > 0) prevT = 0;
+			m->SetTransition(prevT);
+		} 
+		else if (!result)
+		{
+			if (SimpleMenu::smGetCloseState() == SimpleMenu::SM_CLOSE_ALL) break;
+			prevT += IW_GEOM_ONE*ms/300;
+			if (prevT > IW_GEOM_ONE) break;
+			m->SetTransition(prevT);
+		}
 
 		m->Prepare();
 		IwGxClear(IW_GX_DEPTH_BUFFER_F);
@@ -85,7 +108,7 @@ void SimpleMenu::smShowMenu(CsmMenu* m, CsmInputFilter* input, IsmScriptProvider
 	if (SimpleMenu::smGetCloseState() == SimpleMenu::SM_CLOSE_CURRENT)
 	{
 		sm_menuCloseState = SM_KEEP_OPEN;
-	}
+	} else if (SimpleMenu::smGetCloseState() == SimpleMenu::SM_SWITCH_CURRENT)
 
 	inputQueue->UnRegisterReceiver(m);
 	input->PopQueue(inputQueue);

@@ -37,7 +37,8 @@ namespace SimpleMenu
 	{
 		SM_KEEP_OPEN = 0,
 		SM_CLOSE_CURRENT = 1,
-		SM_CLOSE_ALL = 2
+		SM_CLOSE_ALL = 2,
+		SM_SWITCH_CURRENT = 3
 	};
 
 	smCloseState smGetCloseState();

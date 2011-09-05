@@ -30,6 +30,8 @@ CsmItem::CsmItem()
 	state = SM_ANYSTYLE;
 	idHash = 0;
 	isValid = false;
+	parent = 0;
+	root = 0;
 }
 //Desctructor
 CsmItem::~CsmItem()
@@ -91,7 +93,7 @@ void CsmItem::Prepare(smItemContext* renderContext, const CIwSVec2& recommendedS
 	CombineStyle(renderContext);
 	smItemContext context = *renderContext;
 	context.parentStyle = &combinedStyle;
-	if (childItems.size() > 0)
+	//if (childItems.size() > 0)
 	{
 		PrepareChildItems(&context, recommendedSize);
 		RearrangeChildItems();
@@ -216,6 +218,7 @@ void CsmItem::RenderInternalShadow(smItemContext* renderContext)
 	indices[i++] = 0;	indices[i++] = 7;	indices[i++] = 4;
 
 	IwGxSetMaterial(m);
+	if (renderContext->transformation != CIwMat2D::g_Identity) for (CIwSVec2*i=v;i!=v+vertices;++i) *i = renderContext->transformation.TransformVec(*i);
 	//toeTransformScreenSpace3D(v,v+vertices,renderContext->transformation, renderContext->viewportSize);
 	IwGxSetVertStreamScreenSpace(v,vertices);
 	IwGxSetColStream(col);
@@ -302,6 +305,7 @@ void CsmItem::RenderShadow(smItemContext* renderContext)
 
 	IwGxSetMaterial(m);
 
+	if (renderContext->transformation != CIwMat2D::g_Identity) for (CIwSVec2*i=v;i!=v+vertices;++i) *i = renderContext->transformation.TransformVec(*i);
 	//toeTransformScreenSpace3D(v,v+vertices,renderContext->transformation, renderContext->viewportSize);
 	IwGxSetVertStreamScreenSpace(v,vertices);
 	IwGxSetColStream(col);
@@ -365,6 +369,7 @@ void CsmItem::RenderBorder(smItemContext* renderContext)
 	indices[i++] = 0;	indices[i++] = 7;	indices[i++] = 4;
 
 	IwGxSetMaterial(m);
+	if (renderContext->transformation != CIwMat2D::g_Identity) for (CIwSVec2*i=v;i!=v+vertices;++i) *i = renderContext->transformation.TransformVec(*i);
 	//toeTransformScreenSpace3D(v,v+vertices,renderContext->transformation, renderContext->viewportSize);
 	IwGxSetVertStreamScreenSpace(v,vertices);
 	IwGxSetColStream(col);

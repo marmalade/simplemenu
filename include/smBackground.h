@@ -26,7 +26,7 @@ namespace SimpleMenu
 
 		virtual void Serialise();
 
-		void Render(const CIwSVec2& origin, const CIwSVec2& size, const CIwSVec2 & viewport, const CIwMat & transformation);
+		void Render(const CIwSVec2& origin, const CIwSVec2& size, const CIwSVec2 & viewport, const CIwMat2D & transformation);
 #ifdef IW_BUILD_RESOURCES
 		//Parses from text file: parses attribute/value pair.
 		virtual	bool	ParseAttribute(CIwTextParserITX* pParser, const char* pAttrName);

@@ -167,14 +167,6 @@ void SimpleMenu::smInit()
 	smRegisterClass(CsmTextBlock::GetClassDescription());
 	smRegisterClass(CsmTextBox::GetClassDescription());
 	smRegisterClass(smGetClassDescription());
-
-
-
-
-
-
-
-
 	
 }
 

@@ -125,6 +125,7 @@ void CsmImage::Render(smItemContext* renderContext)
 	CIwColour* col =IW_GX_ALLOC(CIwColour,4);
 	col[0] = col[1] = col[2] = col[3] = rectColour;
 
+	if (renderContext->transformation != CIwMat2D::g_Identity) for (CIwSVec2*i=v;i!=v+4;++i) *i = renderContext->transformation.TransformVec(*i);
 	//smTransformScreenSpace3D(v,v+4,renderContext->transformation, renderContext->viewportSize);
 
 	IwGxSetVertStreamScreenSpace(v,4);

@@ -2,6 +2,7 @@
 #include <IwResManager.h>
 #include <IwGx.h>
 #include "simplemenu.h"
+#include "math.h"
 #include "smMenu.h"
 #include "smItem.h"
 
@@ -74,7 +75,14 @@ CsmMenu::~CsmMenu()
 		delete material;
 	if (blendMaterial)
 		delete blendMaterial;
-	childItems.Delete();
+	if (content.item)
+		delete content.item;
+	if (header.item)
+		delete header.item;
+	if (footer.item)
+		delete footer.item;
+	if (overlay.item)
+		delete overlay.item;
 }
 CIwMaterial* CsmMenu::GetFlatMaterial()
 {
@@ -116,7 +124,10 @@ CsmScriptableClassDeclaration* CsmMenu::GetClassDescription()
 void CsmMenu::Serialise ()
 {
 	CIwResource::Serialise();
-	childItems.Serialise();
+	smSerialiseManaged(content.item);
+	smSerialiseManaged(header.item);
+	smSerialiseManaged(footer.item);
+	smSerialiseManaged(overlay.item);
 	style.Serialise();
 	IwSerialiseUInt32(styleSheetHash);
 	smSerialiseString(onUpdate);
@@ -125,8 +136,10 @@ void CsmMenu::Serialise ()
 	{
 		SetStyleSheetHash(styleSheetHash);
 
-		for (CsmItem** i = childItems.begin(); i!=childItems.end(); ++i)
-			(*i)->OnAttachToMenu(this,0);
+		if (content.item) content.item->OnAttachToMenu(this,0);
+		if (header.item) header.item->OnAttachToMenu(this,0);
+		if (footer.item) footer.item->OnAttachToMenu(this,0);
+		if (overlay.item) overlay.item->OnAttachToMenu(this,0);
 	}
 }
 void CsmMenu::SetStyleSheetHash(uint32 v) 
@@ -137,12 +150,23 @@ void CsmMenu::SetStyleSheetHash(uint32 v)
 		styleSheet = (CsmStyleSheet*)IwGetResManager()->GetResHashed(styleSheetHash,"CsmStyleSheet");
 	}
 }
+void SetScaleAt(iwfixed scaleX,iwfixed scaleY,int x,int y, CIwMat2D* m)
+{
+	m->m[0][0] = scaleX;
+	m->m[0][1] = 0;
+	m->m[1][0] = 0;
+	m->m[1][1] = scaleY;
+	m->t.x = x - x*scaleX/IW_GEOM_ONE;
+	m->t.y = y - y*scaleY/IW_GEOM_ONE;
+
+	//m.t.y = y - h*(IW_GEOM_ONE-scaleY)/IW_GEOM_ONE/2;
+}
 //Render image on the screen surface
 void CsmMenu::Prepare()
 {
 	isPreparedToRender = true;
-	renderContext = smItemContext();
-
+	smItemContext renderContext = smItemContext();
+	
 	if (styleSheet)
 		styleSheet->Apply(&styleSettings, IwHashString("SIMPLEMENU"), SM_ANYSTYLE, SM_ANYSTYLE);
 	style.Apply(&styleSettings);
@@ -154,18 +178,34 @@ void CsmMenu::Prepare()
 	CIwSVec2 recommendedSize = renderContext.viewportSize = CIwSVec2(w,h);
 	styleSettings.Background.Render(CIwSVec2::g_Zero,CIwSVec2(w,h), renderContext.viewportSize, renderContext.transformation);
 
+	header.renderContext = footer.renderContext = content.renderContext = overlay.renderContext = renderContext;
+	if (transition != 0)
+	{
+		iwfixed t = abs(transition);
+		iwfixed scale = IW_GEOM_ONE-t;
+
+		//header.renderContext.transformation.SetRot(-t/4,CIwVec2(0,0));
+		SetScaleAt(scale,scale,w/2,0,&header.renderContext.transformation);
+
+		//footer.renderContext.transformation.SetRot(-t/4,CIwVec2(w,h));
+		SetScaleAt(scale,scale,w/2,h,&footer.renderContext.transformation);
+
+		SetScaleAt(scale,scale,w/2,h/2,&content.renderContext.transformation);
+		SetScaleAt(scale,scale,w/2,h/2,&overlay.renderContext.transformation);
+	}
+
 	int16 contentAreaLeftover = h;
 	CsmItem* item;
 	item = GetHeader();
-	if (item) { item->Prepare(&renderContext,recommendedSize); contentAreaLeftover -= item->GetSize().y; }
+	if (item) { item->Prepare(&header.renderContext,recommendedSize); contentAreaLeftover -= item->GetSize().y; }
 	item = GetFooter();
-	if (item) { item->Prepare(&renderContext,recommendedSize); contentAreaLeftover -= item->GetSize().y; }
+	if (item) { item->Prepare(&footer.renderContext,recommendedSize); contentAreaLeftover -= item->GetSize().y; }
 	isHeaderScrollable = contentAreaLeftover < h/3;
 	item = GetContent();
 	if (item) 
 	{
 		recommendedSize.y = (isHeaderScrollable)?h:contentAreaLeftover;
-		item->Prepare(&renderContext,recommendedSize);
+		item->Prepare(&content.renderContext,recommendedSize);
 	}
 
 	AlignBlocks();
@@ -180,13 +220,13 @@ void CsmMenu::Render()
 
 	// Render Content
 	item = GetContent();
-	if (item) { item->Render(&renderContext);}
+	if (item) { item->Render(&content.renderContext);}
 	// Render Header
 	item = GetHeader();
-	if (item) { item->Render(&renderContext);}
+	if (item) { item->Render(&header.renderContext);}
 	// Render Footer
 	item = GetFooter();
-	if (item) { item->Render(&renderContext);}
+	if (item) { item->Render(&footer.renderContext);}
 
 	//render scroll
 	CsmItem* content=GetContent();
@@ -210,8 +250,8 @@ void CsmMenu::Render()
 			{
 				int16 stop = contentVisibleTop*contentAreaHeight/contentHeight;
 				int16 sbottom = contentVisibleBottom*contentAreaHeight/contentHeight;
-				smDrawSimpleMenuScrollbar(CIwSVec2(renderContext.viewportSize.x-4,contentAreaOffset-1),CIwSVec2(4,contentAreaHeight+2),
-					CIwSVec2(renderContext.viewportSize.x-3,contentAreaOffset+stop),CIwSVec2(2,sbottom-stop));
+				smDrawSimpleMenuScrollbar(CIwSVec2(overlay.renderContext.viewportSize.x-4,contentAreaOffset-1),CIwSVec2(4,contentAreaHeight+2),
+					CIwSVec2(overlay.renderContext.viewportSize.x-3,contentAreaOffset+stop),CIwSVec2(2,sbottom-stop));
 			}
 		}
 	}
@@ -220,22 +260,17 @@ void CsmMenu::Render()
 }
 void CsmMenu::Update(iwfixed dt)
 {
-	CsmItem* content=GetContent();
-
 	if (!activeTouch)
 	{
-		if (content)
+		if (content.item)
 		{
-			int16 contentHeight = content->GetSize().y;
+			int16 contentHeight = content.item->GetSize().y;
 			int16 minContent = 0;
 			int16 maxContent = 0;
 			if (isHeaderScrollable)
 			{
-				CsmItem* content=GetContent();
-				CsmItem* header=GetHeader();
-				CsmItem* footer=GetFooter();
-				maxContent = header?header->GetSize().y:0;
-				minContent = contentAreaHeight-( (content?content->GetSize().y:0) + (footer?footer->GetSize().y:0));
+				maxContent = header.item?header.item->GetSize().y:0;
+				minContent = contentAreaHeight-( (content.item?content.item->GetSize().y:0) + (footer.item?footer.item->GetSize().y:0));
 			}
 			else
 			{
@@ -261,16 +296,16 @@ void CsmMenu::Update(iwfixed dt)
 			else
 			{
 				contentOffset += scrollAnimation;
-				scrollAnimation = scrollAnimation*8/10;
+				scrollAnimation = scrollAnimation*9/10;
 			}
-			content->SetOrigin(CIwSVec2(0,contentAreaOffset+contentOffset));
+			content.item->SetOrigin(CIwSVec2(0,contentAreaOffset+contentOffset));
 		}
 	}
 	else
 	{
 		scrollAnimation = scrollAnimationAcc;
 		scrollAnimationAcc = 0;
-		content->SetOrigin(CIwSVec2(0,contentAreaOffset+contentOffset));
+		content.item->SetOrigin(CIwSVec2(0,contentAreaOffset+contentOffset));
 	}
 
 	while (lazyEvents.GetFirstChild())
@@ -282,11 +317,10 @@ void CsmMenu::Update(iwfixed dt)
 		delete e;
 	}
 
-	for (CsmItem** i = childItems.begin(); i!=childItems.end(); ++i)
-	{
-		CsmItem* item = *i;
-		item->Animate(dt);
-	}
+	if (content.item) content.item->Animate(dt);
+	if (header.item) header.item->Animate(dt);
+	if (footer.item) footer.item->Animate(dt);
+	if (overlay.item) overlay.item->Animate(dt);
 
 	if (onUpdate.size() > 0)
 		if (scriptProvider)
@@ -343,40 +377,28 @@ CsmItem* CsmMenu::GetItemByHash(uint32 h) const
 
 bool CsmMenu::VisitForward(IsmVisitor* visitor) const
 {
-	for (CsmItem** i = childItems.begin(); i!=childItems.end(); ++i)
-	{
-		CsmItem* item = static_cast<CsmItem*>(*i);
-		if (!item->VisitForward(visitor))
-			return false;
-	}
+	if (content.item) if (!content.item->VisitForward(visitor)) return false;
+	if (header.item) if (!header.item->VisitForward(visitor)) return false;
+	if (footer.item) if (!footer.item->VisitForward(visitor)) return false;
+	if (overlay.item) if (!overlay.item->VisitForward(visitor)) return false;
 	return true;
 }
 bool CsmMenu::VisitBackward(IsmVisitor* visitor) const
 {
-	CsmItem** i = childItems.end();
-	for (; i!=childItems.begin(); )
-	{
-		--i;
-		CsmItem* item = static_cast<CsmItem*>(*i);
-		if (!item->VisitBackward(visitor))
-			return false;
-	}
+	if (overlay.item) if (!overlay.item->VisitBackward(visitor)) return false;
+	if (footer.item) if (!footer.item->VisitBackward(visitor)) return false;
+	if (header.item) if (!header.item->VisitBackward(visitor)) return false;
+	if (content.item) if (!content.item->VisitBackward(visitor)) return false;
 	return true;
 }
 
 CsmItem* CsmMenu::FindActiveItemAt(const CIwVec2 & coord)
 {
-	if (childItems.size() == 0)
-		return 0;
-	CsmItem** i = childItems.end();
-	do
-	{
-		--i;
-		CsmItem* item = static_cast<CsmItem*>(*i);
-		CsmItem* foundItem = item->FindActiveItemAt(coord);
-		if (foundItem)
-			return foundItem;
-	} while (i!=childItems.begin());
+	CsmItem* foundItem = 0;
+	if (overlay.item) if (foundItem = overlay.item->FindActiveItemAt(coord)) return foundItem;
+	if (footer.item) if (foundItem = footer.item->FindActiveItemAt(coord)) return foundItem;
+	if (header.item) if (foundItem = header.item->FindActiveItemAt(coord)) return foundItem;
+	if (content.item) if (foundItem = content.item->FindActiveItemAt(coord)) return foundItem;
 	return 0;
 }
 bool CsmMenu::KeyReleasedEvent(smKeyContext* keyContext)
@@ -543,7 +565,11 @@ bool CsmMenu::TouchMotionEvent(smTouchContext* touchContext)
 		return false;
 	CIwVec2 shift = touchContext->currentPoistion-touchContext->lastKnownPoistion;
 	DPI::CdpiLength threshold(16*IW_GEOM_ONE, DPI::CdpiLength::PT);
-	if (isVerticalScrolled || abs(touchContext->firstKnownPoistion.y - touchContext->currentPoistion.y) > threshold.GetPx(1))
+	int a = threshold.GetPx(1);
+	int b = abs(touchContext->firstKnownPoistion.x - touchContext->currentPoistion.x)/4;
+	int thresholdPx = (a>b)?a:b;
+	
+	if (isVerticalScrolled || abs(touchContext->firstKnownPoistion.y - touchContext->currentPoistion.y) > thresholdPx)
 	{
 		isVerticalScrolled = true;
 		if (activeItem)
@@ -565,8 +591,11 @@ bool CsmMenu::TouchMotionEvent(smTouchContext* touchContext)
 
 void CsmMenu::AddItem(CsmItem* item)
 {
-	childItems.push_back(item);
-	item->OnAttachToMenu(this,0);
+	if (!content.item) { content.item = item; item->OnAttachToMenu(this,0); return; }
+	if (!header.item) { header.item = item; item->OnAttachToMenu(this,0); return; }
+	if (!footer.item) { footer.item = item; item->OnAttachToMenu(this,0); return; }
+	if (!overlay.item) { overlay.item = item; item->OnAttachToMenu(this,0); return; }
+	IwAssertMsg(SM, false, ("Too many CsmMenu child items"));
 }
 
 std::string CsmMenu::GetInnerText() const
@@ -577,10 +606,10 @@ std::string CsmMenu::GetInnerText() const
 }
 void CsmMenu::CollectInnerTextTo(std::stringstream & s) const
 {
-	for (CsmItem** i = childItems.begin(); i!=childItems.end(); ++i)
-	{
-		(*i)->CollectInnerTextTo(s);
-	}
+	if (content.item) content.item->CollectInnerTextTo(s);
+	if (header.item) header.item->CollectInnerTextTo(s);
+	if (footer.item) footer.item->CollectInnerTextTo(s);
+	if (overlay.item) overlay.item->CollectInnerTextTo(s);
 }
 
 #ifdef IW_BUILD_RESOURCES

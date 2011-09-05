@@ -11,6 +11,14 @@
 
 namespace SimpleMenu
 {
+	struct smMenuLayer
+	{
+		smItemContext renderContext;
+		CsmItem* item;
+
+		smMenuLayer():item(0){}
+	};
+
 	class CsmMenu : public CIwResource, public IsmInputReciever
 	{
 		friend class CsmItem;
@@ -18,7 +26,6 @@ namespace SimpleMenu
 		std::string onLoad;
 		std::string onUpdate;
 	protected:
-		CsmItemList childItems;
 		uint32 styleSheetHash;
 		CsmStyleSettings styleSettings;
 		CsmStyle style;
@@ -39,7 +46,13 @@ namespace SimpleMenu
 		bool isPreparedToRender;
 		// Flag to indicate if there is enough space for content. If it's true than there isn't enough space and we should scroll the header too.
 		bool isHeaderScrollable;
-		smItemContext renderContext;
+		
+		smMenuLayer header;
+		smMenuLayer footer;
+		smMenuLayer content;
+		smMenuLayer overlay;
+
+		iwfixed transition;
 	public:
 		//Declare managed class
 		IW_MANAGED_DECLARE(CsmMenu);
@@ -55,6 +68,9 @@ namespace SimpleMenu
 		void Initialize(IsmScriptProvider* sp);
 		IsmScriptProvider* GetScriptProvider() const { return scriptProvider; };
 
+		void SetTransition(iwfixed t) { transition = t; }
+		iwfixed GetTransition() const { return transition; }
+
 		//Reads/writes a binary file using @a IwSerialise interface.
 		virtual void Serialise ();
 		//Prepare to render
@@ -69,9 +85,10 @@ namespace SimpleMenu
 
 		void AlignBlocks();
 
-		CsmItem* GetContent() const { return (childItems.size() > 0)?static_cast<CsmItem*>(childItems[0]):(CsmItem*)0;}
-		CsmItem* GetHeader() const { return (childItems.size() > 1)?static_cast<CsmItem*>(childItems[1]):(CsmItem*)0;}
-		CsmItem* GetFooter() const { return (childItems.size() > 2)?static_cast<CsmItem*>(childItems[2]):(CsmItem*)0;}
+		CsmItem* GetContent() const { return content.item;}
+		CsmItem* GetHeader() const { return header.item;}
+		CsmItem* GetFooter() const { return footer.item;}
+		CsmItem* GetOverlay() const { return overlay.item;}
 		CsmItem* GetItemById(const char*) const;
 		CsmItem* GetItemByHash(uint32 h) const;
 		CsmItem* FindActiveItemAt(const CIwVec2 & coord);
