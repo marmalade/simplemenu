@@ -16,6 +16,7 @@ files
 	smCamera.cpp
 	smCompass.cpp
 	smVolumeSlider.cpp
+	smWebView.cpp
 
 	["include"]
 	(include)
@@ -28,10 +29,13 @@ files
 	smCamera.h
 	smCompass.h 
 	smVolumeSlider.h
+	smWebView.h
 }
 
 subprojects
 {
 	./simplemenu.mkf
 	./simplemenu.config.mkf
+
+	s3eWebView
 }

@@ -99,7 +99,12 @@ void CsmGallery::Touch(smTouchContext* smTouchContext)
 void CsmGallery::TouchReleased(smTouchContext* smTouchContext)
 {
 	touched = false;
-	
+	int dx = smTouchContext->lastKnownPoistion.x - 	smTouchContext->firstKnownPoistion.x;
+	int threshold = DPI::CdpiLength(72, DPI::CdpiLength::PT).GetPx(1);
+	if (abs(dx) > threshold)
+	{
+
+	}
 }
 void CsmGallery::TouchCanceled(smTouchContext* smTouchContext)
 {

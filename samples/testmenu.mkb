@@ -79,7 +79,6 @@ subprojects
 	../simplemenu.curl.osm.mkf
 	../simplemenu.sqlite.mkf
 	../simplemenu.tilemap.mkf
-	../simplemenu.statemachine.mkf
 	freetype
 	freetypehelper
 }

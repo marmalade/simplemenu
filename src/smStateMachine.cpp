@@ -4,48 +4,9 @@
 
 namespace SimpleMenu
 {
-	int initStateMachineCounter = 0;
-	TsmManagedList<CsmState>* g_smStateMachineStack;
-
-	class CsmStateAction
-	{
-	public:
-		virtual ~CsmStateAction() {}
-		virtual void Perform() {}
-	};
-
-	TsmManagedList<CsmStateAction>* g_smStateMachineActionQueue;
-
-	class CsmStatePushAction: public CsmStateAction
-	{
-		CsmState* state;
-	public:
-		CsmStatePushAction(CsmState* s) {state = s;}
-		virtual void Perform() {
-			g_smStateMachineStack->push_back(state);
-		}
-	};
-	class CsmStatePopAction: public CsmStateAction
-	{
-		virtual void Perform() {
-			g_smStateMachineStack->back()->Release();
-			g_smStateMachineStack->pop_back();
-		}
-	};
-	class CsmStateCloseAllAction: public CsmStateAction
-	{
-		virtual void Perform() {
-			while (!g_smStateMachineStack->empty())
-			{
-				g_smStateMachineStack->back()->Release();
-				g_smStateMachineStack->pop_back();
-			}
-		}
-	};
-	void smStateMachinePushAction(CsmStateAction*a)
-	{
-		g_smStateMachineActionQueue->push_back(a);
-	};
+	extern TsmManagedList<CsmState>* g_smStateMachineStack;
+	extern TsmManagedList<CsmStateAction>* g_smStateMachineActionQueue;
+	
 }
 
 using namespace SimpleMenu;
@@ -61,67 +22,7 @@ CsmScriptableClassDeclaration* CsmStateMachine::GetClassDescription()
 			0);
 	return &d;
 }
-void CsmStateMachine::CloseAll() { smStateMachinePushAction(new CsmStateCloseAllAction()); }
-void CsmStateMachine::Close() { smStateMachinePushAction(new CsmStatePopAction()); }
-void CsmStateMachine::OpenMenuAtGroup(const char*g) { smStateMachinePushAction(new CsmStatePushAction(new CsmGroupMenuState(g,0))); }
-void CsmStateMachine::Alert(const char*h,const char*t) { 
-	IwAssertMsg(SM,false,("%s\n%s",h,t));
-}
 
-void SimpleMenu::smStateMachineInit()
-{
-	++initStateMachineCounter;
-	if (initStateMachineCounter != 1)
-		return;
-
-	g_smStateMachineStack = new TsmManagedList<CsmState>();
-	g_smStateMachineActionQueue = new TsmManagedList<CsmStateAction>();
-	//#ifdef IW_BUILD_RESOURCES
-	//IwGetResManager()->AddHandler(new CsmStateMachineScriptResHandler);
-	//#endif
-
-	//IW_CLASS_REGISTER(CsmStateMachineState);
-	smRegisterClass(CsmStateMachine::GetClassDescription());
-
-	smInit();
-}
-
-void SimpleMenu::smStateMachineTerminate()
-{
-	--initStateMachineCounter;
-	if (initStateMachineCounter < 0)
-		IwAssertMsg(SIMPLEMENU,false,("smStateMachineTerminate doesn't match smStateMachineInit"));
-	if (initStateMachineCounter != 0)
-		return;
-
-	if (g_smStateMachineStack)
-	{
-		while (!g_smStateMachineStack->empty())
-		{
-			g_smStateMachineStack->back()->Release();
-			g_smStateMachineStack->pop_back();
-		}
-		delete g_smStateMachineStack;
-		g_smStateMachineStack = 0;
-	}
-	if (g_smStateMachineActionQueue)
-	{
-		g_smStateMachineActionQueue->Delete();
-		delete g_smStateMachineActionQueue;
-		g_smStateMachineActionQueue = 0;
-	}
-
-	smTerminate();
-}
-
-void SimpleMenu::smStateMachinePush(CsmState* s)
-{
-	g_smStateMachineActionQueue->push_back(new CsmStatePushAction(s));
-}
-void SimpleMenu::smStateMachinePop()
-{
-	g_smStateMachineActionQueue->push_back(new CsmStatePopAction());
-}
 void smStateMachineUpdate(int ms)
 {
 	CsmState* s = smStateMachinePeek();

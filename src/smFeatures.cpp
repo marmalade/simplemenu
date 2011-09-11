@@ -2,6 +2,7 @@
 #include <smFeatures.h>
 #include <smAllFeatures.h>
 #include <smConfig.h>
+#include <smWebView.h>
 
 namespace SimpleMenu
 {
@@ -48,6 +49,7 @@ void SimpleMenu::smFeaturesInit()
 	smRegisterClass(CsmAccelerometer::GetClassDescription());
 	smRegisterClass(CsmAudio::GetClassDescription());
 	smRegisterClass(CsmVideo::GetClassDescription());
+	smRegisterClass(CsmWebView::GetClassDescription());
 
 	IW_CLASS_REGISTER(CsmCameraImage);
 

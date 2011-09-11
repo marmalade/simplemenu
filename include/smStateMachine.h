@@ -23,6 +23,16 @@ namespace SimpleMenu
 		int ms;
 		clock_t prev;
 	};
+	class CsmStateAction
+	{
+	public:
+		virtual ~CsmStateAction() {}
+		virtual void Perform() {}
+	};
+	class CsmStateCloseAllAction: public CsmStateAction
+	{
+		virtual void Perform();
+	};
 
 	class CsmStateMachine
 	{
@@ -83,7 +93,4 @@ namespace SimpleMenu
 	CsmState* smStateMachinePeek();
 	void smStateMachineLoop(CsmInputFilter* input);
 	void smStateMachineIterate(smStateMachineStateContext* context);
-
-	void smStateMachineInit();
-	void smStateMachineTerminate();
 }

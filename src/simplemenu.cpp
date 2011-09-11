@@ -21,6 +21,7 @@
 #include "smGrid.h"
 #include "smFloatingPanel.h"
 #include "smWindowHistory.h"
+#include "smStateMachine.h"
 
 namespace SimpleMenu
 {
@@ -28,6 +29,7 @@ namespace SimpleMenu
 	CsmInputFilter* g_inputFilter = 0;
 	iwangle g_toeLoadingAngle = 0;
 	CIwArray<CsmScriptableClassDeclaration*>* toe_scriptClassDeclarations=0;
+	TsmManagedList<CsmState>* g_smStateMachineStack = 0;
 
 	CsmInputFilter* smGetInputFilter() 
 	{
@@ -38,6 +40,39 @@ namespace SimpleMenu
 		}
 		return g_inputFilter;
 	}
+
+
+	TsmManagedList<CsmStateAction>* g_smStateMachineActionQueue = 0;
+
+	class CsmStatePushAction: public CsmStateAction
+	{
+		CsmState* state;
+	public:
+		CsmStatePushAction(CsmState* s) {state = s;}
+		virtual void Perform() {
+			g_smStateMachineStack->push_back(state);
+		}
+	};
+	class CsmStatePopAction: public CsmStateAction
+	{
+		virtual void Perform() {
+			g_smStateMachineStack->back()->Release();
+			g_smStateMachineStack->pop_back();
+		}
+	};
+	
+	void CsmStateCloseAllAction::Perform() {
+		while (!g_smStateMachineStack->empty())
+		{
+			g_smStateMachineStack->back()->Release();
+			g_smStateMachineStack->pop_back();
+		}
+	}
+
+	void smStateMachinePushAction(CsmStateAction*a)
+	{
+		g_smStateMachineActionQueue->push_back(a);
+	};
 
 	/*smCloseState sm_menuCloseState = SM_KEEP_OPEN;
 	smCloseState smGetCloseState() 
@@ -92,6 +127,22 @@ namespace SimpleMenu
 
 using namespace SimpleMenu;
 
+void CsmStateMachine::CloseAll() { smStateMachinePushAction(new CsmStateCloseAllAction()); }
+void CsmStateMachine::Close() { smStateMachinePushAction(new CsmStatePopAction()); }
+void CsmStateMachine::OpenMenuAtGroup(const char*g) { smStateMachinePushAction(new CsmStatePushAction(new CsmGroupMenuState(g,0))); }
+void CsmStateMachine::Alert(const char*h,const char*t) { 
+	IwAssertMsg(SM,false,("%s\n%s",h,t));
+}
+
+void SimpleMenu::smStateMachinePush(CsmState* s)
+{
+	g_smStateMachineActionQueue->push_back(new CsmStatePushAction(s));
+}
+void SimpleMenu::smStateMachinePop()
+{
+	g_smStateMachineActionQueue->push_back(new CsmStatePopAction());
+}
+
 void SimpleMenu::smInit()
 {
 	++initCounter;
@@ -128,6 +179,8 @@ void SimpleMenu::smInit()
 
 
 	toe_scriptClassDeclarations = new CIwArray<CsmScriptableClassDeclaration*>;
+	g_smStateMachineStack = new TsmManagedList<CsmState>();
+	g_smStateMachineActionQueue = new TsmManagedList<CsmStateAction>();
 
 	smRegisterClass(CsmMenu::GetClassDescription());
 	smRegisterClass(CsmButton::GetClassDescription());
@@ -148,6 +201,8 @@ void SimpleMenu::smInit()
 	smRegisterClass(CsmTextBlock::GetClassDescription());
 	smRegisterClass(CsmTextBox::GetClassDescription());
 	smRegisterClass(smGetClassDescription());
+	smRegisterClass(CsmStateMachine::GetClassDescription());
+
 	
 }
 
@@ -159,8 +214,22 @@ void SimpleMenu::smTerminate()
 	if (initCounter != 0)
 		return;
 
-	FreeTypeHelper::fthTerminate();
-	DPI::dpiTerminate();
+	if (g_smStateMachineStack)
+	{
+		while (!g_smStateMachineStack->empty())
+		{
+			g_smStateMachineStack->back()->Release();
+			g_smStateMachineStack->pop_back();
+		}
+		delete g_smStateMachineStack;
+		g_smStateMachineStack = 0;
+	}
+	if (g_smStateMachineActionQueue)
+	{
+		g_smStateMachineActionQueue->Delete();
+		delete g_smStateMachineActionQueue;
+		g_smStateMachineActionQueue = 0;
+	}
 
 	if (g_inputFilter)
 	{
@@ -179,6 +248,9 @@ void SimpleMenu::smTerminate()
 		delete toe_scriptClassDeclarations;
 		toe_scriptClassDeclarations = 0;
 	}
+
+	FreeTypeHelper::fthTerminate();
+	DPI::dpiTerminate();
 }
 
 void SimpleMenu::smRegisterClass(CsmScriptableClassDeclaration* c)
