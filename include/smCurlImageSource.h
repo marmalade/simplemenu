@@ -41,6 +41,11 @@ namespace SimpleMenu
 		virtual void Prepare(const CIwSVec2& recommendedSize);
 		// Get image material to draw quad
 		virtual CIwMaterial* GetMaterial();
+
+		void SetImageToMaterial();
+		void DecodeJpeg(void*buf, size_t len);
+		void DecodePng(void*buf, size_t len);
+		bool LoadFile(const char* file);
 #ifdef IW_BUILD_RESOURCES
 		//Parses from text file: parses attribute/value pair.
 		virtual	bool	ParseAttribute(CIwTextParserITX* pParser, const char* pAttrName);

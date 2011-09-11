@@ -21,10 +21,12 @@ files
 packages
 {
 	libcurl
+	libjpeg
 }
 
 subprojects
 {
 	./simplemenu.mkf
 	libcurl
+	libjpeg
 }

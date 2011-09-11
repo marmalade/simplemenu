@@ -14,6 +14,7 @@
 #include <smOsm.h>
 #include <smLuaState.h>
 #include <smWindowHistory.h>
+#include <smStateMachine.h>
 
 using namespace FreeTypeHelper;
 
@@ -32,6 +33,7 @@ int main(int argc, char* argv[])
 	SimpleMenu::sm3DInit();
 	SimpleMenu::smCurlInit();
 	SimpleMenu::smOsmInit();
+	SimpleMenu::smStateMachineInit();
 
 	SimpleMenu::smSetLuaAsDefaultScript();
 	IwGxSetColClear(0x1f, 0x1f, 0xc0, 0x7f);
@@ -40,13 +42,16 @@ int main(int argc, char* argv[])
 
 	SimpleMenu::CsmLuaState* lua = SimpleMenu::smGetLuaDefaultState();
 
-	CIwResGroup* sampleGroup =  IwGetResManager()->LoadGroup("menu/mainmenu.group");
-	SimpleMenu::CsmMenu* m = (SimpleMenu::CsmMenu*)sampleGroup->GetResNamed("mainmenu", "CsmMenu");
+	SimpleMenu::CsmStateMachine::OpenMenuAtGroup("menu/mainmenu.group");	
+	SimpleMenu::smStateMachineLoop(input);
+	//CIwResGroup* sampleGroup =  IwGetResManager()->LoadGroup("menu/mainmenu.group");
+	//SimpleMenu::CsmMenu* m = (SimpleMenu::CsmMenu*)sampleGroup->GetResNamed("mainmenu", "CsmMenu");
 
-	SimpleMenu::smShowMenu(m, input, lua, 0, 0);
+	//SimpleMenu::smShowMenu(m, input, lua, 0, 0);
 
-	IwGetResManager()->DestroyGroup(sampleGroup);
+	//IwGetResManager()->DestroyGroup(sampleGroup);
 
+	SimpleMenu::smStateMachineTerminate();
 	SimpleMenu::smOsmTerminate();
 	SimpleMenu::smCurlTerminate();
 	SimpleMenu::sm3DTerminate();

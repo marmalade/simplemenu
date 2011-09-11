@@ -10,27 +10,27 @@ CsmMenu
 		CsmButton
 		{
 			text "Controls"
-			onclick "CsmUtils.OpenMenuAtGroup('menu/controls.group')"
+			onclick "CsmStateMachine.OpenMenuAtGroup('menu/controls.group')"
 		}
 		CsmButton
 		{
 			text "Notifications"
-			onclick "CsmUtils.OpenMenuAtGroup('menu/notifications.group')"
+			onclick "CsmStateMachine.OpenMenuAtGroup('menu/notifications.group')"
 		}
 		CsmButton
 		{
 			text "3D Model"
-			onclick "CsmUtils.OpenMenuAtGroup('menu/3dmodel.group')"
+			onclick "CsmStateMachine.OpenMenuAtGroup('menu/3dmodel.group')"
 		}
 		CsmButton
 		{
 			text "Long text block"
-			onclick "CsmUtils.OpenMenuAtGroup('menu/longtext.group')"
+			onclick "CsmStateMachine.OpenMenuAtGroup('menu/longtext.group')"
 		}
 		CsmButton
 		{
 			text "Camera"
-			onclick "CsmUtils.OpenMenuAtGroup('menu/camera.group')"
+			onclick "CsmStateMachine.OpenMenuAtGroup('menu/camera.group')"
 		}
 		CsmButton
 		{
@@ -43,12 +43,12 @@ CsmMenu
 			CsmButton
 			{
 				text "Networking"
-				onclick "CsmUtils.OpenMenuAtGroup('menu/networking.group')"
+				onclick "CsmStateMachine.OpenMenuAtGroup('menu/networking.group')"
 			}
 			CsmButton
 			{
 				text "Open Street Map"
-				onclick "CsmUtils.OpenMenuAtGroup('menu/osm.group')"
+				onclick "CsmStateMachine.OpenMenuAtGroup('menu/osm.group')"
 			}
 		}
 
@@ -81,12 +81,12 @@ CsmMenu
 		CsmButton
 		{
 			text "About"
-			onclick "CsmUtils.OpenMenuAtGroup('menu/about.group')"
+			onclick "CsmStateMachine.OpenMenuAtGroup('menu/about.group')"
 		}
 		CsmButton
 		{
 			text "Close"
-			onclick "CsmUtils.CloseAllMenus()"
+			onclick "CsmStateMachine.CloseAll()"
 		}
 	}
 }

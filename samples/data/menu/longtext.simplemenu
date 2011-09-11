@@ -36,12 +36,12 @@ text " -- last line ---"
 		CsmButton
 		{
 			text "Back"
-			onclick "CsmUtils.CloseMenu()"
+			onclick "CsmStateMachine.Close()"
 		}
 		CsmButton
 		{
 			text "Close"
-			onclick "CsmUtils.CloseAllMenus()"
+			onclick "CsmStateMachine.CloseAll()"
 		}
 	}
 }
