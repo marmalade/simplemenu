@@ -67,6 +67,7 @@ CsmMenu::CsmMenu()
 	blendMaterial = 0;
 	isHeaderScrollable = false;
 	isPreparedToRender = false;
+	transition = 0;
 }
 //Desctructor
 CsmMenu::~CsmMenu()

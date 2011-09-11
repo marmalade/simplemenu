@@ -39,22 +39,14 @@ namespace SimpleMenu
 		return g_inputFilter;
 	}
 
-	smCloseState sm_menuCloseState = SM_KEEP_OPEN;
+	/*smCloseState sm_menuCloseState = SM_KEEP_OPEN;
 	smCloseState smGetCloseState() 
 	{ 
 		return sm_menuCloseState; 
-	}
+	}*/
 	class CsmUtils
 	{
 	public:
-		static void CloseAllMenus() 
-		{
-			sm_menuCloseState = SM_CLOSE_ALL;
-		}
-		static void CloseMenu() 
-		{
-			sm_menuCloseState = SM_CLOSE_CURRENT;
-		}
 		static int GetDPI() {
 			return DPI::dpiGetScreenDPI();
 		}
@@ -78,29 +70,18 @@ namespace SimpleMenu
 		{
 			return (int)IwHashString(s);
 		}
-		static void OpenMenuAtGroup(const char* s)
-		{
-			smOpenMenuAtGroup(s);
-		}
-		static void Alert(const char* s,const char* t)
-		{
-			smAlert(s,t);
-		}
+		
 	};
 
 	CsmScriptableClassDeclaration* smGetClassDescription()
 	{
 		static  TsmScriptableClassDeclaration<CsmUtils> d (0, "CsmUtils",
-			ScriptTraits::Method("CloseMenu", &CsmUtils::CloseMenu),
-			ScriptTraits::Method("CloseAllMenus", &CsmUtils::CloseAllMenus),
 			ScriptTraits::Method("GetDPI", &CsmUtils::GetDPI),
 			ScriptTraits::Method("GetDeviceOSName", &CsmUtils::GetDeviceOSName),
 			ScriptTraits::Method("GetDeviceOS", &CsmUtils::GetDeviceOS),
 			ScriptTraits::Method("GetDeviceIDName", &CsmUtils::GetDeviceIDName),
 			ScriptTraits::Method("GetDeviceID", &CsmUtils::GetDeviceID),
 			ScriptTraits::Method("HashString", &CsmUtils::HashString),
-			ScriptTraits::Method("OpenMenuAtGroup", &CsmUtils::OpenMenuAtGroup),
-			ScriptTraits::Method("Alert", &CsmUtils::Alert),
 			
 				0);
 		return &d;

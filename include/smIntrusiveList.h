@@ -17,6 +17,7 @@ namespace SimpleMenu
 
 		inline T* GetPrevious() const {return static_cast<T*>(prevSibling); }
 		inline T* GetNext() const {return static_cast<T*>(nextSibling); }
+		inline TsmIntrusiveList<T,TAG>* GetListConainer() const {return listContainer; }
 
 		void AttachHead(TsmIntrusiveList<T,TAG>* node);
 		void AttachTail(TsmIntrusiveList<T,TAG>* node);

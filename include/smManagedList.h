@@ -12,11 +12,13 @@ namespace SimpleMenu
 		void Serialise();
 		void Delete();
 
+		bool empty() const { return items.empty(); }
 		T* back() const { return items.back(); }
 		T* front() const { return items.front(); }
 		int push_back(T*i) { return items.push_back(i);}
 		T** begin() const {return items.begin();}
 		T** end() const {return items.end();}
+		void pop_back() { delete items.back(); return items.pop_back(); }
 		size_t size() const {return items.size(); }
 		T* operator [] (int const i) const { return items[i]; }
 	};
