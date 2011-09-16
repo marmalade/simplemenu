@@ -24,7 +24,7 @@ namespace SimpleMenu
 		//Constructor
 		CsmImage();
 		//Constructor
-		CsmImage(uint32 hash);
+		CsmImage(const char* hash);
 		//Desctructor
 		virtual ~CsmImage();
 
@@ -55,4 +55,8 @@ namespace SimpleMenu
 	protected:
 		void InitImage();
 	};
+
+	bool smLoadImage(const char* name, CIwImage* image);
+	void smDecodeJpeg(void*buf, size_t len, CIwImage* image);
+	void smDecodePng(void*buf, size_t len, CIwImage* image);
 }

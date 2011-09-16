@@ -28,21 +28,24 @@ namespace SimpleMenu
 	class CsmImageTexture : public CsmImageSource
 	{
 	protected:
-		uint32 textureHash;
+		std::string textureName;
+		
 		CIwTexture* texture;
 		CIwMaterial* material;
+		bool aggregatedTexture;
 	public:
 		//Declare managed class
 		IW_MANAGED_DECLARE(CsmImageTexture);
 		//Constructor
 		CsmImageTexture();
 		//Constructor
-		CsmImageTexture(uint32 hash);
+		CsmImageTexture(const char* name);
 		//Desctructor
 		virtual ~CsmImageTexture();
 		//Reads/writes a binary file using @a IwSerialise interface.
 		void Serialise ();
 
+		void LoadImage();
 		virtual bool IsAvailable() const;
 		virtual CIwSVec2 GetRecommendedSize(const CIwSVec2& area) const;
 		virtual void Prepare(const CIwSVec2& recommendedSize);

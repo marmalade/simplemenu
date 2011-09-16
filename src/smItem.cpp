@@ -101,28 +101,44 @@ void CsmItem::Prepare(smItemContext* renderContext, const CIwSVec2& recommendedS
 }
 void CsmItem::PrepareChildItems(smItemContext* context, const CIwSVec2& recommendedSize)
 {
-	int16 contentWidth = recommendedSize.x - GetContentOffsetLeft()-GetContentOffsetRight();
 	size.x = recommendedSize.x;
+	int16 contentWidth = size.x - GetContentOffsetLeft()-GetContentOffsetRight();
 	size.y = 0;
 	CIwSVec2 chRecSize (contentWidth, recommendedSize.y);
 	for (CsmItem** i = childItems.begin(); i!=childItems.end(); ++i)
 	{
-		CsmItem* item = static_cast<CsmItem*>(*i);
-		item->Prepare(context,chRecSize);
-		size.y += item->GetSize().y;
+		(*i)->Prepare(context,chRecSize);
+		size.y += (*i)->GetSize().y;
 	}
+	
 	size.y += GetContentOffsetTop()+GetContentOffsetBottom();
 }
 void CsmItem::RearrangeChildItems()
 {
+	if (childItems.empty())
+		return;
 	CIwSVec2 topLeft = GetOrigin();
 	topLeft.x += GetContentOffsetLeft();
 	topLeft.y += GetContentOffsetTop();
+	int16 contentWidth = size.x - GetContentOffsetLeft()-GetContentOffsetRight();
+	int16 contentHeight = size.y - GetContentOffsetTop()-GetContentOffsetBottom();
+
+	CIwSVec2 border(0,0);
 	for (CsmItem** i = childItems.begin(); i!=childItems.end(); ++i)
 	{
-		CsmItem* item = static_cast<CsmItem*>(*i);
-		item->SetOrigin(topLeft);
-		topLeft.y += item->GetSize().y;
+		const CIwSVec2& s = (*i)->GetSize();
+		if (s.x > border.x)
+			border.x = s.x;
+		border.y += s.y;
+	}
+	topLeft.x += (contentWidth-border.x)*combinedStyle.HorizontalAlignment/IW_GEOM_ONE;
+	if (contentHeight!=border.y)
+		topLeft.y += (contentHeight-border.y)*combinedStyle.VerticalAlignment/IW_GEOM_ONE;
+
+	for (CsmItem** i = childItems.begin(); i!=childItems.end(); ++i)
+	{
+		(*i)->SetOrigin(topLeft);
+		topLeft.y += (*i)->GetSize().y;
 	}
 }
 void CsmItem::OnAttachToMenu(CsmMenu*r,CsmItem*p)
@@ -449,7 +465,7 @@ bool CsmItem::VisitBackward(IsmVisitor* visitor)
 	{
 		--i;
 		CsmItem* item = static_cast<CsmItem*>(*i);
-		if (!item->VisitForward(visitor))
+		if (!item->VisitBackward(visitor))
 			return false;
 	}
 	return visitor->Visited(this);
@@ -573,9 +589,9 @@ bool	CsmItem::ParseAttribute(CIwTextParserITX* pParser, const char* pAttrName)
 	
 	if (!stricmp("image", pAttrName))
 	{
-		uint32 t;
-		pParser->ReadStringHash(&t);
-		CsmImage* ti = new CsmImage(t);
+		std::string n;
+		smReadString(pParser, &n);
+		CsmImage* ti = new CsmImage(n.c_str());
 		childItems.push_back(ti);
 		return true;
 	}

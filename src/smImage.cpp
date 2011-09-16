@@ -32,7 +32,7 @@ CsmImage::CsmImage()
 	InitImage();
 }
 //Constructor
-CsmImage::CsmImage(uint32 t)
+CsmImage::CsmImage(const char* t)
 {
 	InitImage();
 	source = new CsmImageTexture(t);

@@ -64,7 +64,7 @@ void SimpleMenu::smStateMachineIterate(smStateMachineStateContext* context)
 		case SMACTION_RELEASE:
 			{
 				if (smStateMachinePeek()) smStateMachinePeek()->Release();
-				context->prev = clock();
+				context->prev = s3eTimerGetUST();
 				context->state = SMACTION_DO_ACTION_OR_MENU;
 				if (!g_smStateMachineActionQueue->empty())
 				{
@@ -94,7 +94,7 @@ void SimpleMenu::smStateMachineIterate(smStateMachineStateContext* context)
 		case SMACTION_LOAD:
 			{
 				if (smStateMachinePeek()) smStateMachinePeek()->Load(context->inputQueue);
-				context->prev = clock();
+				context->prev = s3eTimerGetUST();
 				context->state = SMACTION_FADE_IN;
 				smStateMachineIterate(context);
 				break;
@@ -122,15 +122,15 @@ void SimpleMenu::smStateMachineLoop(CsmInputFilter* input)
 
 	smStateMachineStateContext context;
 	
-	clock_t cur;
-	cur = context.prev = clock();
+	int64 cur;
+	cur = context.prev = s3eTimerGetUST();
 	context.state = SMACTION_DO_ACTION_OR_MENU;
 	context.inputQueue = inputQueue;
 	
 	for (;!g_smStateMachineActionQueue->empty() || !g_smStateMachineStack->empty();)
 	{
-		cur = clock();
-		context.ms = (1000/30)-(cur-context.prev);
+		cur = s3eTimerGetUST();
+		context.ms = (int32) ( (1000/30)-(cur-context.prev) );
 		if (context.ms < 0) context.ms = 0;
 
 		s3eDeviceYield(context.ms);
@@ -138,8 +138,8 @@ void SimpleMenu::smStateMachineLoop(CsmInputFilter* input)
 		s3eKeyboardUpdate();
 		s3ePointerUpdate();
 
-		cur = clock();
-		context.ms = (cur-context.prev); if (context.ms > 1000) context.ms = 1000; //Limit to 1 FPS
+		cur = s3eTimerGetUST();
+		context.ms = (int32)( (cur-context.prev) ); if (context.ms > 1000) context.ms = 1000; //Limit to 1 FPS
 		context.prev = cur;
 
 		if (s3eDeviceCheckQuitRequest())
@@ -227,7 +227,9 @@ void CsmGroupMenuState::Load(CsmInputQueue* inputQueue)
 {
 	if (!groupName.empty())
 	{
+		smRequestAutoRenderLoading();
 		group =  IwGetResManager()->LoadGroup(groupName.c_str(), true);
+		smReleaseAutoRenderLoading();
 		if (!group)
 		{
 			CsmStateMachine::Close();

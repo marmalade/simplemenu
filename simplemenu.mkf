@@ -41,6 +41,8 @@ files
 	smWindowHistory.cpp 
 	smFloatingPanel.cpp 
 	smStateMachine.cpp
+	smImageGallery.cpp
+	smSmartGrid.cpp
 
 	["include"]
 	(include)
@@ -76,12 +78,15 @@ files
 	smWindowHistory.h
 	smFloatingPanel.h
 	smStateMachine.h
+	smImageGallery.h
+	smSmartGrid.h
 }
 
 packages
 {
 	dpi
 	freetype
+	libjpeg
 }
 
 subprojects
@@ -89,4 +94,5 @@ subprojects
 	dpi
 	freetype
 	freetypehelper
+	libjpeg
 }

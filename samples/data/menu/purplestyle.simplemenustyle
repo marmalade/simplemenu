@@ -6,7 +6,7 @@ CsmStyleSheet
 	style
 	{
 		font "font"
-		fontSize 8 pt
+		fontSize 7 pt
 		fontColor {0,0,0,255}
 		shadowColor {0,0,0,64}
 		shadow-size 3 pt
@@ -94,6 +94,7 @@ CsmStyleSheet
 		font-colour { 220 220 230 255 }
 		text-shadow-offset -1 px -1 px
 
+		vertical-alignment 0.5
 		horizontal-alignment 0.5
 
 		padding 5 px
@@ -168,5 +169,17 @@ CsmStyleSheet
 	{
 		font "fontbold"
 		fontSize 12 pt
+	}
+	bindto "*" "H3" "*"
+	style
+	{
+		font "fontbold"
+		fontSize 10 pt
+	}
+	bindto "*" "H4" "*"
+	style
+	{
+		font "fontbold"
+		fontSize 9 pt
 	}
 }

@@ -20,8 +20,8 @@ namespace SimpleMenu
 	{
 		CsmInputQueue* inputQueue;
 		smStateMachineState state;
-		int ms;
-		clock_t prev;
+		int32 ms;
+		int64 prev;
 	};
 	class CsmStateAction
 	{

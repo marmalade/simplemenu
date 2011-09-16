@@ -1,6 +1,7 @@
 #include <IwTextParserITX.h>
 #include <IwResManager.h>
 #include <IwGx.h>
+#include "simplemenu.h"
 #include "smImageSource.h"
 #include "smMenu.h"
 
@@ -32,39 +33,63 @@ CsmImageTexture::CsmImageTexture()
 	InitImage();
 }
 //Constructor
-CsmImageTexture::CsmImageTexture(uint32 t)
+CsmImageTexture::CsmImageTexture(const char* t)
 {
 	InitImage();
-	textureHash = t;
+	textureName = t;
 }
 //Desctructor
 CsmImageTexture::~CsmImageTexture()
 {
 	if (material)
 		delete material;
+	if (aggregatedTexture && texture)
+		delete texture;
 }
 void CsmImageTexture::InitImage()
 {
-	textureHash = 0;
 	texture = 0;
 	material = 0;
+	aggregatedTexture = false;
 }
 //Reads/writes a binary file using @a IwSerialise interface.
 void CsmImageTexture::Serialise ()
 {
 	CsmImageSource::Serialise();
-	IwSerialiseUInt32(textureHash);
+	smSerialiseString(textureName);
 }
 bool CsmImageTexture::IsAvailable() const
 {
-	return textureHash != 0;
+	return !textureName.empty();
+}
+void CsmImageTexture::LoadImage()
+{
+	if (textureName.length()>5 && textureName[0]=='r' && textureName[1]=='o' && textureName[2]=='m' && textureName[3]==':')
+	{
+		CIwImage image;
+		smLoadImage(textureName.c_str(), &image);
+		aggregatedTexture = true;
+		texture = new CIwTexture();
+		if (image.GetWidth() > 0)
+		{
+			texture->SetImage(&image);
+			texture->Upload();
+		}
+	}
+	else
+	{
+		aggregatedTexture = false;
+		texture = (CIwTexture*)IwGetResManager()->GetResHashed(IwHashString(textureName.c_str()), "CIwTexture", IW_RES_PERMIT_NULL_F);
+	}
 }
 CIwSVec2 CsmImageTexture::GetRecommendedSize(const CIwSVec2& area) const
 {
-	if (textureHash == 0)
+	if (!IsAvailable())
 		return CIwSVec2(0,0);
 	if (!texture)
-		(const_cast<CsmImageTexture*>(this))->texture = (CIwTexture*)IwGetResManager()->GetResHashed(textureHash, "CIwTexture", IW_RES_PERMIT_NULL_F);
+	{
+		(const_cast<CsmImageTexture*>(this))->LoadImage();
+	}
 	if (!texture)
 		return CIwSVec2(0,0);
 	return CIwSVec2(texture->GetWidth(), texture->GetHeight());
@@ -79,7 +104,8 @@ CIwMaterial* CsmImageTexture::GetMaterial()
 	if (!material)
 	{
 		material = new CIwMaterial();
-		material->SetTexture(texture);
+		if (texture->GetWidth() > 0)
+			material->SetTexture(texture);
 		material->SetColAmbient(255,255,255,255);
 	}
 	return material;
@@ -99,7 +125,7 @@ bool	CsmImageTexture::ParseAttribute(CIwTextParserITX* pParser, const char* pAtt
 {
 	if (!stricmp("texture",pAttrName))
 	{
-		pParser->ReadStringHash(&textureHash);
+		smReadString(pParser, &textureName);
 		return true;
 	}
 	return CsmImageSource::ParseAttribute(pParser, pAttrName);

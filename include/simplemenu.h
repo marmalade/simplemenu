@@ -29,6 +29,8 @@ namespace SimpleMenu
 
 	void smDrawSimpleMenuScrollbar(const CIwSVec2 & pos,const CIwSVec2 & size,const CIwSVec2 & spos,const CIwSVec2 & ssize);
 
+	void smRequestAutoRenderLoading();
+	void smReleaseAutoRenderLoading();
 	void smRenderLoading();
 
 	void smAssertMessage(const char* title,const char* message,bool v);
@@ -42,4 +44,6 @@ namespace SimpleMenu
 	};
 
 	smCloseState smGetCloseState();
+
+
 }

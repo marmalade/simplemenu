@@ -159,6 +159,7 @@ namespace SimpleMenu
 		const CIwSVec2& GetOrigin() const {return origin;}
 		//Gets size of the item. It's only valid after Prepare method been executed
 		const CIwSVec2& GetSize() const {return size;}
+		virtual void SetSize(const CIwSVec2& v) { size=v;}
 		//Sets position of the item. This method should be called during parent RearrangeChildItems method
 		virtual void SetOrigin(const CIwSVec2& v) { if (origin!=v) { origin=v;RearrangeChildItems(); }}
 		//Gets the element name hash to select an apropriate style

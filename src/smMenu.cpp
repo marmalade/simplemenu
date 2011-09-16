@@ -2,6 +2,7 @@
 #include <IwResManager.h>
 #include <IwGx.h>
 #include "simplemenu.h"
+#include "smStateMachine.h"
 #include "math.h"
 #include "smMenu.h"
 #include "smItem.h"
@@ -457,6 +458,12 @@ bool CsmMenu::KeyPressedEvent(smKeyContext* keyContext)
 				skip->Touch(&c);
 				skip->TouchReleased(&c);
 			}
+		}
+		break;
+	case s3eKeyBack:
+	case s3eKeyBackspace:
+		{
+			CsmStateMachine::Close();
 		}
 		break;
 	default:

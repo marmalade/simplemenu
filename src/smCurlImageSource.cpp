@@ -14,25 +14,7 @@ using namespace SimpleMenu;
 
 namespace SimpleMenu
 {
-	// dummy funcs to help libjpeg
-	static void JPEGInitSource(j_decompress_ptr cinfo)
-	{
-	}
 
-	static boolean JPEGFillInputBuffer(j_decompress_ptr cinfo)
-	{
-		return 0;
-	}
-
-	static void JPEGSkipInputData(j_decompress_ptr cinfo, long num_bytes)
-	{
-		cinfo->src->next_input_byte += num_bytes;
-		cinfo->src->bytes_in_buffer -= num_bytes;
-	}
-
-	static void JPEGTermSource(j_decompress_ptr cinfo)
-	{
-	}
 }
 
 //Instantiate the default factory function for a named class 
@@ -47,6 +29,7 @@ CsmCurlImageSource::CsmCurlImageSource()
 	material = 0;
 	texture = 0;
 	image = 0;
+	mipMapping = false;
 }
 //Desctructor
 CsmCurlImageSource::~CsmCurlImageSource()
@@ -95,7 +78,11 @@ CIwMaterial* CsmCurlImageSource::GetMaterial()
 void CsmCurlImageSource::SetImageToMaterial()
 {
 	if (!material) material = new CIwMaterial();
-	if (!texture) texture = new CIwTexture();
+	if (!texture)
+	{
+		texture = new CIwTexture();
+		texture->SetMipMapping(mipMapping);
+	}
 	material->SetColAmbient(255,255,255,255);
 	if (image && image->GetWidth() > 0)
 	{
@@ -104,124 +91,7 @@ void CsmCurlImageSource::SetImageToMaterial()
 		material->SetTexture(texture);
 	}
 }
-void CsmCurlImageSource::DecodeJpeg(void*buf, size_t len)
-{
-    jpeg_decompress_struct cinfo;
-    bzero(&cinfo, sizeof(cinfo));
 
-    JSAMPARRAY buffer;      /* Output row buffer */
-    int row_stride;     /* physical row width in output buffer */
-
-    jpeg_source_mgr srcmgr;
-
-    srcmgr.bytes_in_buffer = len;
-    srcmgr.next_input_byte = (JOCTET*) buf;
-    srcmgr.init_source = JPEGInitSource;
-    srcmgr.fill_input_buffer = JPEGFillInputBuffer;
-    srcmgr.skip_input_data = JPEGSkipInputData;
-    srcmgr.resync_to_restart = jpeg_resync_to_restart;
-    srcmgr.term_source = JPEGTermSource;
-	
-    jpeg_error_mgr jerr;
-    cinfo.err = jpeg_std_error(&jerr);
-
-    jpeg_create_decompress(&cinfo);
-    cinfo.src = &srcmgr;
-
-    if (JPEG_HEADER_OK != jpeg_read_header(&cinfo, TRUE))
-	{
-		return;
-	}
-    jpeg_start_decompress(&cinfo);
-
-    /* JSAMPLEs per row in output buffer */
-    row_stride = cinfo.output_width * cinfo.output_components;
-
-    /* Make a one-row-high sample array that will go away when done with image */
-    buffer = (*cinfo.mem->alloc_sarray)
-        ((j_common_ptr) &cinfo, JPOOL_IMAGE, row_stride, 1);
-
-	int y = 0;
-	image = new CIwImage();
-	image->SetFormat(CIwImage::RGB_888);
-	image->SetWidth(cinfo.output_width);
-	image->SetHeight(cinfo.output_height);
-	image->SetBuffers();
-    while (cinfo.output_scanline < cinfo.output_height)// count through the image
-    {
-        /* jpeg_read_scanlines expects an array of pointers to scanlines.
-         * Here the array is only one element long, but you could ask for
-         * more than one scanline at a time if that's more convenient.
-         */
-        (void) jpeg_read_scanlines(&cinfo, buffer, 1);
-		uint8* t = image->GetTexels()+image->GetPitch()*y;
-		for (JDIMENSION x=0; x<cinfo.output_width; ++x)
-		{
-			t[2] = buffer[0][x*3+0];
-			t[1] = buffer[0][x*3+1];
-			t[0] = buffer[0][x*3+2];
-			t += 3;
-		}
-		++y;
-    }
-
-    (void) jpeg_finish_decompress(&cinfo);
-    jpeg_destroy_decompress(&cinfo);
-}
-void CsmCurlImageSource::DecodePng(void*buf, size_t len)
-{
-	image = new CIwImage();
-	{
-		s3eFile* f =  s3eFileOpenFromMemory(buf, len);
-		if (f)
-		{
-			image->ReadFile(f);
-			s3eFileClose(f);
-		}
-	}
-}
-bool CsmCurlImageSource::LoadFile(const char* fileName)
-{
-    char* data;
-    int len;
-    s3eFile *f = 0;
-
-	if (!(f = s3eFileOpen( fileName, "rb")))
-    {
-        return false;
-    }
-
-    len = (int)s3eFileGetSize(f);
-    if (len <= 0)
-	{
-        s3eFileClose(f);
-        return false;
-	}
-
-    data = (char*)s3eMalloc(len);
-    if (!data)
-    {
-        s3eFileClose(f);
-        return false;
-    }
-
-    uint32 rtn = s3eFileRead(data, 1, len, f);
-    s3eFileClose(f);
-
-    if (rtn == (uint32)len)
-    {
-		if (data[0] == 0x89 && data[1] == 'P' && data[2] == 'N' && data[3] == 'G')
-		{
-			DecodePng(data,len);
-		}
-		else
-		{
-			DecodeJpeg(data,len);
-		}
-    }
-    s3eFree(data);
-	return true;
-}
 //Animate item and all child items
 void CsmCurlImageSource::Animate(iwfixed timespan)
 {
@@ -230,7 +100,8 @@ void CsmCurlImageSource::Animate(iwfixed timespan)
 		if ((url.length() > 5) && (url[0] == 'r') &&
 			((url[1] == 'a') || (url[1] == 'o')) && (url[2] == 'm') && (url[3] == ':') && (url[4] == '/'))
 		{
-			LoadFile(url.c_str());
+			if (image) delete image; image = new CIwImage();
+			smLoadImage(url.c_str(), image);
 			SetImageToMaterial();
 		}
 		else
@@ -248,13 +119,14 @@ void CsmCurlImageSource::Animate(iwfixed timespan)
 			if (request.GetInputBufferSize() != 0)
 			{
 				const char* t = request.GetContentType();
+				if (image) delete image; image = new CIwImage();
 				if (!stricmp(t, "image/jpg") || !stricmp(t, "image/jpeg"))
 				{
-					DecodeJpeg((void*)request.GetInputBuffer(), request.GetInputBufferSize());
+					smDecodeJpeg((void*)request.GetInputBuffer(), request.GetInputBufferSize(), image);
 				}
 				else
 				{
-					DecodePng((void*)request.GetInputBuffer(), request.GetInputBufferSize());
+					smDecodePng((void*)request.GetInputBuffer(), request.GetInputBufferSize(), image);
 				}
 			}
 			SetImageToMaterial();

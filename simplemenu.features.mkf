@@ -17,6 +17,7 @@ files
 	smCompass.cpp
 	smVolumeSlider.cpp
 	smWebView.cpp
+	smLoadingScreen.cpp
 
 	["include"]
 	(include)
@@ -30,6 +31,7 @@ files
 	smCompass.h 
 	smVolumeSlider.h
 	smWebView.h
+	smLoadingScreen.h
 }
 
 subprojects

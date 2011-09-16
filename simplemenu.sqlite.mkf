@@ -19,5 +19,6 @@ package sqlite
 subprojects
 {
 	./simplemenu.mkf
-	sqlite
+	#sqlite
+	sqlite_3.6.10/sqlite-build.mkf
 }
